@@ -1,0 +1,186 @@
+/* src/styles/Contato.module.css - Mobile First */
+
+:root {
+  --color-accent-blue: #0A3D62; /* Azul Marinho Profundo */
+  --color-light-teal: #4BC6B8; /* Verde Água Suave */
+  --color-text: #444444;
+  --color-bg-light: #fefefe;
+  --color-bg-form: #f0f8ff; /* Fundo suave para o formulário */
+  --border-radius: 12px;
+}
+
+.main {
+  padding: 30px 15px;
+  background-color: var(--color-background);
+}
+
+.heading {
+  font-size: 1.8rem;
+  color: var(--color-accent-blue);
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.subHeading {
+  font-size: 1rem;
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+/* ------------------- LAYOUT GERAL ------------------- */
+.contactContainer {
+  display: grid;
+  grid-template-columns: 1fr; /* Uma coluna no mobile */
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ------------------- SEÇÃO DE INFORMAÇÕES ------------------- */
+.infoSection {
+  background-color: var(--color-accent-blue);
+  color: white;
+  padding: 30px 25px;
+  border-radius: var(--border-radius);
+}
+
+.infoSection h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 10px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.contactItem svg {
+  margin-right: 15px;
+  color: var(--color-light-teal);
+  min-width: 24px;
+}
+
+.contactDetails p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.contactDetails a {
+  color: var(--color-light-teal);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.contactDetails a:hover {
+  text-decoration: underline;
+}
+
+/* ------------------- SEÇÃO DE FORMULÁRIO ------------------- */
+.formSection {
+  background-color: var(--color-bg-form);
+  padding: 30px 25px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.formSection h2 {
+  font-size: 1.5rem;
+  color: var(--color-accent-blue);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.formGroup input[type="text"],
+.formGroup input[type="email"],
+.formGroup textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  box-sizing: border-box; /* Garante que o padding não aumente a largura total */
+  transition: border-color 0.3s ease;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  border-color: var(--color-light-teal);
+  outline: none;
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.submitButton {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-light-teal);
+  color: var(--color-accent-blue);
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.submitButton:hover {
+  background-color: #3aa89b;
+  transform: translateY(-1px);
+}
+
+.submitButton:active {
+  transform: translateY(0);
+}
+
+/* ------------------- DESKTOP STYLES (min-width: 768px) ------------------- */
+@media (min-width: 768px) {
+  .main {
+    padding: 60px 40px;
+  }
+  
+  .heading {
+    font-size: 2.5rem;
+  }
+  
+  .subHeading {
+    font-size: 1.1rem;
+    margin-bottom: 50px;
+  }
+
+  .contactContainer {
+    grid-template-columns: 1fr 1.5fr; /* Info (menor) | Formulário (maior) */
+  }
+
+  .infoSection {
+    padding: 40px 30px;
+  }
+  
+  .formSection {
+    padding: 40px 30px;
+  }
+}
+
