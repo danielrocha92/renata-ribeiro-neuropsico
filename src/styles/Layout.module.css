@@ -1,0 +1,86 @@
+/* src/styles/Layout.module.css - Mobile First */
+
+/* ------------------- HEADER E FOOTER (MOBILE BASE) ------------------- */
+.header {
+  width: 100%;
+  padding: 15px 10px; /* Base compacta */
+  display: flex;
+  flex-direction: column; /* Pilha vertical por padrão (Mobile) */
+  align-items: center;
+  background-color: var(--color-card-bg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 10px; /* Espaço entre logo e navegação no mobile */
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.link {
+  color: var(--color-text-dark);
+  font-size: 0.8rem; /* Fonte menor para mobile */
+  padding: 5px 8px; /* Touch target adequado */
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: var(--color-secondary);
+}
+
+.footer {
+  width: 100%;
+  padding: 20px 10px; /* Padding menor para mobile */
+  text-align: center;
+  background-color: var(--color-text-dark);
+  color: var(--color-text-light);
+  font-size: 0.8rem;
+  margin-top: auto;
+}
+
+.contact {
+  margin-bottom: 8px;
+}
+
+/* ------------------- DESKTOP STYLES (min-width: 600px) ------------------- */
+@media (min-width: 600px) {
+  .header {
+    flex-direction: row; /* Volta a ser horizontal */
+    justify-content: space-between;
+    padding: 20px 30px;
+  }
+  
+  .logo {
+    font-size: 1.4rem;
+    margin-bottom: 0; /* Remove margem desnecessária no desktop */
+  }
+
+  .nav {
+    flex-wrap: nowrap;
+    width: auto;
+    gap: 25px;
+  }
+  
+  .link {
+    font-size: 1rem;
+    padding: 0;
+  }
+
+  .footer {
+    padding: 40px 20px;
+    font-size: 0.9rem;
+  }
+}
+
