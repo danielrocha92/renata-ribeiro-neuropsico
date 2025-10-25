@@ -1,147 +1,119 @@
-.hero {
+/* src/styles/Home.module.css - Mobile First */
+
+.main {
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
+}
+
+/* ------------------- HERO SECTION (MOBILE BASE) ------------------- */
+.hero {
+  width: 100%;
+  padding: 30px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(135deg, var(--color-primary), #3498db);
+  color: var(--color-text-light);
+  min-height: 75vh;
   justify-content: center;
-  padding: 4rem 2rem;
-  background-color: #f9f9f9;
-  min-height: calc(100vh - 150px); /* Adjust based on header/footer height */
 }
 
 .heroContent {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1100px;
-  width: 100%;
-  gap: 2rem;
+  width: 100%; /* Ocupa a largura total no mobile */
+  padding: 0;
 }
 
-.textBlock {
-  max-width: 500px;
-}
-
-.headline {
-  font-size: 3rem;
-  font-weight: bold;
-  color: #333;
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
   line-height: 1.2;
 }
 
-.subheadline {
-  font-size: 1.2rem;
-  color: #666;
-  margin-top: 1rem;
-  line-height: 1.6;
+.subtitle {
+  font-size: 1rem;
+  font-weight: 300;
+  margin-bottom: 30px;
+}
+
+.servicesList {
+  list-style: none;
+  display: flex;
+  flex-direction: column; /* Coluna por padrão (Mobile) */
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.serviceItem {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 10px 15px; /* Aumentado para melhor touch target */
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  width: 100%; /* Largura total */
 }
 
 .ctaButton {
-  display: inline-block;
-  margin-top: 2rem;
-  padding: 1rem 2rem;
-  background-color: #0070f3;
-  color: #fff;
-  text-decoration: none;
-  font-size: 1.1rem;
-  font-weight: bold;
+  background-color: var(--color-secondary);
+  color: var(--color-text-dark);
+  padding: 14px 20px;
+  border: none;
   border-radius: 8px;
-  transition: background-color 0.3s ease;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Largura total para mobile */
 }
 
 .ctaButton:hover {
-  background-color: #005bb5;
+  background-color: #00a6b8;
+  transform: translateY(-2px);
 }
 
-.imagePlaceholder {
-  width: 400px;
-  height: 400px;
-  background-color: #e0e0e0;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #999;
+/* ------------------- DESKTOP STYLES (min-width: 600px) ------------------- */
+@media (min-width: 600px) {
+  .hero {
+    padding: 60px 20px;
+    min-height: 80vh;
+  }
+  
+  .heroContent {
+    max-width: 900px;
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+  }
+  
+  .servicesList {
+    flex-direction: row; /* Volta a ser linha (Desktop) */
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 40px;
+  }
+
+  .serviceItem {
+    width: auto; /* Largura automática */
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+  
+  .ctaButton {
+    width: auto; /* Largura automática */
+    padding: 15px 30px;
+    font-size: 1.1rem;
+  }
 }
 
-/* Seção de Serviços */
-.servicesSection {
-  padding: 4rem 2rem;
-  text-align: center;
-}
-
-.servicesTitle {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 3rem;
-}
-
-.servicesGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-/* Seção Sobre */
-.aboutSection {
-  padding: 4rem 2rem;
-  background-color: #fff;
-}
-
-.aboutContent {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1100px;
-  margin: 0 auto;
-  gap: 3rem;
-}
-
-.aboutText {
-  max-width: 600px;
-}
-
-.aboutTitle {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 1.5rem;
-}
-
-.aboutDescription {
-  font-size: 1.1rem;
-  color: #666;
-  line-height: 1.7;
-  margin-bottom: 2rem;
-}
-
-.aboutImagePlaceholder {
-  width: 350px;
-  height: 350px;
-  background-color: #e0e0e0;
-  border-radius: 50%; /* Circular image */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #999;
-  flex-shrink: 0;
-}
-
-.secondaryButton {
-  display: inline-block;
-  padding: 0.8rem 1.8rem;
-  background-color: transparent;
-  color: #0070f3;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 8px;
-  border: 2px solid #0070f3;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.secondaryButton:hover {
-  background-color: #0070f3;
-  color: #fff;
-}
