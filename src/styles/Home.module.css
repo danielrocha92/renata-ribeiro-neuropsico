@@ -61,3 +61,87 @@
   justify-content: center;
   color: #999;
 }
+
+/* Seção de Serviços */
+.servicesSection {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.servicesTitle {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 3rem;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Seção Sobre */
+.aboutSection {
+  padding: 4rem 2rem;
+  background-color: #fff;
+}
+
+.aboutContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 3rem;
+}
+
+.aboutText {
+  max-width: 600px;
+}
+
+.aboutTitle {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.aboutDescription {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.aboutImagePlaceholder {
+  width: 350px;
+  height: 350px;
+  background-color: #e0e0e0;
+  border-radius: 50%; /* Circular image */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.secondaryButton {
+  display: inline-block;
+  padding: 0.8rem 1.8rem;
+  background-color: transparent;
+  color: #0070f3;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  border: 2px solid #0070f3;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.secondaryButton:hover {
+  background-color: #0070f3;
+  color: #fff;
+}
