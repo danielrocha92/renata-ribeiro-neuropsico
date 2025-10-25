@@ -1,0 +1,32 @@
+/* src/styles/CardServico.module.css */
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+  background-color: #f9f9f9;
+  /* Personalização com cores que remetem à calma e ao cérebro (azul, verde-água) */
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 50, 100, 0.1);
+}
+
+.icone {
+  font-size: 32px;
+  color: #0070f3; /* Exemplo de cor primária */
+  margin-bottom: 10px;
+}
+
+.titulo {
+  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.descricao {
+  color: #666;
+  line-height: 1.6;
+}

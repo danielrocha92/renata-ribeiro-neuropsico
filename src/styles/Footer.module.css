@@ -1,0 +1,32 @@
+.footer {
+  background-color: #f8f8f8;
+  border-top: 1px solid #eaeaea;
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.socialLinks {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.socialLinks a {
+  color: #666;
+  text-decoration: none;
+  font-size: 1.5rem; /* Larger icons */
+  transition: color 0.2s ease-in-out;
+}
+
+.socialLinks a:hover {
+  color: #0070f3;
+}
+
+.copyright {
+  margin-top: 1rem;
+}
