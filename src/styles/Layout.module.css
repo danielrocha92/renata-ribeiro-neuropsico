@@ -1,86 +1,164 @@
 /* src/styles/Layout.module.css - Mobile First */
 
-/* ------------------- HEADER E FOOTER (MOBILE BASE) ------------------- */
+:root {
+  /* Paleta de cores refinada para suavidade */
+  --color-accent-blue: #0A3D62; /* Azul Marinho Profundo (Profissional) */
+  --color-soft-teal: #66CCCC; /* Verde Água Suave (Acolhedor) */
+  --color-text: #444444;
+  --color-text-light: #fefefe;
+  --color-bg-light: #f9f9f9;
+  --color-bg-footer: #0A3D62; /* Fundo do Footer azul marinho */
+  --border-radius: 8px;
+  --shadow-subtle: 0 4px 8px rgba(0, 0, 0, 0.05); /* Sombra suave */
+}
+
+/* ------------------- ESTILOS GERAIS ------------------- */
+.body {
+  font-family: 'Inter', sans-serif;
+  color: var(--color-text);
+  line-height: 1.6;
+  background-color: var(--color-bg-light);
+}
+
 .header {
-  width: 100%;
-  padding: 15px 10px; /* Base compacta */
-  display: flex;
-  flex-direction: column; /* Pilha vertical por padrão (Mobile) */
-  align-items: center;
-  background-color: var(--color-card-bg);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: white;
+  box-shadow: var(--shadow-subtle);
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 100;
+  padding: 15px 20px;
+}
+
+.navContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .logo {
   font-size: 1.2rem;
   font-weight: 700;
-  color: var(--color-primary);
-  margin-bottom: 10px; /* Espaço entre logo e navegação no mobile */
+  color: var(--color-accent-blue);
+  text-decoration: none;
 }
 
-.nav {
+.logo span {
+  font-weight: 400;
+  color: var(--color-soft-teal);
+}
+
+.navMenu {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 15px; /* Espaçamento mais apertado no mobile */
 }
 
-.link {
-  color: var(--color-text-dark);
-  font-size: 0.8rem; /* Fonte menor para mobile */
-  padding: 5px 8px; /* Touch target adequado */
-  transition: color 0.2s ease;
+.navItem a {
+  color: var(--color-accent-blue);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 5px;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s ease;
 }
 
-.link:hover {
-  color: var(--color-secondary);
+.navItem a:hover {
+  border-bottom-color: var(--color-soft-teal);
 }
 
+/* ------------------- FOOTER STYLES ------------------- */
 .footer {
-  width: 100%;
-  padding: 20px 10px; /* Padding menor para mobile */
-  text-align: center;
-  background-color: var(--color-text-dark);
+  background-color: var(--color-bg-footer);
   color: var(--color-text-light);
+  padding: 40px 20px 20px; /* Mais padding no topo para separação */
+  border-top: 5px solid var(--color-soft-teal); /* Linha de destaque */
+}
+
+.footerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr; /* Coluna única no mobile */
+  gap: 30px;
+  text-align: center;
+}
+
+.footerSection h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: var(--color-soft-teal);
+}
+
+.footerSection p, .footerSection a {
+  font-size: 0.9rem;
+  color: #c0c0c0;
+  margin: 5px 0;
+  line-height: 1.6;
+  text-decoration: none;
+}
+
+.footerSection a:hover {
+  color: var(--color-text-light);
+  text-decoration: underline;
+}
+
+.socialIcons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.socialIcon {
+  color: var(--color-soft-teal);
+  transition: color 0.3s ease;
+}
+
+.socialIcon:hover {
+  color: var(--color-text-light);
+}
+
+.copyright {
+  text-align: center;
+  margin-top: 30px;
   font-size: 0.8rem;
-  margin-top: auto;
+  color: #777;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 15px;
 }
 
-.contact {
-  margin-bottom: 8px;
-}
-
-/* ------------------- DESKTOP STYLES (min-width: 600px) ------------------- */
-@media (min-width: 600px) {
+/* ------------------- DESKTOP STYLES (min-width: 768px) ------------------- */
+@media (min-width: 768px) {
   .header {
-    flex-direction: row; /* Volta a ser horizontal */
-    justify-content: space-between;
-    padding: 20px 30px;
+    padding: 20px 40px;
   }
-  
+
   .logo {
-    font-size: 1.4rem;
-    margin-bottom: 0; /* Remove margem desnecessária no desktop */
+    font-size: 1.5rem;
   }
 
-  .nav {
-    flex-wrap: nowrap;
-    width: auto;
-    gap: 25px;
+  .navMenu {
+    gap: 30px;
   }
-  
-  .link {
+
+  .navItem a {
     font-size: 1rem;
-    padding: 0;
   }
 
-  .footer {
-    padding: 40px 20px;
-    font-size: 0.9rem;
+  /* Footer em 3 colunas no desktop */
+  .footerContent {
+    grid-template-columns: 2fr 1fr 1fr;
+    text-align: left;
+  }
+
+  .socialIcons {
+    justify-content: flex-start;
   }
 }
 
