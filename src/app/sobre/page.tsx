@@ -2,34 +2,42 @@
 import styles from '@/styles/Sobre.module.css';
 import React from 'react';
 
+// Ícone de Localização (SVG simples)
+const LocationIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin">
+        <path d="M12 18s-4 4-4 7c0 2.8 2.2 5 4 5s4-2.2 4-5c0-3-4-7-4-7z"/>
+        <circle cx="12" cy="10" r="3"/>
+    </svg>
+);
+
 // Dados da Formação
 const formacaoData = [
   { 
-    titulo: 'Especialização em Neurociência Aplicada', 
-    instituicao: 'Harvard EdX (Certificação)', 
-    ano: 2024
+    titulo: 'Especialização em Neuropsicologia Clínica', 
+    instituicao: 'CEPSIC - Hospital das Clínicas (HC) da Faculdade de Medicina da USP', 
+    ano: '2011'
   },
   { 
-    titulo: 'Reabilitação Cognitiva e Neuropsicologia Clínica', 
+    titulo: 'Pós-graduação em Psicologia Hospitalar Aplicada à Cardiologia', 
+    instituicao: 'Instituto do Coração (INCOR) - FMUSP', 
+    ano: '1999'
+  },
+  { 
+    titulo: 'Especialização em Psicodinâmica do Adulto e Adolescente', 
+    instituicao: 'Instituto Sedes Sapientiae', 
+    ano: 'Não especificado'
+  },
+  { 
+    titulo: 'Bacharelado e Formação em Psicologia', 
     instituicao: 'Universidade de São Paulo (USP)', 
-    ano: 2022
-  },
-  { 
-    titulo: 'Psicologia e Terapia Cognitivo Comportamental (TCC)', 
-    instituicao: 'Universidade X (Graduação)', 
-    ano: 2018
-  },
-  { 
-    titulo: 'Formação em Mindfulness e Redução de Estresse', 
-    instituicao: 'Centro de Estudos Y', 
-    ano: 2020 
+    ano: '1993' 
   },
 ];
 
 export default function SobrePage() {
   return (
     <main className={styles.main}>
-      <h1 className={styles.heading}>Dra. Renata Ribeiro: Neurociência e Empatia a Seu Serviço</h1>
+      <h1 className={styles.heading}>Dra. Renata Concilio Ribeiro: Autoridade em Neuropsicologia (USP)</h1>
 
       <section className={styles.profileSection}>
         <div className={styles.photoPlaceholder}>
@@ -37,21 +45,26 @@ export default function SobrePage() {
         </div>
         <div className={styles.bio}>
           <p>
-            Olá! Sou a Dra. Renata Ribeiro, psicóloga e neuropsicóloga apaixonada pela complexidade da mente humana. Minha missão é traduzir o conhecimento da Neurociência em ferramentas práticas para o seu dia a dia, ajudando você a desvendar os mecanismos por trás de suas emoções e comportamentos.
+            Com mais de 20 anos de experiência, sou a **Dra. Renata Concilio Ribeiro**, psicóloga, neuropsicóloga e psicanalista. Minha trajetória é marcada pelo rigor acadêmico das principais instituições do país, como o **Hospital das Clínicas (HC) da FMUSP**, onde obtive minha especialização em Neuropsicologia Clínica.
           </p>
           <p>
-            Com foco na **Terapia Cognitivo Comportamental (TCC)** e especialização em **Reabilitação Cognitiva pela USP**, eu ofereço um caminho claro e estruturado para lidar com dificuldades como TDAH, ansiedade, dificuldades de memória e estresse. Minha prática é sempre baseada em evidências científicas e um acolhimento genuíno.
+            Minha prática combina a profundidade da psicanálise com as estratégias focadas e baseadas em evidências da Terapia Cognitivo Comportamental (TCC), oferecendo um atendimento que é ao mesmo tempo acolhedor e altamente eficaz. Atendo **adolescentes e adultos**, focando em diagnósticos precisos e reabilitação cognitiva.
           </p>
-          <p>
-            Acredito que entender como seu cérebro funciona é o primeiro passo para o autodomínio e para uma vida com mais clareza e bem-estar.
-          </p>
+
+          <div className={styles.locationSection}>
+            <LocationIcon />
+            <div className={styles.locationText}>
+                Atendimento presencial em São Paulo, Itaim Bibi: <br/>
+                Rua João Cachoeira, 488 - Conjunto 510.
+            </div>
+          </div>
         </div>
       </section>
 
       <section className={styles.philosophySection}>
-        <h2 className={styles.sectionTitle}>Nossa Filosofia: Mente, Ciência e Ação</h2>
+        <h2 className={styles.sectionTitle}>Filosofia: Ciência a Serviço do Bem-Estar</h2>
         <blockquote className={styles.philosophyText}>
-          "Não basta apenas sentir; precisamos entender o que fazemos e por que fazemos. O acompanhamento eficaz une a profundidade da Neurociência com a ação transformadora da TCC. Juntos, vamos mapear seus padrões, construir novas conexões neurais e criar a vida que você deseja, passo a passo."
+          "O cérebro é a nossa ferramenta mais complexa. Meu trabalho é oferecer o mapeamento neuropsicológico necessário para desvendar dificuldades e, em seguida, fornecer as estratégias (sejam elas da TCC ou da Reabilitação Cognitiva) para que o paciente retome o controle de sua vida com autonomia e conhecimento."
         </blockquote>
       </section>
       
@@ -60,7 +73,12 @@ export default function SobrePage() {
         <ul className={styles.formationList}>
           {formacaoData.map((item, index) => (
             <li key={index} className={styles.formationItem}>
-              <div className={styles.courseTitle}>{item.titulo}</div>
+              <div className={styles.courseTitle}>
+                {item.titulo} 
+                {item.instituicao.includes('USP') && 
+                  <span style={{ fontSize: '0.8em', marginLeft: '8px', color: '#888' }}>(Referência Nacional)</span>
+                }
+              </div>
               <div className={styles.institution}>
                 {item.instituicao} ({item.ano})
               </div>
