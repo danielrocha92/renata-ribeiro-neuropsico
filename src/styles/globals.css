@@ -1,26 +1,35 @@
-@import "tailwindcss";
+/* src/styles/globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-primary: #0070f3; /* Azul profissional */
+  --color-secondary: #00bcd4; /* Azul água (calmante) */
+  --color-text-dark: #333333;
+  --color-text-light: #ffffff;
+  --color-background: #f8f9fa;
+  --color-card-bg: #ffffff;
+  --spacing-unit: 8px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Mobile First: Usa 100% da viewport width */
+  width: 100vw; 
+  overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
+  color: var(--color-text-dark);
+  background-color: var(--color-background);
+  font-size: 16px; /* Base font size */
 }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
