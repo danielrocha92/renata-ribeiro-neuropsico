@@ -21,6 +21,9 @@ export default function Header() {
           <li>
             <Link href="/contato">Contato</Link>
           </li>
+          <li>
+            <Link href="/cliente">Área do Cliente</Link>
+          </li>
         </ul>
       </nav>
     </header>

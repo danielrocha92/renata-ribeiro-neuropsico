@@ -7,6 +7,8 @@ import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import styles from "@/styles/Layout.module.css";
 
+import { AuthProvider } from "@/contexts/AuthContext";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -40,73 +42,143 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={inter.className}>
         
-        <header className={styles.header}>
-          <nav className={styles.navContainer}>
-            <a href="/" className={styles.logo}>
-              Renata Ribeiro <span>Neuropsico</span>
-            </a>
-            <ul className={styles.navMenu}>
-              <li className={styles.navItem}><a href="/">Início</a></li>
-              <li className={styles.navItem}><a href="/servicos">Serviços</a></li>
-              <li className={styles.navItem}><a href="/sobre">Sobre</a></li>
-              <li className={styles.navItem}><a href="/contato">Contato</a></li>
-            </ul>
-          </nav>
-        </header>
+        <AuthProvider>
+        
+          <header className={styles.header}>
+        
+            <nav className={styles.navContainer}>
+        
+              <a href="/" className={styles.logo}>
+        
+                Renata Ribeiro <span>Neuropsico</span>
+        
+              </a>
+        
+              <ul className={styles.navMenu}>
+        
+                <li className={styles.navItem}><a href="/">Início</a></li>
+        
+                <li className={styles.navItem}><a href="/servicos">Serviços</a></li>
+        
+                <li className={styles.navItem}><a href="/sobre">Sobre</a></li>
+        
+                <li className={styles.navItem}><a href="/contato">Contato</a></li>
 
-        {children}
+                <li className={styles.navItem}><a href="/cliente">Área do Cliente</a></li>
+        
+              </ul>
+        
+            </nav>
+        
+          </header>
+        
 
-        <footer className={styles.footer}>
-          <div className={styles.footerContent}>
-            
-            <div className={styles.footerSection}>
-              <h4>Dra. Renata Ribeiro | Neuropsicologia</h4>
-              <p>CRP SP 06/53721-8</p>
-              <p>Especialista com foco em Neurociência, TCC e Reabilitação Cognitiva (HC-FMUSP).</p>
-              <p>Atendimento presencial e online para adolescentes e adultos.</p>
-              <div className={styles.socialIcons}>
-                <a 
-                  href="https://www.instagram.com/psic.renataribeiro" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className={styles.socialIcon}
-                  aria-label="Instagram da Dra. Renata Ribeiro"
-                >
-                  <IconInstagram />
-                </a>
-                <a 
-                  href="https://www.linkedin.com/in/renataribeiropsico" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className={styles.socialIcon}
-                  aria-label="LinkedIn da Dra. Renata Ribeiro"
-                >
-                  <IconLinkedin />
-                </a>
+        
+          {children}
+        
+
+        
+          <footer className={styles.footer}>
+        
+            <div className={styles.footerContent}>
+        
+              
+        
+              <div className={styles.footerSection}>
+        
+                <h4>Dra. Renata Ribeiro | Neuropsicologia</h4>
+        
+                <p>CRP SP 06/53721-8</p>
+        
+                <p>Especialista com foco em Neurociência, TCC e Reabilitação Cognitiva (HC-FMUSP).</p>
+        
+                <p>Atendimento presencial e online para adolescentes e adultos.</p>
+        
+                <div className={styles.socialIcons}>
+        
+                  <a 
+        
+                    href="https://www.instagram.com/psic.renataribeiro" 
+        
+                    target="_blank" 
+        
+                    rel="noopener noreferrer" 
+        
+                    className={styles.socialIcon}
+        
+                    aria-label="Instagram da Dra. Renata Ribeiro"
+        
+                  >
+        
+                    <IconInstagram />
+        
+                  </a>
+        
+                  <a 
+        
+                    href="https://www.linkedin.com/in/renataribeiropsico" 
+        
+                    target="_blank" 
+        
+                    rel="noopener noreferrer" 
+        
+                    className={styles.socialIcon}
+        
+                    aria-label="LinkedIn da Dra. Renata Ribeiro"
+        
+                  >
+        
+                    <IconLinkedin />
+        
+                  </a>
+        
+                </div>
+        
               </div>
-            </div>
+        
 
-            <div className={styles.footerSection}>
-              <h4>Localização e Contato</h4>
-              <p><IconMap /> Rua João Cachoeira, 488 - Conj. 510, Itaim Bibi, SP</p>
-              <p><IconMail /> <a href="mailto:contato@renataribeiropsico.com.br">contato@renataribeiropsico.com.br</a></p>
-              <p><IconPhone /> <a href="tel:+5511998765432">(11) 99876-5432</a> (WhatsApp)</p>
-            </div>
-            
-            <div className={styles.footerSection}>
-              <h4>Navegação Rápida</h4>
-              <p><a href="/">Início</a></p>
-              <p><a href="/servicos">Serviços</a></p>
-              <p><a href="/sobre">Sobre a Dra.</a></p>
-              <p><a href="/contato">Agendar Consulta</a></p>
-            </div>
+        
+              <div className={styles.footerSection}>
+        
+                <h4>Localização e Contato</h4>
+        
+                <p><IconMap /> Rua João Cachoeira, 488 - Conj. 510, Itaim Bibi, SP</p>
+        
+                <p><IconMail /> <a href="mailto:contato@renataribeiropsico.com.br">contato@renataribeiropsico.com.br</a></p>
+        
+                <p><IconPhone /> <a href="tel:+5511998765432">(11) 99876-5432</a> (WhatsApp)</p>
+        
+              </div>
+        
+              
+        
+              <div className={styles.footerSection}>
+        
+                <h4>Navegação Rápida</h4>
+        
+                <p><a href="/">Início</a></p>
+        
+                <p><a href="/servicos">Serviços</a></p>
+        
+                <p><a href="/sobre">Sobre a Dra.</a></p>
+        
+                <p><a href="/contato">Agendar Consulta</a></p>
+        
+              </div>
+        
 
-          </div>
-          <div className={styles.copyright}>
-            &copy; {new Date().getFullYear()} Dra. Renata Ribeiro. Todos os direitos reservados.
-          </div>
-        </footer>
-
+        
+            </div>
+        
+            <div className={styles.copyright}>
+        
+              &copy; {new Date().getFullYear()} Dra. Renata Ribeiro. Todos os direitos reservados.
+        
+            </div>
+        
+          </footer>
+        
+        </AuthProvider>
       </body>
     </html>
   );

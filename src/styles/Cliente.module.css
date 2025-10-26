@@ -1,0 +1,162 @@
+.dashboard {
+  padding: 2rem;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.userActions {
+  text-align: right;
+}
+
+.userEmail {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0 0 0.5rem 0;
+}
+
+.logoutButton {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.logoutButton:hover {
+  background-color: #c0392b;
+}
+
+.mainContent {
+  display: grid;
+  gap: 2rem;
+}
+
+.section {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.75rem;
+}
+
+.cardList {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  background-color: #fcfcfc;
+  border: 1px solid #e9e9e9;
+  padding: 1.25rem;
+  border-radius: 10px;
+  position: relative;
+}
+
+.card h4 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.card p {
+  margin: 0.25rem 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.status {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.statusConfirmed {
+  background-color: #e8f5e9; /* Light Green */
+  color: #2e7d32;
+}
+
+.statusCompleted {
+  background-color: #f3e5f5; /* Light Purple */
+  color: #6a1b9a;
+}
+
+.pastCard {
+  background-color: #fafafa;
+  opacity: 0.8;
+}
+
+.documentCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.downloadButton {
+  background-color: #3498db;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.downloadButton:hover {
+  background-color: #2980b9;
+}
+
+@media (min-width: 768px) {
+  .cardList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .mainContent {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cardList {
+    grid-template-columns: 1fr;
+  }
+}
