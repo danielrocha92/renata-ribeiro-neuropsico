@@ -1,0 +1,116 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { db } from '../lib/firebase';
+import { collection, query, where, getDocs, updateDoc, doc, Timestamp, onSnapshot, documentId } from 'firebase/firestore';
+import { useAuth } from '../contexts/AuthContext';
+
+interface Appointment {
+  id: string;
+  patientId: string;
+  date: Timestamp;
+  title: string;
+  status: 'Pendente' | 'Confirmado' | 'Cancelado' | 'Realizada';
+  patientName?: string; // This will be populated
+}
+
+const AppointmentsManager: React.FC = () => {
+  const { user } = useAuth(); // This is the psychologist
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user || !db) return;
+
+    const q = query(collection(db, "appointments"), where("psychologistId", "==", user.uid));
+
+    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+      setLoading(true);
+      try {
+        const appointmentsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Appointment));
+        
+        // Get unique patient IDs
+        const patientIds = [...new Set(appointmentsData.map(app => app.patientId))];
+
+        if (patientIds.length > 0) {
+          // Fetch patient names
+          const usersQuery = query(collection(db, "users"), where(documentId(), "in", patientIds));
+          const usersSnapshot = await getDocs(usersQuery);
+          const patientNames = new Map<string, string>();
+          usersSnapshot.forEach(doc => {
+            patientNames.set(doc.id, doc.data().name);
+          });
+
+          // Add patient names to appointments
+          const appointmentsWithNames = appointmentsData.map(app => ({
+            ...app,
+            patientName: patientNames.get(app.patientId) || 'Nome não encontrado'
+          }));
+          setAppointments(appointmentsWithNames);
+        } else {
+          setAppointments([]);
+        }
+
+      } catch (err) {
+        console.error(err);
+        setError("Falha ao buscar agendamentos.");
+      } finally {
+        setLoading(false);
+      }
+    }, (err) => {
+        console.error(err);
+        setError("Falha na conexão com os agendamentos.");
+        setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  const handleUpdateStatus = async (id: string, status: Appointment['status']) => {
+    if (!db) return;
+    const docRef = doc(db, "appointments", id);
+    try {
+      await updateDoc(docRef, { status: status });
+    } catch (err) {
+      console.error("Failed to update status: ", err);
+      setError("Falha ao atualizar o status do agendamento.");
+    }
+  };
+
+  const pending = appointments.filter(a => a.status === 'Pendente').sort((a, b) => a.date.toMillis() - b.date.toMillis());
+  const upcoming = appointments.filter(a => a.status === 'Confirmado' && a.date.toDate() > new Date()).sort((a, b) => a.date.toMillis() - b.date.toMillis());
+
+  if (loading) return <p>Carregando agendamentos...</p>;
+  if (error) return <p style={{color: 'red'}}>{error}</p>;
+
+  return (
+    <div>
+      <div style={{marginBottom: '2rem'}}>
+        <h4>Solicitações Pendentes</h4>
+        {pending.length > 0 ? pending.map(app => (
+          <div key={app.id} style={{border: '1px solid #ccc', padding: '10px', margin: '10px 0'}}>
+            <p><strong>Paciente:</strong> {app.patientName}</p>
+            <p><strong>Data:</strong> {app.date.toDate().toLocaleString('pt-BR')}</p>
+            <p><strong>Motivo:</strong> {app.title}</p>
+            <button onClick={() => handleUpdateStatus(app.id, 'Confirmado')}>Confirmar</button>
+            <button onClick={() => handleUpdateStatus(app.id, 'Cancelado')}>Cancelar</button>
+          </div>
+        )) : <p>Nenhuma nova solicitação.</p>}
+      </div>
+
+      <div>
+        <h4>Próximos Agendamentos (Confirmados)</h4>
+        {upcoming.length > 0 ? upcoming.map(app => (
+          <div key={app.id} style={{border: '1px solid #eee', padding: '10px', margin: '10px 0'}}>
+            <p><strong>Paciente:</strong> {app.patientName}</p>
+            <p><strong>Data:</strong> {app.date.toDate().toLocaleString('pt-BR')}</p>
+            <p><strong>Status:</strong> {app.status}</p>
+          </div>
+        )) : <p>Nenhum agendamento confirmado.</p>}
+      </div>
+    </div>
+  );
+};
+
+export default AppointmentsManager;

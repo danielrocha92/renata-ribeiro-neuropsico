@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '../../lib/firebase';
+import { auth, db } from '../../lib/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from '../../styles/Cadastro.module.css';
@@ -13,38 +14,56 @@ const CadastroPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [userType, setUserType] = useState('paciente');
+  const [crp, setCrp] = useState(''); // State for CRP number
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccess(null);
 
     if (password !== confirmPassword) {
       setError('As senhas não coincidem.');
       return;
     }
 
-    if (!auth) {
-      setError('Serviço de autenticação indisponível.');
+    if (userType === 'psicologo' && !crp) {
+      setError('O número do CRP é obrigatório para psicólogos.');
+      return;
+    }
+
+    if (!auth || !db) {
+      setError('Serviço de autenticação ou banco de dados indisponível.');
       return;
     }
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      
-      // Update user profile with name
-      if (userCredential.user) {
-        await updateProfile(userCredential.user, {
-          displayName: name,
-        });
+      const user = userCredential.user;
+
+      await updateProfile(user, { displayName: name });
+
+      const userData: any = {
+        uid: user.uid,
+        name: name,
+        email: email,
+        userType: userType,
+        status: userType === 'psicologo' ? 'pending' : 'active',
+      };
+
+      if (userType === 'psicologo') {
+        userData.crp = crp;
       }
 
-      console.log("Novo usuário criado:", userCredential.user);
+      await setDoc(doc(db, "users", user.uid), userData);
+
       if (userType === 'paciente') {
         router.push('/cliente');
       } else {
-        router.push('/admin');
+        setSuccess('Cadastro realizado com sucesso! Sua conta está pendente de aprovação por um administrador.');
+        setTimeout(() => router.push('/login'), 4000);
       }
 
     } catch (error: any) {
@@ -64,6 +83,7 @@ const CadastroPage: React.FC = () => {
       <form className={styles.signupForm} onSubmit={handleSignUp}>
         <h1 className={styles.title}>Criar Conta</h1>
         {error && <p className={styles.error}>{error}</p>}
+        {success && <p className={styles.success}>{success}</p>}
         <select
           className={styles.input}
           value={userType}
@@ -80,6 +100,16 @@ const CadastroPage: React.FC = () => {
           onChange={(e) => setName(e.target.value)}
           required
         />
+        {userType === 'psicologo' && (
+          <input
+            type="text"
+            placeholder="Número do CRP (ex: 06/123456)"
+            className={styles.input}
+            value={crp}
+            onChange={(e) => setCrp(e.target.value)}
+            required
+          />
+        )}
         <input
           type="email"
           placeholder="Email"
@@ -104,7 +134,9 @@ const CadastroPage: React.FC = () => {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
-        <button type="submit" className={styles.button}>Cadastrar</button>
+        <button type="submit" className={styles.button} disabled={!!success}>
+          Cadastrar
+        </button>
         <p className={styles.loginLink}>
           Já tem uma conta? <Link href="/login">Faça login</Link>
         </p>

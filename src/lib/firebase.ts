@@ -2,6 +2,7 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import { getFirestore, type Firestore } from 'firebase/firestore';
 import { getAuth, type Auth } from 'firebase/auth';
+import { getStorage, type FirebaseStorage } from 'firebase/storage';
 import { getAnalytics, type Analytics } from 'firebase/analytics';
 
 const firebaseConfig = {
@@ -17,6 +18,7 @@ const firebaseConfig = {
 let app: FirebaseApp | null = null;
 let db: Firestore | null = null;
 let auth: Auth | null = null;
+let storage: FirebaseStorage | null = null;
 let analytics: Analytics | null = null;
 
 // Initialize on the client side ONLY. This avoids server-side crashes.
@@ -28,7 +30,8 @@ if (typeof window !== 'undefined' && firebaseConfig.apiKey) {
   }
   db = getFirestore(app);
   auth = getAuth(app);
+  storage = getStorage(app);
   analytics = getAnalytics(app);
 }
 
-export { db, auth, analytics };
+export { db, auth, storage, analytics };

@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../lib/firebase';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { auth, db } from '../../lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from '../../styles/Login.module.css';
@@ -11,37 +12,59 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [userType, setUserType] = useState('paciente');
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (!auth) {
+    if (!auth || !db) {
       setError("O serviço de autenticação não está disponível. Tente novamente mais tarde.");
       return;
     }
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      if (userType === 'paciente') {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Fetch user data from Firestore to check role and status
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (!userDoc.exists()) {
+        await signOut(auth);
+        setError("Dados de usuário não encontrados.");
+        return;
+      }
+
+      const userData = userDoc.data();
+
+      if (userData.userType === 'psicologo') {
+        if (userData.status === 'pending') {
+          await signOut(auth);
+          setError('Sua conta de psicólogo está pendente de aprovação.');
+        } else if (userData.status === 'active') {
+          router.push('/admin');
+        } else {
+          await signOut(auth);
+          setError('O status da sua conta é inválido.');
+        }
+      } else if (userData.userType === 'paciente') {
         router.push('/cliente');
       } else {
-        router.push('/admin');
+        await signOut(auth);
+        setError('Tipo de usuário desconhecido.');
       }
+
     } catch (error: any) {
-      // Traduzir mensagens de erro comuns do Firebase
       switch (error.code) {
         case 'auth/user-not-found':
-          setError('Nenhum usuário encontrado com este e-mail.');
-          break;
         case 'auth/wrong-password':
-          setError('Senha incorreta. Por favor, tente novamente.');
+          setError('E-mail ou senha inválidos.');
           break;
         case 'auth/invalid-email':
           setError('O formato do e-mail é inválido.');
           break;
         default:
-          setError('Ocorreu um erro ao fazer login. Por favor, tente novamente.');
+          setError('Ocorreu um erro ao fazer login.');
           console.error(error);
       }
     }
@@ -52,20 +75,13 @@ const LoginPage: React.FC = () => {
       <form className={styles.loginForm} onSubmit={handleLogin}>
         <h1 className={styles.title}>Login</h1>
         {error && <p className={styles.error}>{error}</p>}
-        <select
-          className={styles.input}
-          value={userType}
-          onChange={(e) => setUserType(e.target.value)}
-        >
-          <option value="paciente">Paciente</option>
-          <option value="psicologo">Psicólogo</option>
-        </select>
         <input
           type="email"
           placeholder="Email"
           className={styles.input}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           type="password"
@@ -73,6 +89,7 @@ const LoginPage: React.FC = () => {
           className={styles.input}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
         <button type="submit" className={styles.button}>Entrar</button>
         <p className={styles.signupLink}>

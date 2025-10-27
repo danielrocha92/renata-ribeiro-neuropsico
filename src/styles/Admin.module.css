@@ -1,0 +1,37 @@
+.dashboard {
+  padding: 2rem;
+  background-color: #f4f7f6;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.section {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #555;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}

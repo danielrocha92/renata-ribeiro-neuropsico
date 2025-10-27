@@ -2,7 +2,8 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { auth } from '../lib/firebase';
+import { auth, db } from '../lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 interface AuthContextType {
   user: User | null;
@@ -12,22 +13,39 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({ user: null, isAdmin: false, loading: true });
 
-const adminEmails = ['admin@example.com', 'psicologo@email.com']; // Adicione o email do psicólogo aqui
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(!!auth);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      if (user && adminEmails.includes(user.email!)) {
-        setIsAdmin(true);
-      } else {
-        setIsAdmin(false);
-      }
+    if (!auth || !db) {
       setLoading(false);
+      return;
+    }
+
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      try {
+        setUser(user);
+        if (user) {
+          const userDocRef = doc(db, 'users', user.uid);
+          const userDoc = await getDoc(userDocRef);
+          // A user is an admin if they are a psychologist AND their status is active
+          if (userDoc.exists() && userDoc.data().userType === 'psicologo' && userDoc.data().status === 'active') {
+            setIsAdmin(true);
+          } else {
+            setIsAdmin(false);
+          }
+        } else {
+          setIsAdmin(false);
+        }
+      } catch (error) {
+        console.error("Auth context error:", error);
+        // Set default states on error
+        setIsAdmin(false);
+      } finally {
+        setLoading(false);
+      }
     });
 
     return () => unsubscribe();
