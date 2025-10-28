@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { db } from '../lib/firebase';
-import { collection, query, where, getDocs, updateDoc, doc, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, updateDoc, doc, onSnapshot } from 'firebase/firestore';
 
 interface PendingUser {
   uid: string;

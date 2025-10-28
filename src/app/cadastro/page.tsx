@@ -8,6 +8,15 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from '../../styles/Cadastro.module.css';
 
+interface UserData {
+  uid: string;
+  name: string;
+  email: string;
+  userType: string;
+  status: string;
+  crp?: string;
+}
+
 const CadastroPage: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -45,7 +54,7 @@ const CadastroPage: React.FC = () => {
 
       await updateProfile(user, { displayName: name });
 
-      const userData: any = {
+      const userData: UserData = {
         uid: user.uid,
         name: name,
         email: email,
@@ -66,13 +75,19 @@ const CadastroPage: React.FC = () => {
         setTimeout(() => router.push('/login'), 4000);
       }
 
-    } catch (error: any) {
-      if (error.code === 'auth/email-already-in-use') {
-        setError('Este e-mail já está em uso.');
-      } else if (error.code === 'auth/weak-password') {
-        setError('A senha é muito fraca. Use pelo menos 6 caracteres.');
+    } catch (error: unknown) {
+      if (error instanceof Error && 'code' in error) {
+        const firebaseError = error as { code: string };
+        if (firebaseError.code === 'auth/email-already-in-use') {
+          setError('Este e-mail já está em uso.');
+        } else if (firebaseError.code === 'auth/weak-password') {
+          setError('A senha é muito fraca. Use pelo menos 6 caracteres.');
+        } else {
+          setError('Ocorreu um erro ao criar o usuário.');
+          console.error(error);
+        }
       } else {
-        setError('Ocorreu um erro ao criar o usuário.');
+        setError('Ocorreu um erro desconhecido.');
         console.error(error);
       }
     }

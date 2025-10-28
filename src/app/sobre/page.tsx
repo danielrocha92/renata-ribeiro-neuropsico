@@ -64,7 +64,7 @@ export default function SobrePage() {
       <section className={styles.philosophySection}>
         <h2 className={styles.sectionTitle}>Filosofia: Ciência a Serviço do Bem-Estar</h2>
         <blockquote className={styles.philosophyText}>
-          "O cérebro é a nossa ferramenta mais complexa. Meu trabalho é oferecer o mapeamento neuropsicológico necessário para desvendar dificuldades e, em seguida, fornecer as estratégias (sejam elas da TCC ou da Reabilitação Cognitiva) para que o paciente retome o controle de sua vida com autonomia e conhecimento."
+          &quot;O cérebro é a nossa ferramenta mais complexa. Meu trabalho é oferecer o mapeamento neuropsicológico necessário para desvendar dificuldades e, em seguida, fornecer as estratégias (sejam elas da TCC ou da Reabilitação Cognitiva) para que o paciente retome o controle de sua vida com autonomia e conhecimento.&quot;
         </blockquote>
       </section>
       
@@ -90,4 +90,3 @@ export default function SobrePage() {
     </main>
   );
 }
-

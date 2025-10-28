@@ -54,18 +54,24 @@ const LoginPage: React.FC = () => {
         setError('Tipo de usuário desconhecido.');
       }
 
-    } catch (error: any) {
-      switch (error.code) {
-        case 'auth/user-not-found':
-        case 'auth/wrong-password':
-          setError('E-mail ou senha inválidos.');
-          break;
-        case 'auth/invalid-email':
-          setError('O formato do e-mail é inválido.');
-          break;
-        default:
-          setError('Ocorreu um erro ao fazer login.');
-          console.error(error);
+    } catch (error: unknown) {
+      if (error instanceof Error && 'code' in error) {
+        const firebaseError = error as { code: string };
+        switch (firebaseError.code) {
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+            setError('E-mail ou senha inválidos.');
+            break;
+          case 'auth/invalid-email':
+            setError('O formato do e-mail é inválido.');
+            break;
+          default:
+            setError('Ocorreu um erro ao fazer login.');
+            console.error(error);
+        }
+      } else {
+        setError('Ocorreu um erro desconhecido.');
+        console.error(error);
       }
     }
   };
