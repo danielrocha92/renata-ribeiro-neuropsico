@@ -43,7 +43,7 @@ const PatientDocuments: React.FC = () => {
       }
     };
     fetchPatients();
-  }, []); 
+  }, []);
 
   // Fetch documents for the selected patient
   useEffect(() => {
@@ -87,7 +87,7 @@ const PatientDocuments: React.FC = () => {
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on('state_changed',
-      () => { 
+      () => {
         // Progress function not used in this case
       },
       (err) => {
@@ -97,6 +97,18 @@ const PatientDocuments: React.FC = () => {
       },
       async () => {
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+
+        // ***** INÍCIO DA CORREÇÃO *****
+        // Verificação necessária que estava faltando
+        if (!db) {
+          console.error("Erro: Conexão com o banco de dados não estabelecida.");
+          setError('Falha ao salvar o documento no banco.');
+          setUploading(false);
+          return;
+        }
+        // ***** FIM DA CORREÇÃO *****
+
+        // Agora o TypeScript sabe que 'db' não é nulo
         await addDoc(collection(db, "documents"), {
           patientId: selectedPatient,
           fileName: file.name,
@@ -105,9 +117,10 @@ const PatientDocuments: React.FC = () => {
         });
         setUploading(false);
         setFile(null); // Clear the file input
+        
         // Refresh documents list
         const fetchDocuments = async () => {
-          if (!selectedPatient || !db) return;
+          if (!selectedPatient || !db) return; // Esta verificação já estava correta
           const q = query(collection(db, "documents"), where("patientId", "==", selectedPatient));
           const querySnapshot = await getDocs(q);
           const docsList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Document));
@@ -122,7 +135,7 @@ const PatientDocuments: React.FC = () => {
     <div className="patient-documents">
       <h3>Documentos dos Pacientes</h3>
       {error && <p className="error">{error}</p>}
-      
+
       <div className="controls">
         <select value={selectedPatient} onChange={(e) => setSelectedPatient(e.target.value)}>
           <option value="">Selecione um Paciente</option>
@@ -145,7 +158,9 @@ const PatientDocuments: React.FC = () => {
               {documents.map(doc => (
                 <li key={doc.id}>
                   <a href={doc.fileURL} target="_blank" rel="noopener noreferrer">{doc.fileName}</a>
-                  <span> - {new Date(doc.uploadedAt?.seconds * 1000).toLocaleDateString()}</span>
+                  {doc.uploadedAt && (
+                    <span> - {new Date(doc.uploadedAt.seconds * 1000).toLocaleDateString()}</span>
+                  )}
                 </li>
               ))}
             </ul>
