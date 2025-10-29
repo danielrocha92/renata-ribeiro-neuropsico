@@ -1,32 +1,83 @@
+/* src/styles/Footer.module.css - Modern & Smooth */
+
 .footer {
-  background-color: #f8f8f8;
-  border-top: 1px solid #eaeaea;
-  padding: 2rem;
-  text-align: center;
-  color: #666;
+  background-color: var(--color-text-light);
+  color: var(--color-text-dark);
+  padding: 50px 25px;
+  border-top: 1px solid #E5E7EB;
   font-size: 0.9rem;
 }
 
-.socialLinks {
+.footerContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.footerSection h4 {
+  color: var(--color-text-dark);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.footerSection p,
+.footerSection a,
+.footerSection li {
+  margin-bottom: 12px;
+  line-height: 1.7;
+  color: #4B5563; /* Cinza médio */
+  text-decoration: none;
   display: flex;
-  justify-content: center;
-  gap: 1rem;
+  align-items: center;
+  gap: 10px;
+}
+
+.footerSection a:hover {
+  color: var(--color-primary);
+}
+
+.footerSection ul {
   list-style: none;
   padding: 0;
-  margin: 1rem 0;
 }
 
-.socialLinks a {
-  color: #666;
-  text-decoration: none;
-  font-size: 1.5rem; /* Larger icons */
-  transition: color 0.2s ease-in-out;
+.socialIcons {
+  display: flex;
+  gap: 18px;
+  margin-top: 20px;
 }
 
-.socialLinks a:hover {
-  color: #0070f3;
+.socialIcon {
+  color: #4B5563;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.socialIcon:hover {
+  color: var(--color-primary);
+  transform: translateY(-3px);
 }
 
 .copyright {
-  margin-top: 1rem;
+  text-align: center;
+  margin-top: 50px;
+  padding-top: 25px;
+  border-top: 1px solid #E5E7EB;
+  font-size: 0.8rem;
+  color: #6B7280; /* Cinza claro */
+}
+
+/* ------------------- TABLET & DESKTOP STYLES ------------------- */
+@media (min-width: 768px) {
+  .footerContent {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px;
+  }
+
+  .footer {
+    padding: 70px 40px;
+  }
 }

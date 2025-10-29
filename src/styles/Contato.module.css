@@ -1,186 +1,127 @@
-/* src/styles/Contato.module.css - Mobile First */
-
-:root {
-  --color-accent-blue: #0A3D62; /* Azul Marinho Profundo */
-  --color-light-teal: #4BC6B8; /* Verde Água Suave */
-  --color-text: #444444;
-  --color-bg-light: #fefefe;
-  --color-bg-form: #f0f8ff; /* Fundo suave para o formulário */
-  --border-radius: 12px;
-}
+/* src/styles/Contato.module.css - Modern & Smooth */
 
 .main {
-  padding: 30px 15px;
+  padding: 40px 20px;
   background-color: var(--color-background);
 }
 
-.heading {
-  font-size: 1.8rem;
-  color: var(--color-accent-blue);
-  text-align: center;
-  margin-bottom: 10px;
-  font-weight: 700;
-}
-
-.subHeading {
-  font-size: 1rem;
-  color: var(--color-text);
-  text-align: center;
-  margin-bottom: 30px;
-  line-height: 1.5;
-}
-
-/* ------------------- LAYOUT GERAL ------------------- */
-.contactContainer {
-  display: grid;
-  grid-template-columns: 1fr; /* Uma coluna no mobile */
-  gap: 30px;
-  max-width: 900px;
+.container {
+  max-width: 700px;
   margin: 0 auto;
+  background-color: var(--color-card-bg);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* ------------------- SEÇÃO DE INFORMAÇÕES ------------------- */
-.infoSection {
-  background-color: var(--color-accent-blue);
-  color: white;
-  padding: 30px 25px;
-  border-radius: var(--border-radius);
-}
-
-.infoSection h2 {
-  font-size: 1.5rem;
-  margin-bottom: 20px;
+.title {
+  font-size: 2.2rem;
   font-weight: 600;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  padding-bottom: 10px;
+  text-align: center;
+  margin-bottom: 15px;
+  color: var(--color-text-dark);
 }
 
-.contactItem {
+.subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #4B5563;
+  margin-bottom: 40px;
+}
+
+.form {
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 20px;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.contactItem svg {
-  margin-right: 15px;
-  color: var(--color-light-teal);
-  min-width: 24px;
+.inputGroup {
+  display: flex;
+  flex-direction: column;
 }
 
-.contactDetails p {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.4;
-}
-
-.contactDetails a {
-  color: var(--color-light-teal);
-  text-decoration: none;
+.inputGroup label {
   font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--color-text-dark);
 }
 
-.contactDetails a:hover {
-  text-decoration: underline;
+.inputGroup input,
+.inputGroup textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  background-color: #F9FAFB;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* ------------------- SEÇÃO DE FORMULÁRIO ------------------- */
-.formSection {
-  background-color: var(--color-bg-form);
-  padding: 30px 25px;
-  border-radius: var(--border-radius);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+.inputGroup input:focus,
+.inputGroup textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(90, 155, 219, 0.3);
 }
 
-.formSection h2 {
-  font-size: 1.5rem;
-  color: var(--color-accent-blue);
-  margin-bottom: 20px;
+.radioGroup {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.radioGroup label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 400;
+}
+
+.dateTimeGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.button {
+  padding: 14px;
+  font-size: 1.1rem;
   font-weight: 600;
+  color: var(--color-text-light);
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
 }
 
-.formGroup {
+.button:hover {
+  background-color: #4A8AC9;
+  transform: translateY(-2px);
+}
+
+.button:disabled {
+  background-color: #B0C4DE;
+  cursor: not-allowed;
+}
+
+.confirmationMessage {
+  text-align: center;
+  padding: 40px;
+}
+
+.confirmationMessage h2 {
+  font-size: 1.8rem;
+  color: var(--color-primary);
   margin-bottom: 15px;
 }
 
-.formGroup label {
-  display: block;
-  font-size: 0.9rem;
-  color: var(--color-text);
-  margin-bottom: 5px;
-  font-weight: 500;
-}
-
-.formGroup input[type="text"],
-.formGroup input[type="email"],
-.formGroup textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  box-sizing: border-box; /* Garante que o padding não aumente a largura total */
-  transition: border-color 0.3s ease;
-}
-
-.formGroup input:focus,
-.formGroup textarea:focus {
-  border-color: var(--color-light-teal);
-  outline: none;
-}
-
-.formGroup textarea {
-  resize: vertical;
-  min-height: 120px;
-}
-
-.submitButton {
-  display: block;
-  width: 100%;
+.error {
+  color: #EF4444;
+  background-color: #FEE2E2;
+  border: 1px solid #FCA5A5;
   padding: 12px;
-  background-color: var(--color-light-teal);
-  color: var(--color-accent-blue);
-  border: none;
-  border-radius: 6px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease;
+  border-radius: 8px;
+  text-align: center;
 }
-
-.submitButton:hover {
-  background-color: #3aa89b;
-  transform: translateY(-1px);
-}
-
-.submitButton:active {
-  transform: translateY(0);
-}
-
-/* ------------------- DESKTOP STYLES (min-width: 768px) ------------------- */
-@media (min-width: 768px) {
-  .main {
-    padding: 60px 40px;
-  }
-  
-  .heading {
-    font-size: 2.5rem;
-  }
-  
-  .subHeading {
-    font-size: 1.1rem;
-    margin-bottom: 50px;
-  }
-
-  .contactContainer {
-    grid-template-columns: 1fr 1.5fr; /* Info (menor) | Formulário (maior) */
-  }
-
-  .infoSection {
-    padding: 40px 30px;
-  }
-  
-  .formSection {
-    padding: 40px 30px;
-  }
-}
-

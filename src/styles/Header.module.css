@@ -1,73 +1,68 @@
-/* src/styles/Header.module.css - Mobile First */
+/* src/styles/Header.module.css - Modern & Smooth */
 
-:root {
-  --color-primary: #0A3D62; /* Azul Escuro Profissional */
-  --color-secondary: #66CCCC; /* Verde Água Acolhedor */
-  --color-text-dark: #333333;
-  --color-text-light: #ffffff;
-  --color-accent-soft: #f4f6f9; /* Cinza claro suave */
-}
-
-/* ------------------- BASE MOBILE (0px - 767px) ------------------- */
 .header {
-  /* Fundo branco e limpo, barra fina na parte inferior */
-  background-color: var(--color-text-light);
-  border-bottom: 1px solid var(--color-accent-soft);
-  
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
+  background-color: var(--color-card-bg);
+  border-bottom: 1px solid var(--color-text-light);
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); /* Sombra sutil */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: background-color 0.3s ease;
 }
 
-.logo a {
-  font-size: 1.4rem;
+.navContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 1.5rem;
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--color-text-dark);
   text-decoration: none;
-  letter-spacing: -0.5px; /* Visual mais clean */
+}
+
+.logo span {
+  font-weight: 400;
+  color: var(--color-primary);
 }
 
 .menuToggle {
-  /* Botão de Hambúrguer - Visível no Mobile */
   background: none;
   border: none;
-  color: var(--color-primary);
+  color: var(--color-text-dark);
   cursor: pointer;
   padding: 5px;
-  z-index: 1001; /* Fica acima do menu */
+  z-index: 1001;
+  display: block; /* Visível no Mobile */
 }
 
 .nav {
-  /* Inicialmente, o menu está escondido e fixo no Mobile (Overlay) */
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  background-color: rgba(255, 255, 255, 0.98); /* Fundo quase branco da Apple */
+  background-color: var(--color-card-bg);
   z-index: 999;
-  
-  /* Esconder por padrão */
   visibility: hidden;
   opacity: 0;
-  transform: translateX(100%);
-  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+  transform: scale(1.05);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
 }
 
 .menuOpen {
-  /* Estado Aberto do Menu Mobile (Overlay) */
   visibility: visible;
   opacity: 1;
-  transform: translateX(0);
+  transform: scale(1);
 }
 
 .navList {
-  /* Lista de Links no Overlay */
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -76,70 +71,69 @@
   height: 100%;
   margin: 0;
   padding: 0;
-  gap: 30px; /* Espaçamento grande para fácil toque */
+  gap: 35px;
 }
 
-.nav a {
-  /* Estilo dos Links no Overlay */
-  color: var(--color-primary);
+.navItem a {
+  color: var(--color-text-dark);
   text-decoration: none;
-  font-size: 1.8rem; 
+  font-size: 1.6rem; 
   font-weight: 500;
   padding: 10px;
   display: block;
+  transition: color 0.2s ease;
+}
+
+.navItem a:hover {
+  color: var(--color-primary);
 }
 
 .ctaLink a {
-  /* Destaque para o link CTA (Área do Cliente) */
-  color: var(--color-secondary);
-  font-weight: 700;
+  color: var(--color-primary);
+  font-weight: 600;
 }
 
 
 /* ------------------- DESKTOP STYLES (min-width: 768px) ------------------- */
 @media (min-width: 768px) {
   .menuToggle {
-    display: none; /* Esconder o botão de hambúrguer no Desktop */
+    display: none;
   }
 
   .nav {
-    /* Retorna ao comportamento padrão de barra de navegação */
     position: static;
     height: auto;
+    width: auto;
     background: none;
     visibility: visible;
     opacity: 1;
     transform: none;
+    transition: none;
   }
 
   .navList {
-    /* Navegação horizontal padrão */
     flex-direction: row;
-    gap: 25px;
+    gap: 30px;
     height: auto;
   }
 
-  .nav a {
-    /* Estilo dos links no Desktop */
-    color: var(--color-text-dark);
+  .navItem a {
     font-size: 1rem;
-    font-weight: 400;
-    transition: color 0.2s ease-in-out;
-    padding: 0;
+    font-weight: 500;
+    padding: 5px;
   }
   
-  .nav a:hover {
-    color: var(--color-secondary);
-  }
-
   .ctaLink a {
-    /* Link CTA no Desktop - Destaque em negrito */
-    font-weight: 600;
-    color: var(--color-primary);
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
   }
   
   .ctaLink a:hover {
-    color: var(--color-secondary);
+    background-color: #4A8AC9; /* Tom mais escuro do Azul Sereno */
+    color: var(--color-text-light);
   }
 }
 

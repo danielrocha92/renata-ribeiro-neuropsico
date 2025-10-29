@@ -1,13 +1,16 @@
 /* src/styles/globals.css */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --color-primary: #0070f3; /* Azul profissional */
-  --color-secondary: #00bcd4; /* Azul água (calmante) */
-  --color-text-dark: #333333;
-  --color-text-light: #ffffff;
-  --color-background: #f8f9fa;
-  --color-card-bg: #ffffff;
+  /* Paleta de Cores Suave e Moderna */
+  --color-primary: #5A9BDB; /* Azul Sereno */
+  --color-secondary: #88C0D0; /* Azul Gelo */
+  --color-accent: #EBCB8B; /* Amarelo Dourado Suave */
+  --color-text-dark: #2E3440; /* Cinza Escuro (Quase Preto) */
+  --color-text-light: #ECEFF4; /* Cinza Claro (Quase Branco) */
+  --color-background: #F9FAFB; /* Fundo Principal (Branco Gelo) */
+  --color-card-bg: #FFFFFF; /* Fundo do Card (Branco Puro) */
+  
   --spacing-unit: 8px;
 }
 
@@ -19,17 +22,18 @@
 
 html,
 body {
-  /* Mobile First: Usa 100% da viewport width */
   width: 100vw; 
   overflow-x: hidden;
   font-family: 'Inter', sans-serif;
   color: var(--color-text-dark);
   background-color: var(--color-background);
-  font-size: 16px; /* Base font size */
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+  transition: color 0.2s ease-in-out;
 }
 

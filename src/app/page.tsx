@@ -1,15 +1,8 @@
 // src/app/page.tsx
 'use client';
 
-import styles from '@/styles/Home.module.css'; // Atualizado para o novo caminho
-
-// Função de exemplo para o clique no botão
-const handleCtaClick = () => {
-  // Simula a ação de redirecionar para uma página de agendamento ou link externo
-  console.log('Redirecionando para a página de contato/agendamento...');
-  alert('Redirecionando para a página de agendamento. (Use um link real em produção!)');
-};
-
+import Link from 'next/link';
+import styles from '@/styles/Home.module.css';
 
 export default function Home() {
   const servicos = [
@@ -40,12 +33,11 @@ export default function Home() {
             Psicoterapia Cognitivo Comportamental, Avaliação Neuropsicológica e Reabilitação Cognitiva com foco em resultados baseados em evidências.
           </p>
 
-          <button 
-            className={styles.ctaButton}
-            onClick={handleCtaClick}
-          >
-            Agende Sua Primeira Consulta Online ou Presencial
-          </button>
+          <Link href="/contato">
+            <button className={styles.ctaButton}>
+              Agende Sua Primeira Consulta Online ou Presencial
+            </button>
+          </Link>
         </div>
       </section>
 

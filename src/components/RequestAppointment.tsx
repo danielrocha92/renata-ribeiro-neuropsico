@@ -1,100 +1,159 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { db } from '../lib/firebase';
-import { collection, addDoc, query, where, getDocs, serverTimestamp } from 'firebase/firestore';
-import { useAuth } from '../contexts/AuthContext';
+import React, { useState } from 'react';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import styles from '@/styles/Contato.module.css';
 
 const RequestAppointment: React.FC = () => {
-  const { user } = useAuth();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
-  const [title, setTitle] = useState('');
-  const [psychologistId, setPsychologistId] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState('');
+  const [appointmentType, setAppointmentType] = useState('online');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Find the psychologist to assign the appointment to
-  useEffect(() => {
-    const findPsychologist = async () => {
-      if (!db) return;
-      const q = query(collection(db, "users"), where("userType", "==", "psicologo"));
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        // Assign to the first psychologist found
-        setPsychologistId(querySnapshot.docs[0].id);
-      } else {
-        setError("Nenhum psicólogo encontrado para agendar.");
-      }
-    };
-    findPsychologist();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !psychologistId || !date || !time) {
-      setError("Por favor, preencha a data e a hora.");
+    setIsSubmitting(true);
+    setError(null);
+
+    if (!db) {
+      setError("O serviço de agendamento não está disponível. Tente novamente mais tarde.");
+      setIsSubmitting(false);
       return;
     }
-    if (!db) {
-        setError("Banco de dados indisponível.");
-        return;
-    }
-
-    setSubmitting(true);
-    setError(null);
-    setMessage(null);
 
     try {
-      const appointmentDateTime = new Date(`${date}T${time}`);
-
-      await addDoc(collection(db, "appointments"), {
-        patientId: user.uid,
-        psychologistId: psychologistId,
-        date: appointmentDateTime,
-        title: title || "Sessão solicitada",
-        status: 'Pendente',
+      await addDoc(collection(db, 'appointments'), {
+        name,
+        email,
+        phone,
+        date,
+        time,
+        message,
+        appointmentType,
+        status: 'pending',
         createdAt: serverTimestamp(),
       });
-
-      setMessage("Sua solicitação de agendamento foi enviada com sucesso!");
-      setDate('');
-      setTime('');
-      setTitle('');
-    } catch (err) {
-      console.error("Error requesting appointment: ", err);
-      setError("Ocorreu um erro ao enviar sua solicitação.");
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Erro ao agendar consulta:", error);
+      setError("Ocorreu um erro ao enviar sua solicitação. Por favor, tente novamente.");
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
+  if (isSubmitted) {
+    return (
+      <div className={styles.confirmationMessage}>
+        <h2>Obrigado!</h2>
+        <p>Sua solicitação de agendamento foi enviada com sucesso. Entraremos em contato em breve para confirmar.</p>
+      </div>
+    );
+  }
+
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
-      <h3>Solicitar Novo Agendamento</h3>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {message && <p style={{ color: 'green' }}>{message}</p>}
-      <input 
-        type="date" 
-        value={date} 
-        onChange={e => setDate(e.target.value)} 
-        required 
-      />
-      <input 
-        type="time" 
-        value={time} 
-        onChange={e => setTime(e.target.value)} 
-        required 
-      />
-      <input 
-        type="text"
-        placeholder="Motivo da consulta (opcional)"
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-      />
-      <button type="submit" disabled={submitting || !psychologistId}>
-        {submitting ? 'Enviando...' : 'Enviar Solicitação'}
+    <form className={styles.form} onSubmit={handleSubmit}>
+      {error && <p className={styles.error}>{error}</p>}
+      
+      <div className={styles.inputGroup}>
+        <label htmlFor="name">Nome Completo</label>
+        <input
+          type="text"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+      </div>
+
+      <div className={styles.inputGroup}>
+        <label htmlFor="email">E-mail</label>
+        <input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+
+      <div className={styles.inputGroup}>
+        <label htmlFor="phone">Telefone (WhatsApp)</label>
+        <input
+          type="tel"
+          id="phone"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required
+        />
+      </div>
+
+      <div className={styles.inputGroup}>
+        <label>Tipo de Consulta</label>
+        <div className={styles.radioGroup}>
+          <label>
+            <input 
+              type="radio" 
+              value="online" 
+              checked={appointmentType === 'online'} 
+              onChange={() => setAppointmentType('online')} 
+            />
+            Online
+          </label>
+          <label>
+            <input 
+              type="radio" 
+              value="presencial" 
+              checked={appointmentType === 'presencial'} 
+              onChange={() => setAppointmentType('presencial')} 
+            />
+            Presencial
+          </label>
+        </div>
+      </div>
+
+      <div className={styles.dateTimeGroup}>
+        <div className={styles.inputGroup}>
+          <label htmlFor="date">Data Preferencial</label>
+          <input
+            type="date"
+            id="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+          />
+        </div>
+        <div className={styles.inputGroup}>
+          <label htmlFor="time">Horário Preferencial</label>
+          <input
+            type="time"
+            id="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            required
+          />
+        </div>
+      </div>
+
+      <div className={styles.inputGroup}>
+        <label htmlFor="message">Mensagem (Opcional)</label>
+        <textarea
+          id="message"
+          rows={4}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        ></textarea>
+      </div>
+
+      <button type="submit" className={styles.button} disabled={isSubmitting}>
+        {isSubmitting ? 'Enviando...' : 'Solicitar Agendamento'}
       </button>
     </form>
   );
