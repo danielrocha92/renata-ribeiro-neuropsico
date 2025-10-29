@@ -73,14 +73,21 @@ const ClientePage: React.FC = () => {
     fetchData();
   }, [user]);
 
-  const handleLogout = async () => {
+    const handleLogout = async () => {
     try {
-      await signOut(auth);
+      // Adicione esta verificação
+      if (auth) {
+        await signOut(auth);
+      }
+      // Se 'auth' já for nulo, o usuário já está "deslogado",
+      // então apenas redirecionamos.
       router.push('/login');
+      
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
     }
   };
+
 
   return (
     <PrivateRoute>
