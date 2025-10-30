@@ -14,7 +14,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background: linear-gradient(135deg, #F9FAFB, #E5E7EB);
+  background: linear-gradient(135deg, var(--color-background), var(--color-text-light));
   color: var(--color-text-dark);
   flex-grow: 1;
   justify-content: center;
@@ -35,7 +35,7 @@
 .subtitle {
   font-size: 1.1rem;
   font-weight: 400;
-  color: #4B5563;
+  color: var(--color-text-dark);
   margin-bottom: 35px;
   max-width: 600px;
   margin-left: auto;
@@ -57,7 +57,7 @@
   border-radius: 25px;
   font-weight: 500;
   font-size: 0.95rem;
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--color-text-light);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -76,13 +76,13 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 15px rgba(90, 155, 219, 0.4);
+  box-shadow: 0 4px 15px rgba(217, 92, 65, 0.4);
 }
 
 .ctaButton:hover {
-  background-color: #4A8AC9;
+  background-color: #C04F38;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(90, 155, 219, 0.5);
+  box-shadow: 0 6px 20px rgba(217, 92, 65, 0.5);
 }
 
 /* ------------------- DESKTOP STYLES ------------------- */

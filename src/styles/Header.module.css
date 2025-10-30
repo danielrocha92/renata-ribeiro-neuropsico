@@ -25,6 +25,7 @@
   font-weight: 600;
   color: var(--color-text-dark);
   text-decoration: none;
+  font-family: 'Comfortaa', cursive;
 }
 
 .logo span {
@@ -132,8 +133,25 @@
   }
   
   .ctaLink a:hover {
-    background-color: #4A8AC9; /* Tom mais escuro do Azul Sereno */
+    background-color: #C04F38; /* Tom mais escuro do Azul Sereno */
     color: var(--color-text-light);
+  }
+
+  .header.scrolled {
+    padding: 10px 25px; /* Smaller padding when scrolled */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .header.scrolled .navContainer {
+    padding: 10px 25px;
+  }
+
+  .header.scrolled .logo {
+    font-size: 1.2rem; /* Smaller logo when scrolled */
+  }
+
+  .header.scrolled .navItem a {
+    font-size: 0.9rem; /* Smaller nav items when scrolled */
   }
 }
 

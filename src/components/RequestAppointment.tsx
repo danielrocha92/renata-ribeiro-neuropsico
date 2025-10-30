@@ -9,10 +9,9 @@ const RequestAppointment: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
+
   const [message, setMessage] = useState('');
-  const [appointmentType, setAppointmentType] = useState('online');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,10 +32,9 @@ const RequestAppointment: React.FC = () => {
         name,
         email,
         phone,
-        date,
-        time,
+
         message,
-        appointmentType,
+
         status: 'pending',
         createdAt: serverTimestamp(),
       });
@@ -95,52 +93,9 @@ const RequestAppointment: React.FC = () => {
         />
       </div>
 
-      <div className={styles.inputGroup}>
-        <label>Tipo de Consulta</label>
-        <div className={styles.radioGroup}>
-          <label>
-            <input 
-              type="radio" 
-              value="online" 
-              checked={appointmentType === 'online'} 
-              onChange={() => setAppointmentType('online')} 
-            />
-            Online
-          </label>
-          <label>
-            <input 
-              type="radio" 
-              value="presencial" 
-              checked={appointmentType === 'presencial'} 
-              onChange={() => setAppointmentType('presencial')} 
-            />
-            Presencial
-          </label>
-        </div>
-      </div>
 
-      <div className={styles.dateTimeGroup}>
-        <div className={styles.inputGroup}>
-          <label htmlFor="date">Data Preferencial</label>
-          <input
-            type="date"
-            id="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
-        </div>
-        <div className={styles.inputGroup}>
-          <label htmlFor="time">Horário Preferencial</label>
-          <input
-            type="time"
-            id="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            required
-          />
-        </div>
-      </div>
+
+
 
       <div className={styles.inputGroup}>
         <label htmlFor="message">Mensagem (Opcional)</label>

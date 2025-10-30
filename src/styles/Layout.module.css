@@ -14,7 +14,7 @@
 
 /* ------------------- ESTILOS GERAIS ------------------- */
 .body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: var(--color-text);
   line-height: 1.6;
   background-color: var(--color-bg-light);

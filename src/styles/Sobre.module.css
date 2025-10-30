@@ -1,12 +1,6 @@
 /* src/styles/Sobre.module.css - Mobile First */
 
-:root {
-  --color-accent-blue: #0A3D62; /* Azul Marinho Profundo */
-  --color-light-teal: #4BC6B8; /* Verde Água Suave */
-  --color-text: #444444;
-  --color-bg-light: #fefefe;
-  --border-radius: 12px;
-}
+
 
 .main {
   padding: 30px 15px;
@@ -15,7 +9,7 @@
 
 .heading {
   font-size: 1.8rem;
-  color: var(--color-accent-blue);
+  color: var(--color-secondary);
   text-align: center;
   margin-bottom: 30px;
   font-weight: 700;
@@ -26,8 +20,7 @@
   display: flex;
   flex-direction: column; /* Pilha vertical no mobile */
   align-items: center;
-  margin-bottom: 40px;
-  background-color: var(--color-bg-light);
+  background-color: var(--color-card-bg);
   padding: 20px;
   border-radius: var(--border-radius);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
@@ -45,13 +38,13 @@
   color: #777;
   font-size: 0.9rem;
   font-weight: 600;
-  border: 4px solid var(--color-light-teal);
+  border: 4px solid var(--color-light-purplish-blue);
   flex-shrink: 0;
 }
 
 .bio {
   font-size: 1rem;
-  color: var(--color-text);
+  color: var(--color-text-dark);
   line-height: 1.6;
   text-align: center;
 }
@@ -64,16 +57,15 @@
 .locationSection {
   margin-top: 20px;
   padding: 15px;
-  border-left: 5px solid var(--color-light-teal);
-  background-color: #f5f5f5;
+  border-left: 5px solid var(--color-light-purplish-blue);
+  background-color: var(--color-background);
   border-radius: var(--border-radius);
   text-align: center;
 }
 
 .locationText {
   font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--color-accent-blue);
+  color: var(--color-secondary);
   margin-top: 5px;
 }
 
@@ -84,9 +76,9 @@
 
 .sectionTitle {
   font-size: 1.5rem;
-  color: var(--color-light-teal);
+  color: var(--color-light-purplish-blue);
   margin-bottom: 20px;
-  border-left: 5px solid var(--color-accent-blue);
+  border-left: 5px solid var(--color-secondary);
   padding-left: 10px;
   font-weight: 600;
 }
@@ -95,15 +87,15 @@
   font-style: italic;
   font-size: 1rem;
   line-height: 1.7;
-  color: #555;
+  color: var(--color-text-dark);
   padding: 15px;
-  background-color: #f0f8ff;
+  background-color: var(--color-background);
   border-radius: var(--border-radius);
 }
 
 /* ------------------- SEÇÃO DE FORMAÇÃO ------------------- */
 .formationSection {
-  background-color: var(--color-bg-light);
+  background-color: var(--color-card-bg);
   padding: 20px;
   border-radius: var(--border-radius);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
@@ -115,7 +107,7 @@
 }
 
 .formationItem {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-text-light);
   padding: 15px 0;
 }
 
@@ -125,13 +117,13 @@
 
 .courseTitle {
   font-weight: 700;
-  color: var(--color-accent-blue);
+  color: var(--color-secondary);
   font-size: 1rem;
 }
 
 .institution {
   font-style: normal;
-  color: var(--color-text);
+  color: var(--color-text-dark);
   font-size: 0.9rem;
   margin-top: 2px;
 }

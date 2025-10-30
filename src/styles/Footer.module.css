@@ -3,8 +3,7 @@
 .footer {
   background-color: var(--color-text-light);
   color: var(--color-text-dark);
-  padding: 50px 25px;
-  border-top: 1px solid #E5E7EB;
+  border-top: 1px solid var(--color-text-light);
   font-size: 0.9rem;
 }
 
@@ -29,7 +28,7 @@
 .footerSection li {
   margin-bottom: 12px;
   line-height: 1.7;
-  color: #4B5563; /* Cinza médio */
+  color: var(--color-text-dark);
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -52,7 +51,7 @@
 }
 
 .socialIcon {
-  color: #4B5563;
+  color: var(--color-text-dark);
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
@@ -65,9 +64,9 @@
   text-align: center;
   margin-top: 50px;
   padding-top: 25px;
-  border-top: 1px solid #E5E7EB;
+  border-top: 1px solid var(--color-text-light);
   font-size: 0.8rem;
-  color: #6B7280; /* Cinza claro */
+  color: var(--color-text-dark);
 }
 
 /* ------------------- TABLET & DESKTOP STYLES ------------------- */

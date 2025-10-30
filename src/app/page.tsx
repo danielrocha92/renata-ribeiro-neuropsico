@@ -35,7 +35,7 @@ export default function Home() {
 
           <Link href="/contato">
             <button className={styles.ctaButton}>
-              Agende Sua Primeira Consulta Online ou Presencial
+              Agende Sua Primeira Consulta
             </button>
           </Link>
         </div>

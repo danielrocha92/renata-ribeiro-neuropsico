@@ -1,15 +1,18 @@
 /* src/styles/globals.css */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Paleta de Cores Suave e Moderna */
-  --color-primary: #5A9BDB; /* Azul Sereno */
-  --color-secondary: #88C0D0; /* Azul Gelo */
-  --color-accent: #EBCB8B; /* Amarelo Dourado Suave */
-  --color-text-dark: #2E3440; /* Cinza Escuro (Quase Preto) */
-  --color-text-light: #ECEFF4; /* Cinza Claro (Quase Branco) */
-  --color-background: #F9FAFB; /* Fundo Principal (Branco Gelo) */
-  --color-card-bg: #FFFFFF; /* Fundo do Card (Branco Puro) */
+  /* Paleta de Cores Renata Ribeiro Neuropsico */
+  --color-primary: #D95C41;
+  --color-secondary: #726FB2;
+  --color-accent: #FFDE81;
+  --color-text-dark: #3C3C3B;
+  --color-text-light: #EDEDED;
+  --color-background: #F9FAFB; /* Keeping existing background for now */
+  --color-card-bg: #FFFFFF; /* Keeping white for card background */
+  --color-light-reddish-orange: #EAB6AE;
+  --color-light-yellow: #FFEFBB;
+  --color-light-purplish-blue: #AEACD6;
   
   --spacing-unit: 8px;
 }
@@ -24,16 +27,14 @@ html,
 body {
   width: 100vw; 
   overflow-x: hidden;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: var(--color-text-dark);
   background-color: var(--color-background);
   font-size: 16px;
   line-height: 1.6;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-  transition: color 0.2s ease-in-out;
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Comfortaa', cursive;
 }
 
