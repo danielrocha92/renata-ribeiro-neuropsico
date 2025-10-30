@@ -2,6 +2,11 @@
 import ServicoCard from './ServicoCard';
 import styles from '@/styles/Servicos.module.css';
 
+export const metadata = {
+  title: 'Serviços de Neuropsicologia e Psicoterapia | Renata Ribeiro Neuropsico',
+  description: 'Descubra os serviços especializados de neuropsicologia e psicoterapia de Renata Ribeiro. Avaliação neuropsicológica, TCC e reabilitação cognitiva para seu bem-estar.',
+};
+
 // Dados simulados para os serviços (Tom de voz profissional e acolhedor)
 const servicosData = [
   {

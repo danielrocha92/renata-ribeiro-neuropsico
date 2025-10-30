@@ -10,8 +10,17 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 
 
 export const metadata: Metadata = {
-  title: "Dra. Renata Ribeiro - Neuropsicologia e TCC",
+  title: "SOLO - Psicologia",
   description: "Psicoterapia Cognitivo Comportamental, Avaliação Neuropsicológica e Reabilitação Cognitiva com foco em evidências científicas e acolhimento humano.",
+  icons: {
+    icon: [
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({

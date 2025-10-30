@@ -117,7 +117,7 @@ const PatientDocuments: React.FC = () => {
         });
         setUploading(false);
         setFile(null); // Clear the file input
-        
+
         // Refresh documents list
         const fetchDocuments = async () => {
           if (!selectedPatient || !db) return; // Esta verificação já estava correta

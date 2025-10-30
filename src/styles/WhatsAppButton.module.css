@@ -1,25 +1,68 @@
 /* src/styles/WhatsAppButton.module.css */
 
-.whatsappButton {
+.whatsappButtonContainer {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #25D366; /* WhatsApp green */
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+}
+
+.whatsappPopup {
+  position: absolute; /* Position absolutely within the container */
+  bottom: calc(100% + 10px); /* Position above the button with some spacing */
+  right: 0; /* Align to the right of the container */
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(10px); /* Initial transform for animation */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none; /* Allow clicks to pass through when not visible */
+}
+
+.whatsappPopup::after {
+  content: '';
+  position: absolute;
+  bottom: -5px; /* Position at the bottom of the popup */
+  right: 15px; /* Align with the button */
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid rgba(0, 0, 0, 0.7); /* Caret color matching popup background */
+}
+
+.whatsappButtonContainer:hover .whatsappPopup {
+  opacity: 1;
+  transform: translateY(0); /* Animate to original position */
+}
+
+.whatsappButton {
+  background-color: rgba(var(--color-primary-rgb), 0.7); /* Semi-transparent primary color */
   color: white;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.3); /* Enhanced shadow and inner border */
   z-index: 1000;
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(15px); /* Increased blur for magnifying glass effect */
+  -webkit-backdrop-filter: blur(15px); /* For Safari */
+  border: 1px solid rgba(255, 255, 255, 0.4); /* Subtle white border */
 }
 
 .whatsappButton:hover {
-  transform: scale(1.1);
-  background-color: #1DA851; /* Darker green on hover */
+  transform: scale(1.05);
+  background-color: rgba(var(--color-primary-rgb), 0.9); /* More opaque on hover */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }

@@ -13,6 +13,8 @@
   --color-light-reddish-orange: #EAB6AE;
   --color-light-yellow: #FFEFBB;
   --color-light-purplish-blue: #AEACD6;
+  --color-primary-rgb: 217, 92, 65;
+  --color-card-bg-rgb: 255, 255, 255;
   
   --spacing-unit: 8px;
 }

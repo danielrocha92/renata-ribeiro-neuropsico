@@ -4,13 +4,15 @@
   background-color: var(--color-text-light);
   color: var(--color-text-dark);
   border-top: 1px solid var(--color-text-light);
-  font-size: 0.9rem;
+  font-size: 0.8rem; /* Reduced base font size for mobile footer */
+  padding: 15px 20px;
+  margin-bottom: 20px; /* Added bottom margin for mobile */
 }
 
 .footerContent {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 40px;
+  gap: 20px; /* Further reduced gap for mobile */
   max-width: 1200px;
   margin: 0 auto;
   text-align: left;
@@ -18,55 +20,53 @@
 
 .footerSection h4 {
   color: var(--color-text-dark);
-  font-size: 1.1rem;
+  font-size: 1rem; /* Reduced heading font size */
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 10px; /* Reduced margin */
 }
 
 .footerSection p,
 .footerSection a,
 .footerSection li {
-  margin-bottom: 12px;
-  line-height: 1.7;
+  margin-bottom: 8px; /* Reduced margin */
+  line-height: 1.5;
   color: var(--color-text-dark);
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.footerSection a:hover {
-  color: var(--color-primary);
-}
-
-.footerSection ul {
-  list-style: none;
-  padding: 0;
+  gap: 8px; /* Reduced gap */
 }
 
 .socialIcons {
   display: flex;
-  gap: 18px;
-  margin-top: 20px;
-}
-
-.socialIcon {
-  color: var(--color-text-dark);
-  transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.socialIcon:hover {
-  color: var(--color-primary);
-  transform: translateY(-3px);
+  gap: 12px; /* Reduced gap */
+  margin-top: 15px; /* Reduced margin */
 }
 
 .copyright {
   text-align: center;
-  margin-top: 50px;
-  padding-top: 25px;
+  margin-top: 20px; /* Further reduced margin-top */
+  padding-top: 10px; /* Further reduced padding-top */
   border-top: 1px solid var(--color-text-light);
-  font-size: 0.8rem;
+  font-size: 0.7rem; /* Reduced copyright font size */
   color: var(--color-text-dark);
+}
+
+.madeBy {
+  text-align: center;
+  margin-top: 10px; /* Spacing below copyright */
+  font-size: 0.7rem;
+  color: var(--color-text-dark);
+}
+
+.madeBy a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.madeBy a:hover {
+  text-decoration: underline;
 }
 
 /* ------------------- TABLET & DESKTOP STYLES ------------------- */
