@@ -3,15 +3,13 @@
 import React, { useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import styles from '@/styles/Contato.module.css';
+import styles from './RequestAppointment.module.css';
+
+import { useAuth } from '@/contexts/AuthContext';
 
 const RequestAppointment: React.FC = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-
+  const { user } = useAuth(); // Get user from Auth context
   const [message, setMessage] = useState('');
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,14 +25,18 @@ const RequestAppointment: React.FC = () => {
       return;
     }
 
+    if (!user) {
+      setError("Você precisa estar logado para solicitar um agendamento.");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       await addDoc(collection(db, 'appointments'), {
-        name,
-        email,
-        phone,
-
+        patientId: user.uid,
+        patientName: user.displayName,
+        patientEmail: user.email,
         message,
-
         status: 'pending',
         createdAt: serverTimestamp(),
       });
@@ -59,56 +61,22 @@ const RequestAppointment: React.FC = () => {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       {error && <p className={styles.error}>{error}</p>}
-      
-      <div className={styles.inputGroup}>
-        <label htmlFor="name">Nome Completo</label>
-        <input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </div>
-
-      <div className={styles.inputGroup}>
-        <label htmlFor="email">E-mail</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
-
-      <div className={styles.inputGroup}>
-        <label htmlFor="phone">Telefone (WhatsApp)</label>
-        <input
-          type="tel"
-          id="phone"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          required
-        />
-      </div>
-
-
-
-
 
       <div className={styles.inputGroup}>
         <label htmlFor="message">Mensagem (Opcional)</label>
+        <p style={{ fontSize: '0.8rem', color: '#666', margin: '0 0 8px 0' }}>
+          Se desejar, descreva brevemente o motivo da consulta ou seus horários de preferência.
+        </p>
         <textarea
           id="message"
-          rows={4}
+          rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         ></textarea>
       </div>
 
       <button type="submit" className={styles.button} disabled={isSubmitting}>
-        {isSubmitting ? 'Enviando...' : 'Solicitar Agendamento'}
+        {isSubmitting ? 'Enviando...' : 'Confirmar Solicitação'}
       </button>
     </form>
   );

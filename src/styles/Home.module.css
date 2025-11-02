@@ -42,30 +42,6 @@
   margin-right: auto;
 }
 
-.servicesList {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 40px;
-}
-
-.serviceItem {
-  background-color: var(--color-card-bg);
-  padding: 10px 20px;
-  border-radius: 25px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  border: 1px solid var(--color-text-light);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.serviceItem:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
 .ctaButton {
   background-color: var(--color-primary);
   color: var(--color-text-light);
@@ -85,6 +61,35 @@
   box-shadow: 0 6px 20px rgba(217, 92, 65, 0.5);
 }
 
+/* ------------------- SERVICES SECTION ------------------- */
+.servicesSection {
+  padding: 60px 25px;
+  background-color: var(--color-background-alt);
+  text-align: center;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: var(--color-text-dark);
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 25px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
 /* ------------------- DESKTOP STYLES ------------------- */
 @media (min-width: 768px) {
   .title {
@@ -98,5 +103,16 @@
   .ctaButton {
     padding: 18px 40px;
   }
+
+  .servicesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
+
+@media (min-width: 1024px) {
+  .servicesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 

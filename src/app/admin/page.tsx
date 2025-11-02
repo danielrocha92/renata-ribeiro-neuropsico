@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import AdminPrivateRoute from '../../components/AdminPrivateRoute';
 import PatientDocuments from '../../components/PatientDocuments';
 import AppointmentsManager from '../../components/AppointmentsManager';
@@ -12,7 +13,16 @@ const AdminPage: React.FC = () => {
     <AdminPrivateRoute>
       <div className={styles.dashboard}>
         <h1 className={styles.title}>Dashboard do Psicólogo</h1>
+        
         <div className={styles.grid}>
+          {/* Navigation Card */}
+          <div className={`${styles.section} ${styles.navCard}`}>
+            <Link href="/admin/disponibilidade" className={styles.navLink}>
+              <h2 className={styles.sectionTitle}>Gerenciar Disponibilidade</h2>
+              <p>Clique aqui para definir seus horários de atendimento.</p>
+            </Link>
+          </div>
+
           <div className={`${styles.section} ${styles.fullWidth}`}>
             <h2 className={styles.sectionTitle}>Aprovações Pendentes</h2>
             <VerificationManager />

@@ -13,14 +13,38 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  gap: 1.5rem;
+}
+
+.navCard {
+  background-color: #e7f3ff; /* A light blue to stand out */
+  border: 1px solid #b8d8f2;
+  transition: all 0.3s ease;
+}
+
+.navCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  background-color: #dbeffd;
+}
+
+.navLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.navLink p {
+  font-size: 0.9rem;
+  color: #333;
 }
 
 .section {
   background-color: #fff;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .sectionTitle {
