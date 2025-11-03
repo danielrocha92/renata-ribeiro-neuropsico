@@ -58,7 +58,7 @@ const ClientePage: React.FC = () => {
     };
 
     fetchData();
-  }, [user]);
+  }, [user, db]);
 
   const handleLogout = async () => {
     try {
