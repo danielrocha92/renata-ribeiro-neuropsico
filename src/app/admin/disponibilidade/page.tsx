@@ -40,6 +40,7 @@ const DisponibilidadePage = () => {
     if (!user || !db) return;
 
     const fetchAvailability = async () => {
+      if (!db) return;
       const availabilityCol = collection(db, 'availability');
       const q = query(availabilityCol, where('psychologistId', '==', user.uid));
       const querySnapshot = await getDocs(q);
@@ -73,6 +74,7 @@ const DisponibilidadePage = () => {
     };
 
     try {
+      if (!db) return;
       const availabilityCol = collection(db, 'availability');
       const docRef = await addDoc(availabilityCol, newEvent);
       setEvents(prevEvents => [...prevEvents, { ...newEvent, id: docRef.id, start, end, title }]);
