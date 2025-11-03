@@ -38,6 +38,7 @@ const BookingCalendar = () => {
     if (!db) return;
 
     const fetchAvailability = async () => {
+      if (!db) return;
       const availabilityCol = collection(db, 'availability');
       const querySnapshot = await getDocs(availabilityCol);
       const fetchedSlots = querySnapshot.docs.map(doc => {
@@ -68,6 +69,7 @@ const BookingCalendar = () => {
 
     if (confirmation) {
       try {
+        if (!db) return;
         // 1. Create new appointment
         const appointmentsCol = collection(db, 'appointments');
         await addDoc(appointmentsCol, {
