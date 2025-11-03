@@ -33,11 +33,12 @@ const ClientePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user || !db) return;
+    if (!user) return;
 
     const fetchData = async () => {
       setLoading(true);
       try {
+        if (!db) return;
         // Fetch appointments
         const appQuery = query(collection(db, "appointments"), where("patientId", "==", user.uid));
         const appSnapshot = await getDocs(appQuery);
@@ -58,7 +59,7 @@ const ClientePage: React.FC = () => {
     };
 
     fetchData();
-  }, [user, db]);
+  }, [user]);
 
   const handleLogout = async () => {
     try {
