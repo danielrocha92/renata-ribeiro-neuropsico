@@ -1,13 +1,13 @@
 // src/app/layout.tsx
 import type { Metadata } from "next";
+import dynamic from 'next/dynamic';
 
 import "@/styles/globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
 
-
+const WhatsAppButton = dynamic(() => import('@/components/WhatsAppButton'), { ssr: false });
 
 export const metadata: Metadata = {
   title: "SOLO - Psicologia",
