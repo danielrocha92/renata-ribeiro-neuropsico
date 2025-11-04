@@ -1,13 +1,11 @@
 // src/app/layout.tsx
 import type { Metadata } from "next";
-import dynamic from 'next/dynamic';
 
 import "@/styles/globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-
-const WhatsAppButton = dynamic(() => import('@/components/WhatsAppButton'), { ssr: false });
+import DynamicWhatsAppButton from "@/components/DynamicWhatsAppButton";
 
 export const metadata: Metadata = {
   title: "SOLO - Psicologia",
@@ -34,7 +32,7 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
-          <WhatsAppButton />
+          <DynamicWhatsAppButton />
         </AuthProvider>
       </body>
     </html>
