@@ -1,55 +1,65 @@
-/* src/styles/Contato.module.css - Modern & Smooth */
+/* src/styles/Contato.module.css - Mobile First */
 
 .main {
-  padding: 40px 20px;
+  padding: 20px 10px;
   background-color: var(--color-background);
 }
 
 .container {
-  max-width: 700px;
+  max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   background-color: var(--color-card-bg);
-  padding: 40px;
+  padding: 20px;
   border-radius: 12px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
+.formContainer {
+  flex: 1;
+}
+
+.mapContainer {
+  flex: 1;
+  min-height: 300px;
+}
+
 .title {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   font-weight: 600;
-  text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   color: var(--color-text-dark);
 }
 
 .subtitle {
-  text-align: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #4B5563;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
-.inputGroup {
+.formGroup {
   display: flex;
   flex-direction: column;
 }
 
-.inputGroup label {
+.formGroup label {
   font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
   color: var(--color-text-dark);
 }
 
-.inputGroup input,
-.inputGroup textarea {
+.formGroup input,
+.formGroup textarea {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   font-size: 1rem;
   border: 1px solid #D1D5DB;
   border-radius: 8px;
@@ -57,35 +67,16 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.inputGroup input:focus,
-.inputGroup textarea:focus {
+.formGroup input:focus,
+.formGroup textarea:focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(90, 155, 219, 0.3);
 }
 
-.radioGroup {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-.radioGroup label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 400;
-}
-
-.dateTimeGroup {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.button {
-  padding: 14px;
-  font-size: 1.1rem;
+.submitButton {
+  padding: 12px;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--color-text-light);
   background-color: var(--color-primary);
@@ -96,32 +87,46 @@
   margin-top: 10px;
 }
 
-.button:hover {
+.submitButton:hover {
   background-color: #4A8AC9;
   transform: translateY(-2px);
 }
 
-.button:disabled {
-  background-color: #B0C4DE;
-  cursor: not-allowed;
-}
+/* Tablet and Desktop */
+@media (min-width: 768px) {
+  .main {
+    padding: 40px 20px;
+  }
 
-.confirmationMessage {
-  text-align: center;
-  padding: 40px;
-}
+  .container {
+    flex-direction: row;
+    gap: 40px;
+    padding: 40px;
+  }
 
-.confirmationMessage h2 {
-  font-size: 1.8rem;
-  color: var(--color-primary);
-  margin-bottom: 15px;
-}
+  .mapContainer {
+    min-height: 400px;
+  }
 
-.error {
-  color: #EF4444;
-  background-color: #FEE2E2;
-  border: 1px solid #FCA5A5;
-  padding: 12px;
-  border-radius: 8px;
-  text-align: center;
+  .title {
+    font-size: 2.2rem;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .form {
+    gap: 20px;
+  }
+
+  .formGroup input,
+  .formGroup textarea {
+    padding: 12px;
+  }
+
+  .submitButton {
+    padding: 14px;
+    font-size: 1.1rem;
+  }
 }

@@ -1,83 +1,175 @@
 // src/app/page.tsx
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from '@/styles/Home.module.css';
-import CardServico from '@/components/CardServico';
+import VideoModal from '@/components/VideoModal';
 
-// SVG Icon Components
-const BrainIcon = () => <svg width="48" height="48" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v0A2.5 2.5 0 0 1 9.5 7h-3A2.5 2.5 0 0 1 4 4.5v0A2.5 2.5 0 0 1 6.5 2h3Z"/><path d="M14.5 2A2.5 2.5 0 0 1 17 4.5v0A2.5 2.5 0 0 1 14.5 7h-3a2.5 2.5 0 0 1-2.5-2.5v0A2.5 2.5 0 0 1 11.5 2h3Z"/><path d="M12 12a2.5 2.5 0 0 1 2.5 2.5v0A2.5 2.5 0 0 1 12 17h0a2.5 2.5 0 0 1-2.5-2.5v0A2.5 2.5 0 0 1 12 12Z"/><path d="M4.5 9.5A2.5 2.5 0 0 1 7 12v0a2.5 2.5 0 0 1-2.5 2.5h-2A2.5 2.5 0 0 1 0 12v0A2.5 2.5 0 0 1 2.5 9.5h2Z"/><path d="M19.5 9.5a2.5 2.5 0 0 1 2.5 2.5v0a2.5 2.5 0 0 1-2.5 2.5h-2a2.5 2.5 0 0 1-2.5-2.5v0a2.5 2.5 0 0 1 2.5-2.5h2Z"/><path d="M9.5 16.5A2.5 2.5 0 0 1 12 19v0a2.5 2.5 0 0 1-2.5 2.5h-3A2.5 2.5 0 0 1 4 19v0a2.5 2.5 0 0 1 2.5-2.5h3Z"/><path d="M14.5 16.5a2.5 2.5 0 0 1 2.5 2.5v0a2.5 2.5 0 0 1-2.5 2.5h-3a2.5 2.5 0 0 1-2.5-2.5v0a2.5 2.5 0 0 1 2.5-2.5h3Z"/></svg>;
-const ClipboardIcon = () => <svg width="48" height="48" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>;
-const HeartIcon = () => <svg width="48" height="48" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>;
-const LaptopIcon = () => <svg width="48" height="48" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55A1 1 0 0 1 20.28 20H3.72a1 1 0 0 1-.9-1.45L4 16"/></svg>;
+// --- Ícones SVG para a seção de serviços ---
+const TherapyIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><path d="M12 2a5 5 0 0 0-5 5c0 1.84.96 3.52 2.45 4.4a5.99 5.99 0 0 1-2.42 4.54C4.59 18.29 3 20.5 3 22h18c0-1.5-1.59-3.71-4.03-5.06a5.99 5.99 0 0 1-2.42-4.54C16.04 10.52 17 8.84 17 7a5 5 0 0 0-5-5z"/></svg>
+);
+const BrainIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v0A2.5 2.5 0 0 1 9.5 7h-3A2.5 2.5 0 0 1 4 4.5v0A2.5 2.5 0 0 1 6.5 2h3Z"/><path d="M14.5 2A2.5 2.5 0 0 1 17 4.5v0A2.5 2.5 0 0 1 14.5 7h-3a2.5 2.5 0 0 1-2.5-2.5v0A2.5 2.5 0 0 1 11.5 2h3Z"/><path d="M12 12a2.5 2.5 0 0 1 2.5 2.5v0A2.5 2.5 0 0 1 12 17h0a2.5 2.5 0 0 1-2.5-2.5v0A2.5 2.5 0 0 1 12 12Z"/><path d="M4.5 9.5A2.5 2.5 0 0 1 7 12v0a2.5 2.5 0 0 1-2.5 2.5h-2A2.5 2.5 0 0 1 0 12v0A2.5 2.5 0 0 1 2.5 9.5h2Z"/><path d="M19.5 9.5a2.5 2.5 0 0 1 2.5 2.5v0a2.5 2.5 0 0 1-2.5 2.5h-2a2.5 2.5 0 0 1-2.5-2.5v0a2.5 2.5 0 0 1 2.5-2.5h2Z"/><path d="M9.5 16.5A2.5 2.5 0 0 1 12 19v0a2.5 2.5 0 0 1-2.5 2.5h-3A2.5 2.5 0 0 1 4 19v0a2.5 2.5 0 0 1 2.5-2.5h3Z"/><path d="M14.5 16.5a2.5 2.5 0 0 1 2.5 2.5v0a2.5 2.5 0 0 1-2.5 2.5h-3a2.5 2.5 0 0 1-2.5-2.5v0a2.5 2.5 0 0 1 2.5-2.5h3Z"/></svg>
+);
+const UsersIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+);
+const GlobeIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+);
 
 export default function Home() {
+  // Efeito de fade-in ao rolar
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(styles.visible);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const elements = document.querySelectorAll(`.${styles.fadeIn}`);
+    elements.forEach((el) => observer.observe(el));
+
+    return () => elements.forEach((el) => observer.unobserve(el));
+  }, []);
+
   const servicos = [
     {
-      titulo: 'Psicoterapia Cognitivo-Comportamental',
-      descricao: 'Abordagem prática para transformar padrões de pensamento e comportamento, tratando ansiedade, depressão e outros desafios.',
-      icone: <BrainIcon />,
-      link: '/servicos'
+      icon: <TherapyIcon />,
+      title: 'Psicoterapia Individual',
+      description: 'Um espaço seguro e acolhedor para autoconhecimento, desenvolvimento de habilidades e superação de desafios emocionais.',
     },
     {
-      titulo: 'Avaliação Neuropsicológica',
-      descricao: 'Mapeamento detalhado das funções cognitivas para auxiliar no diagnóstico de TDAH, dificuldades de aprendizagem e quadros neurológicos.',
-      icone: <ClipboardIcon />,
-      link: '/servicos'
+      icon: <BrainIcon />,
+      title: 'Avaliação Neuropsicológica',
+      description: 'Investigação detalhada das funções cognitivas (memória, atenção, etc.) para diagnóstico e planejamento de intervenções.',
     },
     {
-      titulo: 'Reabilitação Cognitiva',
-      descricao: 'Intervenção para restaurar e otimizar a memória, atenção e outras funções cognitivas comprometidas por lesões ou condições neurológicas.',
-      icone: <BrainIcon />,
-      link: '/servicos'
+      icon: <UsersIcon />,
+      title: 'Acompanhamento Psicológico',
+      description: 'Suporte contínuo para lidar com transições de vida, estresse, ansiedade e busca por bem-estar e qualidade de vida.',
     },
     {
-      titulo: 'Apoio Emocional',
-      descricao: 'Um espaço de escuta e acolhimento para lidar com momentos de estresse, transições de vida, luto e angústias pontuais.',
-      icone: <HeartIcon />,
-      link: '/servicos'
+      icon: <GlobeIcon />,
+      title: 'Atendimento Online e Presencial',
+      description: 'Flexibilidade para cuidar da sua saúde mental, com a mesma qualidade e sigilo, de onde você estiver.',
     },
-    {
-      titulo: 'Consultas Presenciais e Online',
-      descricao: 'Flexibilidade para seu tratamento, com a mesma qualidade e sigilo no formato que melhor se adapta à sua rotina.',
-      icone: <LaptopIcon />,
-      link: '/contato'
-    }
   ];
 
   return (
     <main className={styles.main}>
+      {/* --- Hero Section --- */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-          <h1 className={styles.title}>
-            Mapeando sua Mente, Transformando sua Vida.
+          <h1 className={`${styles.title} ${styles.fadeIn}`}>
+            Cuidar da mente é o primeiro passo para uma vida plena.
           </h1>
-          <p className={styles.subtitle}>
-            Neuropsicologia e Psicoterapia com foco em resultados baseados em evidências.
+          <p className={`${styles.subtitle} ${styles.fadeIn}`}>
+            Ofereço um atendimento psicológico e neuropsicológico ético e personalizado, focado em suas necessidades e bem-estar.
           </p>
-          <Link href="/contato">
-            <button className={styles.ctaButton}>
-              Agende Sua Primeira Consulta
+          <Link href="/contato" passHref>
+            <button className={`${styles.ctaButton} ${styles.fadeIn}`}>
+              Agende uma Conversa
             </button>
           </Link>
         </div>
       </section>
 
-      <section className={styles.servicesSection}>
-        <h2 className={styles.sectionTitle}>Nossos Serviços</h2>
-        <div className={styles.servicesGrid}>
-          {servicos.map((servico, index) => (
-            <Link href={servico.link} key={index} className={styles.cardLink}>
-              <CardServico
-                titulo={servico.titulo}
-                descricao={servico.descricao}
-                icone={servico.icone}
-              />
-            </Link>
+      {/* --- About Section --- */}
+      <section id="sobre" className={`${styles.aboutSection} ${styles.fadeIn}`}>
+        <div className={styles.aboutContainer}>
+          <div className={styles.aboutImage}>
+            <Image
+              src="/Profile.jpeg"
+              alt="Renata Ribeiro, Neuropsicóloga"
+              width={300}
+              height={300}
+              className={styles.profilePic}
+            />
+          </div>
+          <div className={styles.aboutText}>
+            <h2>Sobre Mim</h2>
+            <p>
+              Olá, sou Renata Ribeiro, psicóloga e neuropsicóloga. Ofereço um atendimento integrativo e humanizado, combinando psicoterapia e avaliação neuropsicológica para promover o autoconhecimento e o bem-estar.
+            </p>
+            <p>
+              Meu objetivo é criar um ambiente seguro e acolhedor, onde você possa explorar suas emoções e conquistar uma vida mais equilibrada e feliz.
+            </p>
+            <span>Renata C. Ribeiro - Psicóloga e Neuropsicóloga | CRP 06/195299</span>
+          </div>
+        </div>
+      </section>
+
+      {/* --- Services Section --- */}
+      <section id="servicos" className={styles.servicesSection}>
+        <h2 className={`${styles.sectionTitle} ${styles.fadeIn}`}>Serviços</h2>
+        <div className={`${styles.servicesGrid} ${styles.fadeIn}`}>
+          {servicos.map((service, index) => (
+            <div key={index} className={styles.serviceCard}>
+              {service.icon}
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+            </div>
           ))}
         </div>
+        <div className={`${styles.seeMoreContainer} ${styles.fadeIn}`}>
+          <Link href="/servicos" passHref>
+            <button className={styles.ctaButton}>
+              Ver todos os serviços
+            </button>
+          </Link>
+        </div>
+      </section>
+
+      {/* --- Video Modal Section --- */}
+      <VideoModal videoUrl="https://www.linkedin.com/embed/feed/update/urn:li:activity:7029232180379693056?autoplay=1" />
+
+      {/* --- Location Section --- */}
+      <section id="localizacao" className={`${styles.locationSection} ${styles.fadeIn}`}>
+        <h2 className={styles.sectionTitle}>Onde me encontrar</h2>
+        <p className={styles.sectionSubtitle}>Atendimento presencial em São Paulo, SP.</p>
+        <div className={styles.mapContainer}>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.289087109116!2d-46.6637878!3d-23.5308703!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cef93c48e13f65%3A0x463f20561ff49c33!2sRenata%20C%20Ribeiro%20%E2%80%93%20Psic%C3%B3loga%20%26%20Neuropsic%C3%B3loga!5e0!3m2!1spt-BR!2sbr!4v1707693900000!5m2!1spt-BR!2sbr"
+            width="100%"
+            height="400"
+            style={{ border: 0 }}
+            allowFullScreen={true}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </section>
+
+      {/* --- Calendar Section --- */}
+      <section id="agenda" className={`${styles.calendarSection} ${styles.fadeIn}`}>
+        <h2 className={styles.sectionTitle}>Agende sua Consulta</h2>
+        <p className={styles.sectionSubtitle}>
+          Veja os horários disponíveis e agende sua consulta diretamente pelo calendário.
+        </p>
+        <div className={styles.calendarContainer}>
+          <iframe
+            src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FSao_Paulo&bgcolor=%23ffffff&showTitle=0&showNav=1&showPrint=0&showTabs=1&showCalendars=0&showTz=0&src=YOUR_CALENDAR_ID&color=%238a63d2"
+            style={{ border: 0 }}
+            width="100%"
+            height="600"
+            frameBorder="0"
+            scrolling="no"
+          ></iframe>
+        </div>
+        <p className={styles.calendarHint}>
+          Clique nos eventos para mais detalhes ou para agendar sua consulta.
+        </p>
       </section>
     </main>
   );
 }
-

@@ -30,7 +30,7 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           <Header />
-          {children}
+          <main className="main-content">{children}</main>
           <Footer />
           <DynamicWhatsAppButton />
         </AuthProvider>

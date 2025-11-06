@@ -1,88 +1,108 @@
 // src/app/sobre/page.tsx
 import styles from '@/styles/Sobre.module.css';
 import React from 'react';
+import Image from 'next/image';
 
 export const metadata = {
-  title: 'Sobre Renata Ribeiro: Neuropsicóloga e Psicanalista (USP) | São Paulo',
-  description: 'Conheça Renata Ribeiro, psicóloga, neuropsicóloga e psicanalista com mais de 20 anos de experiência e formação na USP. Especialista em TCC, neuropsicologia clínica e reabilitação cognitiva em São Paulo.',
+  title: 'Sobre Renata Ribeiro: Neuropsicóloga e Psicoterapeuta | São Paulo',
+  description: 'Conheça Renata Ribeiro, psicóloga clínica com experiência em Terapia Cognitivo-Comportamental (TCC) e Neuropsicologia. Foco em avaliação e reabilitação de funções cognitivas.',
 };
-
-// Ícone de Localização (SVG simples)
-const LocationIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin">
-        <path d="M12 18s-4 4-4 7c0 2.8 2.2 5 4 5s4-2.2 4-5c0-3-4-7-4-7z"/>
-        <circle cx="12" cy="10" r="3"/>
-    </svg>
-);
 
 // Dados da Formação
 const formacaoData = [
   {
-    titulo: 'Especialização em Neuropsicologia Clínica',
-    instituicao: 'CEPSIC - Hospital das Clínicas (HC) da Faculdade de Medicina da USP',
-    ano: '2011'
+    titulo: 'Neuropsicologia e Reabilitação Cognitiva, Psicologia',
+    instituicao: 'Universidade de São Paulo',
+    ano: 'abril de 2023 - abril de 2025'
   },
   {
-    titulo: 'Pós-graduação em Psicologia Hospitalar Aplicada à Cardiologia',
-    instituicao: 'Instituto do Coração (INCOR) - FMUSP',
-    ano: '1999'
-  },
-  {
-    titulo: 'Especialização em Psicodinâmica do Adulto e Adolescente',
-    instituicao: 'Instituto Sedes Sapientiae',
-    ano: 'Não especificado'
-  },
-  {
-    titulo: 'Bacharelado e Formação em Psicologia',
-    instituicao: 'Universidade de São Paulo (USP)',
-    ano: '1993'
+    titulo: 'Bacharelado, Psicologia',
+    instituicao: 'Faculdades Metropolitanas Unidas',
+    ano: '2015 - 2020'
   },
 ];
+
+// Dados da Experiência
+const experienciaData = [
+    {
+        cargo: 'Neuropsicóloga',
+        empresa: 'Clínica Flora Psicologia',
+        periodo: 'novembro de 2023 - Presente',
+        descricao: 'Foco na elaboração de relatórios técnicos e intervenções terapêuticas para promover o bem-estar e o desenvolvimento pessoal.'
+    },
+    {
+        cargo: 'Psicóloga clínica',
+        empresa: 'Psicóloga Renata C Ribeiro',
+        periodo: 'abril de 2021 - Presente',
+        descricao: 'Psicóloga clínica comprometida com resultados para qualidade de vida e bem estar dos meus clientes, através da abordagem cognitivo comportamental.'
+    },
+    {
+        cargo: 'Psicólogo clínico',
+        empresa: 'Clínica Ame.C',
+        periodo: 'agosto de 2021 - novembro de 2022',
+        descricao: ''
+    },
+    {
+        cargo: 'Assistente de RH',
+        empresa: 'InforMaker',
+        periodo: 'fevereiro de 2020 - dezembro de 2020',
+        descricao: 'Recrutamento e seleção para vagas internas e externas para diversos cargos e níveis hierárquicos; Alinhamento de perfil com o solicitante da vaga, mapeamento e triagem de currículos; Experiência com as ferramentas de seleção ( Catho, Vagas.com e Linkedin); Divulgação de vagas na plataforma da empresa e outras fontes; Entrevistas individuais e de grupos (presencial e a distância); Utilização das ferramentas Teams, Skype e Google Met; Feedback positivo e negativo aos candidatos; Atividades administrativas da área de seleção.'
+    },
+    {
+        cargo: 'Estagiária Terapeuta',
+        empresa: 'CIECS -Clínica Escola de Psicologia da FMU',
+        periodo: 'janeiro de 2018 - julho de 2020',
+        descricao: 'Atendimento Psicoterápico De Crianças, Adolescentes, Adultos E Idosos: Psicodiagnóstico Infantil E Adulto; Orientação Vocacional; Plantão Psicológico; Aplicação De Testes. (TAT е HTP)'
+    },
+];
+
 
 export default function SobrePage() {
   return (
     <main className={styles.main}>
-      <h1 className={styles.heading}> Renata Concilio Ribeiro: Autoridade em Neuropsicologia (USP)</h1>
+      <h1 className={styles.heading}>Sobre Renata Claudino Ribeiro</h1>
 
       <section className={styles.profileSection}>
         <div className={styles.photoPlaceholder}>
-
+          <Image 
+            src="/Profile.jpeg" 
+            alt="Renata Claudino Ribeiro" 
+            width={200} 
+            height={200} 
+            style={{ borderRadius: '50%' }} // Mantém a imagem circular
+          />
         </div>
         <div className={styles.bio}>
+          <h2>Psicóloga Clínica | Terapia Cognitivo-Comportamental e Neuropsicologia</h2>
           <p>
-            Com mais de 20 anos de experiência, sou a  Renata Concilio Ribeiro, psicóloga, neuropsicóloga e psicanalista. Minha trajetória é marcada pelo rigor acadêmico das principais instituições do país, como o Hospital das Clínicas (HC) da FMUSP, onde obtive minha especialização em Neuropsicologia Clínica.
+            Psicóloga clínica com sólida experiência em Terapia Cognitivo-Comportamental (TCC) e Neuropsicologia, com foco em avaliação e reabilitação de funções cognitivas, emocionais e comportamentais.
           </p>
           <p>
-            Minha prática combina a profundidade da psicanálise com as estratégias focadas e baseadas em evidências da Terapia Cognitivo Comportamental (TCC), oferecendo um atendimento que é ao mesmo tempo acolhedor e altamente eficaz. Atendo adolescentes e adultos, focando em diagnósticos precisos e reabilitação cognitiva.
+            Ofereço suporte personalizado e baseado em evidências para promover o bem-estar mental e a qualidade de vida. Atuo com avaliação neuropsicológica detalhada e intervenções terapêuticas para ajudar clientes a desenvolverem maior autoconhecimento e estratégias para lidar com desafios diários.
           </p>
-
-          <div className={styles.locationSection}>
-            <LocationIcon />
-            <div className={styles.locationText}>
-                Atendimento presencial em São Paulo, Itaim Bibi: <br/>
-                Rua João Cachoeira, 488 - Conjunto 510.
-            </div>
-          </div>
         </div>
-      </section>
-
-      <section className={styles.philosophySection}>
-        <h2 className={styles.sectionTitle}>Filosofia: Ciência a Serviço do Bem-Estar</h2>
-        <blockquote className={styles.philosophyText}>
-          &quot;O cérebro é a nossa ferramenta mais complexa. Meu trabalho é oferecer o mapeamento neuropsicológico necessário para desvendar dificuldades e, em seguida, fornecer as estratégias (sejam elas da TCC ou da Reabilitação Cognitiva) para que o paciente retome o controle de sua vida com autonomia e conhecimento.&quot;
-        </blockquote>
       </section>
 
       <section className={styles.formationSection}>
-        <h2 className={styles.sectionTitle}>Formação e Credenciais</h2>
+        <h2 className={styles.sectionTitle}>Experiência Profissional</h2>
+        <ul className={styles.formationList}>
+          {experienciaData.map((item, index) => (
+            <li key={index} className={styles.formationItem}>
+              <div className={styles.courseTitle}>{item.cargo}</div>
+              <div className={styles.institution}>{item.empresa} ({item.periodo})</div>
+              {item.descricao && <p style={{marginTop: '10px', fontSize: '0.9rem', whiteSpace: 'pre-line'}}>{item.descricao}</p>}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className={styles.formationSection}>
+        <h2 className={styles.sectionTitle}>Formação Acadêmica</h2>
         <ul className={styles.formationList}>
           {formacaoData.map((item, index) => (
             <li key={index} className={styles.formationItem}>
               <div className={styles.courseTitle}>
                 {item.titulo}
-                {item.instituicao.includes('USP') &&
-                  <span style={{ fontSize: '0.8em', marginLeft: '8px', color: '#888' }}>(Referência Nacional)</span>
-                }
               </div>
               <div className={styles.institution}>
                 {item.instituicao} ({item.ano})

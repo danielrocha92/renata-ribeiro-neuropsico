@@ -1,6 +1,6 @@
+// src/components/Header.tsx
 'use client';
 
-// src/components/Header.tsx
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // Import usePathname
