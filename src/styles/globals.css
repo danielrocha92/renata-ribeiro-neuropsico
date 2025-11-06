@@ -27,8 +27,6 @@
 
 html,
 body {
-  width: 100vw; 
-  overflow-x: hidden;
   font-family: 'Poppins', sans-serif;
   color: var(--color-text-dark);
   background-color: var(--color-background);
