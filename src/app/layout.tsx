@@ -6,6 +6,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DynamicWhatsAppButton from "@/components/DynamicWhatsAppButton";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 
 export const metadata: Metadata = {
   title: "SOLO - Psicologia",
@@ -33,6 +34,7 @@ export default function RootLayout({
           <main className="main-content">{children}</main>
           <Footer />
           <DynamicWhatsAppButton />
+          <ScrollToTopButton />
         </AuthProvider>
       </body>
     </html>
