@@ -3,20 +3,19 @@
 .header {
   background-color: var(--color-card-bg);
   border-bottom: 1px solid var(--color-text-light);
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: height 0.3s ease, padding 0.3s ease, background-color 0.3s ease;
-  height: 80px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  height: 70px;
   display: flex;
   align-items: center;
 }
 
 .header.scrolled {
-  height: 60px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
   background-color: rgba(var(--color-card-bg-rgb), 0.85);
   backdrop-filter: blur(10px);
