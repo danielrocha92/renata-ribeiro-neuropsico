@@ -24,12 +24,11 @@ const ScrollToTopButton: React.FC = () => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
     });
   };
 
   return (
-    <div className={styles.scrollToTopContainer}>
+    <div className={styles.scrollToTopButtonContainer}>
       {isVisible && (
         <button className={styles.scrollToTopButton} onClick={scrollToTop} aria-label="Voltar ao topo">
           <FiArrowUp size={30} />

@@ -13,8 +13,6 @@
 }
 
 .main {
-  width: 100%;
-  overflow-x: hidden;
   background-color: #FFFFFF; /* Fundo branco */
   color: #333; /* Cor de texto principal */
 }

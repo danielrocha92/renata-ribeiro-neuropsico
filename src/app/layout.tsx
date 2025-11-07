@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import DynamicWhatsAppButton from "@/components/DynamicWhatsAppButton";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 
+
 export const metadata: Metadata = {
   title: "SOLO - Psicologia",
   description: "Psicoterapia Cognitivo Comportamental, Avaliação Neuropsicológica e Reabilitação Cognitiva com foco em evidências científicas e acolhimento humano.",
@@ -35,6 +36,7 @@ export default function RootLayout({
           <Footer />
           <DynamicWhatsAppButton />
           <ScrollToTopButton />
+          
         </AuthProvider>
       </body>
     </html>

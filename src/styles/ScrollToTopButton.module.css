@@ -1,14 +1,14 @@
-/* src/styles/ScrollToTopButton.module.css */
-
-.scrollToTopContainer {
+.scrollToTopButtonContainer {
   position: fixed;
   bottom: 20px;
   left: 20px;
   z-index: 1000;
+  display: flex;
+  align-items: center;
 }
 
 .scrollToTopButton {
-  background-color: rgba(var(--color-primary-rgb), 0.7);
+  background-color: rgba(var(--color-primary-rgb), 0.7); /* Semi-transparent primary color */
   color: white;
   border-radius: 50%;
   width: 50px;
@@ -18,16 +18,16 @@
   align-items: center;
   font-size: 20px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.3); /* Enhanced shadow and inner border */
   z-index: 1000;
   transition: all 0.3s ease;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(15px); /* Increased blur for magnifying glass effect */
+  -webkit-backdrop-filter: blur(15px); /* For Safari */
+  border: 1px solid rgba(255, 255, 255, 0.4); /* Subtle white border */
 }
 
 .scrollToTopButton:hover {
   transform: scale(1.05);
-  background-color: rgba(var(--color-primary-rgb), 0.9);
+  background-color: rgba(var(--color-primary-rgb), 0.9); /* More opaque on hover */
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }
