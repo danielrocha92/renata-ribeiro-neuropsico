@@ -8,7 +8,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { auth, db } from '../../lib/firebase';
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
+import { collection, query, where, getDocs, Timestamp, doc, getDoc } from 'firebase/firestore';
 
 // Define interfaces for our data
 interface Appointment {
@@ -31,9 +31,19 @@ const ClientePage: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isCalendarConnected, setIsCalendarConnected] = useState(false);
 
   useEffect(() => {
     if (!user) return;
+
+    const checkCalendarConnection = async () => {
+      if (!user || !db) return;
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists() && userDoc.data().googleRefreshToken) {
+        setIsCalendarConnected(true);
+      }
+    };
 
     const fetchData = async () => {
       setLoading(true);
@@ -58,6 +68,7 @@ const ClientePage: React.FC = () => {
       }
     };
 
+    checkCalendarConnection();
     fetchData();
   }, [user]);
 
@@ -70,6 +81,12 @@ const ClientePage: React.FC = () => {
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
     }
+  };
+
+  const handleConnectCalendar = () => {
+    if (!user) return;
+    const redirectUrl = `/api/auth/google/redirect?userId=${user.uid}`;
+    router.push(redirectUrl);
   };
 
   return (
@@ -88,6 +105,17 @@ const ClientePage: React.FC = () => {
         ) : (
           <div className={styles.mainContent}>
             <div className={styles.leftColumn}>
+              <section className={styles.section}>
+                <h2>Google Calendar</h2>
+                {isCalendarConnected ? (
+                  <p>Seu Google Calendar está conectado.</p>
+                ) : (
+                  <button onClick={handleConnectCalendar} className={styles.connectButton}>
+                    Conectar Google Calendar
+                  </button>
+                )}
+              </section>
+
               <section className={styles.section}>
                 <h2>Meus Agendamentos</h2>
                 {appointments.length > 0 ? (

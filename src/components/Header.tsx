@@ -6,11 +6,22 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // Import usePathname
 import { FiMenu, FiX } from 'react-icons/fi'; // Ícones de menu
 import styles from '@/styles/Header.module.css';
+import { useAuth } from '@/contexts/AuthContext';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { useRouter } from 'next/navigation';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname(); // Get current pathname
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    router.push('/');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,7 +70,17 @@ const Header: React.FC = () => {
             <li className={`${styles.navItem} ${pathname === '/servicos' ? styles.activeNavItem : ''}`}><Link href="/servicos" onClick={() => setIsMenuOpen(false)}>Serviços</Link></li>
             <li className={`${styles.navItem} ${pathname === '/sobre' ? styles.activeNavItem : ''}`}><Link href="/sobre" onClick={() => setIsMenuOpen(false)}>Sobre</Link></li>
             <li className={`${styles.navItem} ${pathname === '/contato' ? styles.activeNavItem : ''}`}><Link href="/contato" onClick={() => setIsMenuOpen(false)}>Contato</Link></li>
-            <li className={`${styles.navItem} ${styles.ctaLink} ${pathname === '/cliente' ? styles.activeNavItem : ''}`}><Link href="/cliente" onClick={() => setIsMenuOpen(false)}>Área do Cliente</Link></li>
+            {!loading && user ? (
+              <>
+                <li className={`${styles.navItem} ${pathname === '/cliente' ? styles.activeNavItem : ''}`}><Link href="/cliente" onClick={() => setIsMenuOpen(false)}>Área do Cliente</Link></li>
+                <li className={styles.navItem}><button onClick={handleLogout} className={styles.logoutButton}>Logout</button></li>
+              </>
+            ) : (
+              <>
+                <li className={`${styles.navItem} ${pathname === '/login' ? styles.activeNavItem : ''}`}><Link href="/login" onClick={() => setIsMenuOpen(false)}>Login</Link></li>
+                <li className={`${styles.navItem} ${styles.ctaLink} ${pathname === '/cadastro' ? styles.activeNavItem : ''}`}><Link href="/cadastro" onClick={() => setIsMenuOpen(false)}>Cadastre-se</Link></li>
+              </>
+            )}
           </ul>
         </nav>
       </div>

@@ -71,12 +71,13 @@ const BookingCalendar = () => {
       try {
         if (!db) return;
         // 1. Create new appointment
+        const appointmentTitle = `Consulta com ${user.displayName}`;
         const appointmentsCol = collection(db, 'appointments');
         await addDoc(appointmentsCol, {
           patientId: user.uid,
           patientName: user.displayName,
           psychologistId: slot.psychologistId,
-          title: `Consulta com ${user.displayName}`,
+          title: appointmentTitle,
           date: slot.start, // Using the start time as the main date
           status: 'confirmed', // Automatically confirmed
           createdAt: serverTimestamp(),
@@ -90,6 +91,36 @@ const BookingCalendar = () => {
         setAvailableSlots(prevSlots => prevSlots.filter(s => s.id !== slot.id));
 
         alert("Consulta agendada com sucesso!");
+
+        // 4. Create Google Calendar event
+        try {
+          const response = await fetch('/api/create-calendar-event', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId: user.uid,
+              appointment: {
+                title: appointmentTitle,
+                start: slot.start.toISOString(),
+                end: slot.end.toISOString(),
+              },
+            }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            // If the calendar is not connected, we don't need to show an error.
+            // The user can connect it later.
+            if (errorData.error !== 'User has not connected their Google Calendar') {
+              throw new Error(errorData.error || 'Falha ao criar evento no Google Calendar.');
+            }
+          }
+        } catch (calendarError) {
+          console.error("Erro ao criar evento no Google Calendar: ", calendarError);
+          alert("Sua consulta foi agendada, mas não foi possível adicioná-la ao seu Google Calendar. Por favor, verifique a conexão do calendário na sua área de cliente.");
+        }
 
       } catch (error) {
         console.error("Erro ao agendar consulta: ", error);

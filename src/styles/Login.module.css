@@ -88,3 +88,43 @@
 .signupLink a:hover {
   text-decoration: underline;
 }
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #9CA3AF;
+  margin: 25px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.divider:not(:empty)::before {
+  margin-right: .25em;
+}
+
+.divider:not(:empty)::after {
+  margin-left: .25em;
+}
+
+.googleButton {
+  background-color: #fff;
+  color: #4B5563;
+  border: 1px solid #D1D5DB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.googleButton:hover {
+  background-color: #F9FAFB;
+}
+
+.googleIcon {
+  margin-right: 10px;
+}
