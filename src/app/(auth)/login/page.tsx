@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { auth, db } from '../../../lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from '../../../styles/Login.module.css';
+import { FaGoogle } from 'react-icons/fa';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -76,6 +77,56 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    setError(null);
+    if (!auth || !db) {
+      setError("O serviço de autenticação não está disponível. Tente novamente mais tarde.");
+      return;
+    }
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (!userDoc.exists()) {
+        // If the user does not exist, create a new document
+        const newUser = {
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          userType: 'paciente', // Default user type
+          status: 'active',
+        };
+        await setDoc(userDocRef, newUser);
+        router.push('/cliente');
+      } else {
+        const userData = userDoc.data();
+        if (userData.userType === 'psicologo') {
+          if (userData.status === 'pending') {
+            await signOut(auth);
+            setError('Sua conta de psicólogo está pendente de aprovação.');
+          } else if (userData.status === 'active') {
+            router.push('/admin');
+          } else {
+            await signOut(auth);
+            setError('O status da sua conta é inválido.');
+          }
+        } else if (userData.userType === 'paciente') {
+          router.push('/cliente');
+        } else {
+          await signOut(auth);
+          setError('Tipo de usuário desconhecido.');
+        }
+      }
+    } catch (error: unknown) {
+      console.error("Google Sign-In Error:", error);
+      setError("Ocorreu um erro ao fazer login com o Google.");
+    }
+  };
+
   return (
     <div className={styles.container}>
       <form className={styles.loginForm} onSubmit={handleLogin}>
@@ -98,6 +149,11 @@ const LoginPage: React.FC = () => {
           required
         />
         <button type="submit" className={styles.button}>Entrar</button>
+        <div className={styles.divider}>ou</div>
+        <button type="button" className={`${styles.button} ${styles.googleButton}`} onClick={handleGoogleLogin}>
+          <FaGoogle className={styles.googleIcon} />
+          Entrar com Google
+        </button>
         <p className={styles.signupLink}>
           Não tem uma conta? <Link href="/cadastro">Cadastre-se</Link>
         </p>
