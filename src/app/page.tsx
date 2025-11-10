@@ -8,17 +8,17 @@ import styles from '@/styles/Home.module.css';
 import VideoModal from '@/components/VideoModal';
 
 // --- Ícones SVG para a seção de serviços ---
-const TherapyIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><path d="M12 2a5 5 0 0 0-5 5c0 1.84.96 3.52 2.45 4.4a5.99 5.99 0 0 1-2.42 4.54C4.59 18.29 3 20.5 3 22h18c0-1.5-1.59-3.71-4.03-5.06a5.99 5.99 0 0 1-2.42-4.54C16.04 10.52 17 8.84 17 7a5 5 0 0 0-5-5z"/></svg>
+const OnlineIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><path d="M12 2a5 5 0 0 0-5 5c0 1.84.96 3.52 2.45 4.4a5.99 5.99 0 0 1-2.42 4.54C4.59 18.29 3 20.5 3 22h18c0-1.5-1.59-3.71-4.03-5.06a5.99 5.99 0 0 1-2.42-4.54C16.04 10.52 17 8.84 17 7a5 5 0 0 0-5-5z"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
 );
 const BrainIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v0A2.5 2.5 0 0 1 9.5 7h-3A2.5 2.5 0 0 1 4 4.5v0A2.5 2.5 0 0 1 6.5 2h3Z"/><path d="M14.5 2A2.5 2.5 0 0 1 17 4.5v0A2.5 2.5 0 0 1 14.5 7h-3a2.5 2.5 0 0 1-2.5-2.5v0A2.5 2.5 0 0 1 11.5 2h3Z"/><path d="M12 12a2.5 2.5 0 0 1 2.5 2.5v0A2.5 2.5 0 0 1 12 17h0a2.5 2.5 0 0 1-2.5-2.5v0A2.5 2.5 0 0 1 12 12Z"/><path d="M4.5 9.5A2.5 2.5 0 0 1 7 12v0a2.5 2.5 0 0 1-2.5 2.5h-2A2.5 2.5 0 0 1 0 12v0A2.5 2.5 0 0 1 2.5 9.5h2Z"/><path d="M19.5 9.5a2.5 2.5 0 0 1 2.5 2.5v0a2.5 2.5 0 0 1-2.5 2.5h-2a2.5 2.5 0 0 1-2.5-2.5v0a2.5 2.5 0 0 1 2.5-2.5h2Z"/><path d="M9.5 16.5A2.5 2.5 0 0 1 12 19v0a2.5 2.5 0 0 1-2.5 2.5h-3A2.5 2.5 0 0 1 4 19v0a2.5 2.5 0 0 1 2.5-2.5h3Z"/><path d="M14.5 16.5a2.5 2.5 0 0 1 2.5 2.5v0a2.5 2.5 0 0 1-2.5 2.5h-3a2.5 2.5 0 0 1-2.5-2.5v0a2.5 2.5 0 0 1 2.5-2.5h3Z"/></svg>
 );
-const UsersIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+const PsychologyIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><path d="M12 2a5 5 0 0 0-5 5c0 1.84.96 3.52 2.45 4.4a5.99 5.99 0 0 1-2.42 4.54C4.59 18.29 3 20.5 3 22h18c0-1.5-1.59-3.71-4.03-5.06a5.99 5.99 0 0 1-2.42-4.54C16.04 10.52 17 8.84 17 7a5 5 0 0 0-5-5z"/></svg>
 );
-const GlobeIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+const CollaborationIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
 );
 
 export default function Home() {
@@ -44,24 +44,24 @@ export default function Home() {
 
   const servicos = [
     {
-      icon: <TherapyIcon />,
-      title: 'Psicoterapia Individual',
-      description: 'Um espaço seguro e acolhedor para autoconhecimento, desenvolvimento de habilidades e superação de desafios emocionais.',
+      icon: <OnlineIcon />,
+      title: 'Psicoterapia Online',
+      description: 'Os atendimentos são realizados através do Google Meet, em ambiente confidencial e seguro.',
     },
     {
       icon: <BrainIcon />,
-      title: 'Avaliação Neuropsicológica',
-      description: 'Investigação detalhada das funções cognitivas (memória, atenção, etc.) para diagnóstico e planejamento de intervenções.',
+      title: 'Avaliação Neuropsicológica Presencial',
+      description: 'A avaliação neuropsicológica é um processo clínico-científico que tem como objetivo compreender o funcionamento cognitivo, emocional e comportamental de uma pessoa.',
     },
     {
-      icon: <UsersIcon />,
-      title: 'Acompanhamento Psicológico',
-      description: 'Suporte contínuo para lidar com transições de vida, estresse, ansiedade e busca por bem-estar e qualidade de vida.',
+      icon: <PsychologyIcon />,
+      title: 'Avaliação Psicológica',
+      description: 'A avaliação psicológica busca compreender aspectos emocionais, comportamentais e de personalidade, auxiliando no autoconhecimento e na tomada de decisões em diferentes contextos.',
     },
     {
-      icon: <GlobeIcon />,
-      title: 'Atendimento Online e Presencial',
-      description: 'Flexibilidade para cuidar da sua saúde mental, com a mesma qualidade e sigilo, de onde você estiver.',
+      icon: <CollaborationIcon />,
+      title: 'Colaboração, Consultoria & Supervisão',
+      description: 'Ofereço consultoria e supervisão clínica para psicólogos e profissionais em formação que desejam aprimorar o raciocínio clínico, o uso de instrumentos psicológicos e a condução de casos.',
     },
   ];
 
@@ -120,13 +120,6 @@ export default function Home() {
               <p>{service.description}</p>
             </div>
           ))}
-        </div>
-        <div className={`${styles.seeMoreContainer} ${styles.fadeIn}`}>
-          <Link href="/servicos" passHref>
-            <button className={styles.ctaButton}>
-              Ver todos os serviços
-            </button>
-          </Link>
         </div>
       </section>
 
