@@ -1,6 +1,6 @@
 import { google } from 'googleapis';
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '../../../../../lib/firebase';
+import { db } from '@/lib/firebase';
 import { doc, updateDoc, setDoc } from 'firebase/firestore';
 
 export async function GET(req: NextRequest) {
