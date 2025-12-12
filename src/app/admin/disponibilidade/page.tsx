@@ -78,7 +78,7 @@ const DisponibilidadePage = () => {
 
   const handleSelectSlot = ({ start, end }: { start: Date; end: Date }) => {
     // Check for overlapping events
-    const overlapping = events.find(event => 
+    const overlapping = events.find(event =>
       (start < event.end && end > event.start)
     );
 
@@ -159,7 +159,9 @@ const DisponibilidadePage = () => {
   };
 
   const handleGoogleCalendarSync = () => {
-    router.push('/api/auth/google/redirect');
+    if (!user) return;
+    const redirectUrl = `/api/auth/google/redirect?userId=${user.uid}`;
+    window.location.href = redirectUrl;
   };
 
   return (

@@ -61,6 +61,7 @@ const LoginPage: React.FC = () => {
         switch (firebaseError.code) {
           case 'auth/user-not-found':
           case 'auth/wrong-password':
+          case 'auth/invalid-credential':
             setError('E-mail ou senha inválidos.');
             break;
           case 'auth/invalid-email':
