@@ -15,10 +15,10 @@
     "firebase": "^10.12.3",
     "googleapis": "^164.1.0",
     "lucide-react": "^0.417.0",
-    "next": "16.0.0",
-    "react": "19.2.0",
+    "next": "^16.0.10",
+    "react": "^19.2.3",
     "react-big-calendar": "^1.19.4",
-    "react-dom": "19.2.0",
+    "react-dom": "^19.2.3",
     "react-icons": "^5.5.0"
   },
   "devDependencies": {
@@ -27,7 +27,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.0.0",
+    "eslint-config-next": "^16.0.10",
     "next-sitemap": "^4.2.3",
     "tailwindcss": "^4",
     "typescript": "^5"
