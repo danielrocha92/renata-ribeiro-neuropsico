@@ -86,7 +86,10 @@ const ClientePage: React.FC = () => {
   const handleConnectCalendar = () => {
     if (!user) return;
     const redirectUrl = `/api/auth/google/redirect?userId=${user.uid}`;
-    router.push(redirectUrl);
+    // Use window.location.href instead of router.push to force a full page navigation.
+    // This avoids CORS errors because the browser handles the redirect directly,
+    // rather than initiating a fetch request from client-side code.
+    window.location.href = redirectUrl;
   };
 
   return (
