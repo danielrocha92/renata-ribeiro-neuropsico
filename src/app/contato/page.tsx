@@ -1,9 +1,57 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import emailjs from '@emailjs/browser';
 import styles from '@/styles/Contato.module.css';
 
 const ContatoPage: React.FC = () => {
+  const form = useRef<HTMLFormElement>(null);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+
+  const sendEmail = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setSuccess(false);
+    setError(false);
+
+    if (
+      !process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ||
+      !process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ||
+      !process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+    ) {
+      console.error("EmailJS environment variables are missing.");
+      setError(true);
+      setLoading(false);
+      return;
+    }
+
+    if (form.current) {
+      emailjs
+        .sendForm(
+          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+          form.current,
+          {
+            publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
+          }
+        )
+        .then(
+          () => {
+            setSuccess(true);
+            setLoading(false);
+            if (form.current) form.current.reset();
+          },
+          (error) => {
+            console.error('FAILED...', error.text);
+            setError(true);
+            setLoading(false);
+          },
+        );
+    }
+  };
+
   return (
     <main className={styles.main}>
       <div className={styles.container}>
@@ -12,20 +60,29 @@ const ContatoPage: React.FC = () => {
           <p className={styles.subtitle}>
             Preencha o formulário abaixo para enviar uma mensagem.
           </p>
-          <form className={styles.form}>
+          <form className={styles.form} ref={form} onSubmit={sendEmail}>
             <div className={styles.formGroup}>
-              <label htmlFor="name">Nome</label>
-              <input type="text" id="name" name="name" required />
+              <label htmlFor="user_name">Nome</label>
+              <input type="text" id="user_name" name="user_name" required />
             </div>
             <div className={styles.formGroup}>
-              <label htmlFor="email">Email</label>
-              <input type="email" id="email" name="email" required />
+              <label htmlFor="user_email">Email</label>
+              <input type="email" id="user_email" name="user_email" required />
             </div>
             <div className={styles.formGroup}>
               <label htmlFor="message">Mensagem</label>
               <textarea id="message" name="message" rows={5} required></textarea>
             </div>
-            <button type="submit" className={styles.submitButton}>Enviar</button>
+            <button
+              type="submit"
+              className={styles.submitButton}
+              disabled={loading}
+              style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+            >
+              {loading ? 'Enviando...' : 'Enviar'}
+            </button>
+            {success && <p className={styles.successMessage}>Mensagem enviada com sucesso!</p>}
+            {error && <p className={styles.errorMessage}>Ocorreu um erro ao enviar a mensagem. Tente novamente.</p>}
           </form>
         </div>
         <div className={styles.mapContainer}>

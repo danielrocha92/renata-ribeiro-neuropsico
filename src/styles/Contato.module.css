@@ -130,3 +130,25 @@
     font-size: 1.1rem;
   }
 }
+
+.successMessage {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #34d399;
+  border-radius: 8px;
+  text-align: center;
+  width: 100%;
+}
+
+.errorMessage {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #f87171;
+  border-radius: 8px;
+  text-align: center;
+  width: 100%;
+}

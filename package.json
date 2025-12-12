@@ -10,6 +10,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "date-fns": "^4.1.0",
     "firebase": "^10.12.3",
     "googleapis": "^164.1.0",
