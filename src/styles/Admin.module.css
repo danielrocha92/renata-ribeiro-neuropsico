@@ -12,7 +12,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
 }
 
@@ -63,6 +63,15 @@
 
 .container {
   padding: 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
 }
 
 .header {
@@ -148,7 +157,113 @@
   border-bottom: 1px solid #eee;
 }
 
-.table th {
-  background-color: #f8f9fa;
+
+/* Chat Responsive Styles */
+.chatContainer {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  height: calc(100vh - 200px);
+}
+
+.chatList {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-y: auto;
+  border: 1px solid #eee;
+}
+
+.chatMain {
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #eee;
+}
+
+.chatHeader {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  background: #f9f9f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.backButton {
+  display: none;
+  /* Hidden on desktop */
+  background: none;
+  border: none;
+  color: #6A7EBD;
   font-weight: 600;
+  cursor: pointer;
+}
+
+.messageArea {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.messageBubble {
+  max-width: 70%;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+}
+
+.messageAdmin {
+  align-self: flex-end;
+  background-color: #6A7EBD;
+  color: white;
+}
+
+.messageUser {
+  align-self: flex-start;
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.inputArea {
+  padding: 1rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .chatContainer {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 150px);
+    /* Adjust for mobile header/nav */
+  }
+
+  .chatList.hiddenMobile {
+    display: none;
+  }
+
+  .chatMain.hiddenMobile {
+    display: none;
+  }
+
+  .chatList {
+    width: 100%;
+    height: 100%;
+  }
+
+  .chatMain {
+    width: 100%;
+    height: 100%;
+  }
+
+  .backButton {
+    display: block;
+    /* Show back button on mobile when in chat */
+    margin-right: 1rem;
+  }
 }

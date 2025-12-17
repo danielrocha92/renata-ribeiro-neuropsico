@@ -24,11 +24,20 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Regras para Disponibilidade (Availability)
+    match /availability/{slotId} {
+      allow read: if request.auth != null;
+      allow delete: if request.auth != null; // Permitir que o cliente delete ao agendar
+      allow create, update: if isAdmin();
+    }
+
     // Regras para Agendamentos (Appointments)
     match /appointments/{appointmentId} {
-      // Usuário pode ler/escrever seus próprios agendamentos. Admin pode ler/escrever todos.
-      allow read, write: if request.auth != null && (request.auth.uid == resource.data.patientId || isAdmin());
-      // Permitir criação se o usuário estiver autenticado (normalmente o cliente cria a solicitação)
+      // Permitir leitura para todos autenticados (para mostrar horário indisponível)
+      allow read: if request.auth != null;
+      // Escrita restrita ao dono ou admin
+      allow update, delete: if request.auth != null && (request.auth.uid == resource.data.patientId || isAdmin());
+      // Permitir criação
       allow create: if request.auth != null;
     }
 

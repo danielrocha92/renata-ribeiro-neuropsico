@@ -28,20 +28,23 @@ interface CalendarEvent {
   start: Date;
   end: Date;
   psychologistId?: string; // Keep track of who owns the slot
+  type?: 'availability' | 'appointment';
 }
 
 const BookingCalendar = () => {
   const { user } = useAuth();
-  const [availableSlots, setAvailableSlots] = useState<CalendarEvent[]>([]);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
 
   useEffect(() => {
     if (!db) return;
 
-    const fetchAvailability = async () => {
+    const fetchData = async () => {
       if (!db) return;
+
+      // Fetch Availability
       const availabilityCol = collection(db, 'availability');
-      const querySnapshot = await getDocs(availabilityCol);
-      const fetchedSlots = querySnapshot.docs.map(doc => {
+      const availSnapshot = await getDocs(availabilityCol);
+      const availEvents = availSnapshot.docs.map(doc => {
         const data = doc.data();
         return {
           id: doc.id,
@@ -49,15 +52,40 @@ const BookingCalendar = () => {
           start: (data.start as Timestamp).toDate(),
           end: (data.end as Timestamp).toDate(),
           psychologistId: data.psychologistId,
+          type: 'availability' as const
         };
       });
-      setAvailableSlots(fetchedSlots);
+
+      // Fetch Appointments (to show as Reserved)
+      const appointmentsCol = collection(db, 'appointments');
+      // Optionally filter by date or psychologist if needed in future
+      const apptSnapshot = await getDocs(appointmentsCol);
+      const apptEvents = apptSnapshot.docs.map(doc => {
+        const data = doc.data();
+        // Check if status is not cancelled
+        if (data.status === 'cancelled') return null;
+
+        return {
+          id: doc.id,
+          title: 'Indisponível', // Masking data
+          start: (data.start as Timestamp).toDate(),
+          end: (data.end as Timestamp).toDate(),
+          psychologistId: data.psychologistId,
+          type: 'appointment' as const
+        };
+      }).filter(e => e !== null) as CalendarEvent[];
+
+      setEvents([...availEvents, ...apptEvents]);
     };
 
-    fetchAvailability();
+    fetchData();
   }, []);
 
-  const handleSelectSlot = async (slot: CalendarEvent) => {
+  const handleSelectSlot = async (slot: CalendarEvent & { type?: string }) => {
+    if (slot.type === 'appointment') {
+      return; // Do nothing for reserved slots
+    }
+
     if (!user || !db) {
       alert("Você precisa estar logado para agendar.");
       return;
@@ -70,6 +98,7 @@ const BookingCalendar = () => {
     if (confirmation) {
       try {
         if (!db) return;
+
         // 1. Create new appointment
         const appointmentTitle = `Consulta com ${user.displayName}`;
         const appointmentsCol = collection(db, 'appointments');
@@ -78,8 +107,10 @@ const BookingCalendar = () => {
           patientName: user.displayName,
           psychologistId: slot.psychologistId,
           title: appointmentTitle,
-          date: slot.start, // Using the start time as the main date
-          status: 'confirmed', // Automatically confirmed
+          date: slot.start,
+          start: slot.start, // Ensure start/end are saved for calendar rendering
+          end: slot.end,
+          status: 'confirmed',
           createdAt: serverTimestamp(),
         });
 
@@ -87,12 +118,20 @@ const BookingCalendar = () => {
         const availabilityDocRef = doc(db, 'availability', slot.id);
         await deleteDoc(availabilityDocRef);
 
-        // 3. Update local state to remove the slot from the calendar
-        setAvailableSlots(prevSlots => prevSlots.filter(s => s.id !== slot.id));
+        // 3. Update local state
+        setEvents(prev => prev.filter(s => s.id !== slot.id).concat([{
+          id: 'temp_new_appt', // Temporary ID
+          title: 'Indisponível',
+          start: slot.start,
+          end: slot.end,
+          psychologistId: slot.psychologistId,
+          // @ts-ignore
+          type: 'appointment'
+        }]));
 
         alert("Consulta agendada com sucesso!");
 
-        // 4. Create Google Calendar event
+        // 4. Create Google Calendar event (keeping existing logic)
         try {
           const response = await fetch('/api/create-calendar-event', {
             method: 'POST',
@@ -110,16 +149,14 @@ const BookingCalendar = () => {
           });
 
           if (!response.ok) {
-            const errorData = await response.json();
-            // If the calendar is not connected, we don't need to show an error.
-            // The user can connect it later.
-            if (errorData.error !== 'User has not connected their Google Calendar') {
-              throw new Error(errorData.error || 'Falha ao criar evento no Google Calendar.');
+            const data = await response.json();
+            if (data.error !== 'User has not connected their Google Calendar') {
+              console.error("Calendar API Error:", data.error);
             }
           }
+
         } catch (calendarError) {
           console.error("Erro ao criar evento no Google Calendar: ", calendarError);
-          alert("Sua consulta foi agendada, mas não foi possível adicioná-la ao seu Google Calendar. Por favor, verifique a conexão do calendário na sua área de cliente.");
         }
 
       } catch (error) {
@@ -129,17 +166,44 @@ const BookingCalendar = () => {
     }
   };
 
+  const eventStyleGetter = (event: CalendarEvent & { type?: string }) => {
+    if (event.type === 'appointment') {
+      return {
+        style: {
+          backgroundColor: '#e74c3c', // Red/Gray for unavailable
+          opacity: 0.6,
+          color: 'white',
+          border: '0px',
+          display: 'block',
+          cursor: 'not-allowed'
+        }
+      };
+    }
+    return {
+      style: {
+        backgroundColor: '#3174ad', // Blue for available
+        borderRadius: '5px',
+        opacity: 0.8,
+        color: 'white',
+        border: '0px',
+        display: 'block',
+        cursor: 'pointer'
+      }
+    };
+  };
+
   return (
     <div style={{ height: '70vh' }}>
       <Calendar
         localizer={localizer}
-        events={availableSlots}
+        events={events}
         startAccessor="start"
         endAccessor="end"
         defaultView={Views.WEEK}
         views={[Views.WEEK, Views.DAY]}
-        selectable
+        selectable={false} // Disable slot selection, rely on event selection
         onSelectEvent={handleSelectSlot}
+        eventPropGetter={eventStyleGetter}
         culture='pt-BR'
         messages={{
           next: "Próximo",

@@ -99,10 +99,10 @@ const AdminChatPage = () => {
                     <h1>Atendimento Online</h1>
                 </header>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '2rem', height: 'calc(100vh - 200px)' }}>
+                <div className={styles.chatContainer}>
 
                     {/* Sidebar: Room List */}
-                    <div style={{ background: 'white', borderRadius: '8px', padding: '1rem', overflowY: 'auto', border: '1px solid #eee' }}>
+                    <div className={`${styles.chatList} ${selectedRoomId ? styles.hiddenMobile : ''}`}>
                         <h3 className={styles.sectionTitle} style={{ fontSize: '1.2rem' }}>Conversas</h3>
                         {rooms.length === 0 && <p style={{ color: '#888' }}>Nenhuma conversa iniciada.</p>}
                         {rooms.map(room => (
@@ -132,27 +132,25 @@ const AdminChatPage = () => {
                     </div>
 
                     {/* Main Chat Area */}
-                    <div style={{ background: 'white', borderRadius: '8px', display: 'flex', flexDirection: 'column', border: '1px solid #eee' }}>
+                    <div className={`${styles.chatMain} ${!selectedRoomId ? styles.hiddenMobile : ''}`}>
                         {selectedRoomId ? (
                             <>
-                                <div style={{ padding: '1rem', borderBottom: '1px solid #eee', background: '#f9f9f9' }}>
-                                    <strong>Chat com {rooms.find(r => r.id === selectedRoomId)?.patientName}</strong>
+                                <div className={styles.chatHeader}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <button className={styles.backButton} onClick={() => setSelectedRoomId(null)}>
+                                            ← Voltar
+                                        </button>
+                                        <strong>Chat com {rooms.find(r => r.id === selectedRoomId)?.patientName}</strong>
+                                    </div>
                                 </div>
 
-                                <div style={{ flex: 1, padding: '1.5rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div className={styles.messageArea}>
                                     {messages.map(msg => {
-                                        const isAdmin = msg.senderId === 'admin'; // Or check against current user
+                                        const isAdmin = msg.senderId === 'admin';
                                         return (
                                             <div
                                                 key={msg.id}
-                                                style={{
-                                                    alignSelf: isAdmin ? 'flex-end' : 'flex-start',
-                                                    maxWidth: '70%',
-                                                    backgroundColor: isAdmin ? '#6A7EBD' : '#f1f1f1',
-                                                    color: isAdmin ? 'white' : '#333',
-                                                    padding: '0.8rem 1.2rem',
-                                                    borderRadius: '12px'
-                                                }}
+                                                className={`${styles.messageBubble} ${isAdmin ? styles.messageAdmin : styles.messageUser}`}
                                             >
                                                 <p style={{ margin: 0 }}>{msg.text}</p>
                                                 <span style={{ display: 'block', marginTop: '0.3rem', fontSize: '0.7rem', opacity: 0.7, textAlign: 'right' }}>
@@ -164,7 +162,7 @@ const AdminChatPage = () => {
                                     <div ref={bottomRef} />
                                 </div>
 
-                                <form onSubmit={handleSendReply} style={{ padding: '1rem', borderTop: '1px solid #eee', display: 'flex', gap: '1rem' }}>
+                                <form onSubmit={handleSendReply} className={styles.inputArea}>
                                     <input
                                         type="text"
                                         value={reply}

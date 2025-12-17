@@ -1,9 +1,15 @@
 .layout {
-  display: flex;
+  display: block;
 }
 
 .mainContent {
   flex-grow: 1;
   padding: 2rem;
   background-color: #fafafa;
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    padding: 1rem;
+  }
 }
