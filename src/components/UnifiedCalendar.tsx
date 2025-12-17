@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback, FC } from 'react';
 import { Calendar, dateFnsLocalizer, Views, View } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -37,7 +37,7 @@ interface UnifiedCalendarProps {
     onSelectSlot?: (slotInfo: { start: Date; end: Date }) => void;
     onSelectEvent?: (event: CalendarEvent) => void;
     eventPropGetter?: (event: CalendarEvent) => { className?: string; style?: React.CSSProperties };
-    defaultView?: View;
+    defaultView?: string;
     selectable?: boolean;
 }
 
@@ -100,7 +100,8 @@ const CustomToolbar = ({ date, view, onNavigate, onView }: any) => {
     );
 };
 
-const UnifiedCalendar: React.FC<UnifiedCalendarProps> = ({
+
+const UnifiedCalendar: FC<UnifiedCalendarProps> = ({
     events,
     onSelectSlot,
     onSelectEvent,
@@ -108,11 +109,11 @@ const UnifiedCalendar: React.FC<UnifiedCalendarProps> = ({
     defaultView = Views.WEEK,
     selectable = true
 }) => {
-    const [view, setView] = useState<View>(defaultView);
+    const [view, setView] = useState<any>(defaultView); // Use any or string for view state to avoid type conflicts
     const [date, setDate] = useState(new Date());
 
     const onNavigate = useCallback((newDate: Date) => setDate(newDate), []);
-    const onView = useCallback((newView: View) => setView(newView), []);
+    const onView = useCallback((newView: any) => setView(newView), []);
 
     return (
         <div className={styles.calendarContainer}>

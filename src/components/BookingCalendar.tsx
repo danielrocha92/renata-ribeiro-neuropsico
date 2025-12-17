@@ -155,7 +155,7 @@ const BookingCalendar = () => {
   };
 
   return (
-    <div style={{ height: '70vh' }}>
+    <div>
       <UnifiedCalendar
         events={events}
         selectable={false}

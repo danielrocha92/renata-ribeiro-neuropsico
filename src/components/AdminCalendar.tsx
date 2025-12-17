@@ -214,7 +214,7 @@ const AdminCalendar = () => {
                     </button>
                 )}
             </header>
-            <div style={{ height: '70vh', marginTop: '1rem' }}>
+            <div style={{ marginTop: '1rem' }}>
                 <UnifiedCalendar
                     events={events}
                     selectable={true}
