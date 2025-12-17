@@ -125,6 +125,7 @@ const AdminCalendar = () => {
                     psychologistId: user.uid,
                     patientName: patientName || title,
                     patientId: patientId,
+                    date: start, // Adding compatibility field
                     start,
                     end,
                     status: 'confirmed', // Admin appointments are confirmed by default
@@ -137,6 +138,7 @@ const AdminCalendar = () => {
                 await updateDoc(eventRef, {
                     patientName: patientName || title,
                     patientId: patientId,
+                    date: start, // Adding compatibility field
                     start,
                     end
                 });

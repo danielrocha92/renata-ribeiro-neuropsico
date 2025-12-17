@@ -30,23 +30,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         setUser(user);
         if (user) {
-          // --- CORREÇÃO 1: VERIFICAÇÃO DE TIPO ---
-          // Adicionamos a verificação 'db' dentro do callback
-          // para garantir ao TypeScript que 'db' não é nulo.
-          if (!db) {
-            console.error("Auth context: Firestore (db) não está disponível no callback.");
-            throw new Error("Conexão com banco de dados indisponível.");
-          }
-          // --- FIM DA CORREÇÃO 1 ---
+          // --- CORREÇÃO 1: VERIFICAÇÃO DE ADMIN ---
+          // A user is an admin if they matches specific credentials OR if they are a psychologist in DB.
+          // Is checked FIRST to ensure access even if DB has issues or user doc is missing.
 
-          const userDocRef = doc(db, 'users', user.uid); // Esta é a linha 31 original
-          const userDoc = await getDoc(userDocRef);
-          // A user is an admin if they are a psychologist AND their status is active
-          // Also hardcoding access for 'Renata Ribeiro' as requested.
-          if ((userDoc.exists() && userDoc.data().userType === 'psicologo' && userDoc.data().status === 'active') || (user.displayName === 'Renata Ribeiro') || (user.email === 'renataribeiro.neuropsico@gmail.com')) {
+          const isRenata = (user.displayName && user.displayName.trim().toLowerCase() === 'renata ribeiro') ||
+            (user.email === 'renataribeiro.neuropsico@gmail.com');
+
+          if (isRenata) {
             setIsAdmin(true);
           } else {
-            setIsAdmin(false);
+            // If not Renata, check DB
+            try {
+              if (!db) throw new Error("Database not initialized");
+              const userDocRef = doc(db, 'users', user.uid);
+              const userDoc = await getDoc(userDocRef);
+
+              if (userDoc.exists() && userDoc.data().userType === 'psicologo' && userDoc.data().status === 'active') {
+                setIsAdmin(true);
+              } else {
+                setIsAdmin(false);
+              }
+            } catch (dbError) {
+              console.error("Error checking admin status in DB:", dbError);
+              setIsAdmin(false);
+            }
           }
         } else {
           setIsAdmin(false);

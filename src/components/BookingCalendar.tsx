@@ -3,18 +3,20 @@
 import React, { useState, useEffect } from 'react';
 import UnifiedCalendar, { CalendarEvent } from './UnifiedCalendar'; // Import generic component
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import styles from './BookingCalendar.module.css';
+import styles from '@/styles/BookingCalendar.module.css';
 
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
-import { collection, getDocs, addDoc, deleteDoc, doc, Timestamp, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, addDoc, deleteDoc, doc, Timestamp, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import CustomModal from './CustomModal';
 
 // ...
 
 const BookingCalendar = () => {
   const { user } = useAuth();
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [availEvents, setAvailEvents] = useState<CalendarEvent[]>([]);
+  const [apptEvents, setApptEvents] = useState<CalendarEvent[]>([]);
+  const events = [...availEvents, ...apptEvents];
   const [modal, setModal] = useState<{
     isOpen: boolean;
     title?: string;
@@ -27,7 +29,58 @@ const BookingCalendar = () => {
     type: 'alert'
   });
 
-  // ... useEffect fetchData ...
+  useEffect(() => {
+    if (!db) return;
+
+    // 1. Listen to Availability
+    const availCol = collection(db, 'availability');
+    const unsubAvail = onSnapshot(availCol, (snapshot) => {
+      const list: CalendarEvent[] = [];
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.start && data.end) {
+          list.push({
+            id: doc.id,
+            title: 'Disponível',
+            start: data.start instanceof Timestamp ? data.start.toDate() : new Date(data.start),
+            end: data.end instanceof Timestamp ? data.end.toDate() : new Date(data.end),
+            type: 'availability',
+            psychologistId: data.psychologistId
+          } as CalendarEvent);
+        }
+      });
+      setAvailEvents(list);
+    }, (error) => {
+      console.error("Availability listener error:", error);
+    });
+
+    // 2. Listen to Appointments
+    const apptCol = collection(db, 'appointments');
+    const unsubAppt = onSnapshot(apptCol, (snapshot) => {
+      const list: CalendarEvent[] = [];
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.start && data.end) {
+          list.push({
+            id: doc.id,
+            title: 'Indisponível', // Masked
+            start: data.start instanceof Timestamp ? data.start.toDate() : new Date(data.start),
+            end: data.end instanceof Timestamp ? data.end.toDate() : new Date(data.end),
+            type: 'appointment',
+            psychologistId: data.psychologistId
+          } as CalendarEvent);
+        }
+      });
+      setApptEvents(list);
+    }, (error) => {
+      console.error("Appointments listener error:", error);
+    });
+
+    return () => {
+      unsubAvail();
+      unsubAppt();
+    };
+  }, [user]);
 
   const handleCloseModal = () => {
     setModal(prev => ({ ...prev, isOpen: false }));
@@ -66,16 +119,6 @@ const BookingCalendar = () => {
         const availabilityDocRef = doc(db, 'availability', event.id);
         await deleteDoc(availabilityDocRef);
       }
-
-      // 3. Update local state
-      setEvents(prev => prev.filter(s => s.id !== event.id).concat([{
-        id: 'temp_new_appt', // Temporary ID
-        title: 'Indisponível',
-        start: event.start,
-        end: event.end,
-        // @ts-ignore
-        type: 'appointment'
-      }]));
 
       showAlert("Consulta agendada com sucesso!", "Sucesso");
 
@@ -132,25 +175,11 @@ const BookingCalendar = () => {
   const eventStyleGetter = (event: CalendarEvent) => {
     if (event.type === 'appointment') {
       return {
-        style: {
-          backgroundColor: '#e0e0e0', // Gray for unavailable/busy
-          opacity: 0.8,
-          color: '#666',
-          border: '1px solid #ccc',
-          display: 'block',
-          cursor: 'not-allowed',
-          boxShadow: 'none'
-        }
+        className: styles.eventUnavailable
       };
     }
     return {
-      style: {
-        backgroundColor: '#726FB2', // Brand Secondary (Purple/Blue) for Available
-        color: 'white',
-        border: 'none',
-        display: 'block',
-        cursor: 'pointer'
-      }
+      className: styles.eventAvailable
     };
   };
 

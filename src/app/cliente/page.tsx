@@ -4,18 +4,17 @@ import React, { useState } from 'react';
 import styles from '../../styles/Cliente.module.css';
 import PrivateRoute from '../../components/PrivateRoute';
 import BookingCalendar from '@/components/BookingCalendar';
+import DashboardCard from '@/components/DashboardCard';
 import { useAuth } from '../../contexts/AuthContext';
 import { auth } from '../../lib/firebase';
-import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import {
   Video,
   FileText,
   CreditCard,
   MessageCircle,
-  BookOpen,
-  LogOut,
-  HelpCircle
+  HelpCircle,
+  BookOpen
 } from 'lucide-react';
 
 const ClientePage: React.FC = () => {
@@ -25,17 +24,6 @@ const ClientePage: React.FC = () => {
 
   // Simulating loading check if user is resolved, though PrivateRoute handles most of it.
   // We can keep it simple.
-
-  const handleLogout = async () => {
-    try {
-      if (auth) {
-        await signOut(auth);
-      }
-      router.push('/login');
-    } catch (error) {
-      console.error('Erro ao fazer logout:', error);
-    }
-  };
 
   const dashboardCards = [
     {
@@ -90,9 +78,7 @@ const ClientePage: React.FC = () => {
             <h1>Área do Cliente</h1>
             <p>Olá, {user?.displayName || 'Cliente'}. Bem-vindo(a) ao seu espaço de saúde e bem-estar.</p>
           </div>
-          <button onClick={handleLogout} className={styles.logoutButton} title="Sair">
-            <LogOut size={20} /> Sair
-          </button>
+
         </header>
 
         {loading ? (
@@ -102,11 +88,14 @@ const ClientePage: React.FC = () => {
             {/* Quick Actions / Features Grid */}
             <div className={styles.dashboardGrid}>
               {dashboardCards.map((card, index) => (
-                <div key={index} className={styles.card} onClick={card.action}>
-                  {card.icon}
-                  <h3 className={styles.cardTitle}>{card.title}</h3>
-                  <p className={styles.cardDescription}>{card.description}</p>
-                </div>
+                <DashboardCard
+                  key={index}
+                  title={card.title}
+                  description={card.description}
+                  icon={card.icon}
+                  onClick={card.action}
+                  variant={card.title === "Guia de Uso" ? "highlight" : "default"}
+                />
               ))}
             </div>
 

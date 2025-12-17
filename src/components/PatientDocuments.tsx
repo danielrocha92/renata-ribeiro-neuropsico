@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { db, storage } from '../lib/firebase';
+import styles from '@/styles/PatientDocuments.module.css';
+import { db } from '../lib/firebase';
 import { collection, getDocs, query, where, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 // Define types for the data
 interface Patient {
@@ -13,8 +13,11 @@ interface Patient {
 
 interface Document {
   id: string;
+  patientId: string;
   fileName: string;
-  fileURL: string;
+  fileData?: string; // Base64 content for small files
+  externalLink?: string; // URL for large files
+  type: 'file' | 'link';
   uploadedAt: Timestamp;
 }
 
@@ -22,15 +25,16 @@ const PatientDocuments: React.FC = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
+  const [externalLink, setExternalLink] = useState('');
   const [documents, setDocuments] = useState<Document[]>([]);
   const [uploading, setUploading] = useState(false);
   const [loadingDocs, setLoadingDocs] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [mode, setMode] = useState<'upload' | 'link'>('upload');
 
   // Fetch patients from Firestore
   useEffect(() => {
     const fetchPatients = async () => {
-      // Esta verificação está correta
       if (!db) return;
       try {
         const q = query(collection(db, "users"), where("userType", "==", "paciente"));
@@ -48,7 +52,6 @@ const PatientDocuments: React.FC = () => {
   // Fetch documents for the selected patient
   useEffect(() => {
     const fetchDocuments = async () => {
-      // Esta verificação está correta
       if (!selectedPatient || !db) {
         setDocuments([]);
         return;
@@ -71,101 +74,177 @@ const PatientDocuments: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+      const selectedFile = e.target.files[0];
+      // Limit size to ~800KB to fit in Firestore safely (1MB limit)
+      if (selectedFile.size > 800 * 1024) {
+        alert("O arquivo é muito grande para o upload direto (Máx 800KB). Para arquivos maiores, use a opção 'Link Externo' com Google Drive ou similar.");
+        e.target.value = '';
+        setFile(null);
+        return;
+      }
+      setFile(selectedFile);
     }
   };
 
-  const handleUpload = async () => {
-    if (!file || !selectedPatient || !storage || !db) {
-      setError('Selecione um paciente e um arquivo para fazer o upload.');
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  };
+
+  const handleSave = async () => {
+    if (!selectedPatient || !db) {
+      setError('Selecione um paciente.');
       return;
     }
+
     setUploading(true);
     setError(null);
 
-    const storageRef = ref(storage, `documents/${selectedPatient}/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    try {
+      let docData: any = {
+        patientId: selectedPatient,
+        uploadedAt: serverTimestamp(),
+      };
 
-    uploadTask.on('state_changed',
-      () => {
-        // Progress function not used in this case
-      },
-      (err) => {
-        console.error("Upload error: ", err);
-        setError('Falha no upload do arquivo.');
-        setUploading(false);
-      },
-      async () => {
-        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-
-        // ***** INÍCIO DA CORREÇÃO *****
-        // Verificação necessária que estava faltando
-        if (!db) {
-          console.error("Erro: Conexão com o banco de dados não estabelecida.");
-          setError('Falha ao salvar o documento no banco.');
+      if (mode === 'upload') {
+        if (!file) {
+          setError('Selecione um arquivo.');
           setUploading(false);
           return;
         }
-        // ***** FIM DA CORREÇÃO *****
-
-        // Agora o TypeScript sabe que 'db' não é nulo
-        await addDoc(collection(db, "documents"), {
-          patientId: selectedPatient,
+        const base64Data = await convertToBase64(file);
+        docData = {
+          ...docData,
           fileName: file.name,
-          fileURL: downloadURL,
-          uploadedAt: serverTimestamp(),
-        });
-        setUploading(false);
-        setFile(null); // Clear the file input
-
-        // Refresh documents list
-        const fetchDocuments = async () => {
-          if (!selectedPatient || !db) return; // Esta verificação já estava correta
-          const q = query(collection(db, "documents"), where("patientId", "==", selectedPatient));
-          const querySnapshot = await getDocs(q);
-          const docsList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Document));
-          setDocuments(docsList);
+          fileData: base64Data,
+          type: 'file'
         };
-        fetchDocuments();
+      } else {
+        if (!externalLink) {
+          setError('Insira o link externo.');
+          setUploading(false);
+          return;
+        }
+        docData = {
+          ...docData,
+          fileName: 'Documento Externo (Link)',
+          externalLink: externalLink,
+          type: 'link'
+        };
       }
-    );
+
+      await addDoc(collection(db, "documents"), docData);
+
+      setFile(null);
+      setExternalLink('');
+      setUploading(false);
+
+      // Refresh list
+      const q = query(collection(db, "documents"), where("patientId", "==", selectedPatient));
+      const querySnapshot = await getDocs(q);
+      const docsList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Document));
+      setDocuments(docsList);
+
+    } catch (err) {
+      console.error("Error saving document: ", err);
+      setError('Falha ao salvar documento.');
+      setUploading(false);
+    }
   };
 
   return (
-    <div className="patient-documents">
-      <h3>Documentos dos Pacientes</h3>
-      {error && <p className="error">{error}</p>}
+    <div className={styles.container}>
+      <h3 className={styles.title}>Documentos dos Pacientes</h3>
+      {error && <p className={styles.error}>{error}</p>}
 
-      <div className="controls">
-        <select value={selectedPatient} onChange={(e) => setSelectedPatient(e.target.value)}>
-          <option value="">Selecione um Paciente</option>
-          {patients.map(p => (
-            <option key={p.uid} value={p.uid}>{p.name}</option>
-          ))}
-        </select>
-        <input type="file" onChange={handleFileChange} />
-        <button onClick={handleUpload} disabled={!file || !selectedPatient || uploading}>
-          {uploading ? 'Enviando...' : 'Enviar Documento'}
-        </button>
+      <div className={styles.controls}>
+        <div className={styles.inputGroup}>
+          <label>1. Selecione o Paciente</label>
+          <select className={styles.select} value={selectedPatient} onChange={(e) => setSelectedPatient(e.target.value)}>
+            <option value="">Selecione...</option>
+            {patients.map(p => (
+              <option key={p.uid} value={p.uid}>{p.name}</option>
+            ))}
+          </select>
+        </div>
+
+        {selectedPatient && (
+          <div className={styles.uploadSection}>
+            <label>2. Escolha o tipo de anexo</label>
+            <div className={styles.radioGroup}>
+              <label>
+                <input
+                  type="radio"
+                  checked={mode === 'upload'}
+                  onChange={() => setMode('upload')}
+                /> Upload (PDF/Imagem peq.)
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  checked={mode === 'link'}
+                  onChange={() => setMode('link')}
+                /> Link Externo (Drive/Dropbox)
+              </label>
+            </div>
+
+            {mode === 'upload' ? (
+              <div className={styles.inputGroup}>
+                <input type="file" onChange={handleFileChange} className={styles.fileInput} accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" />
+                <small style={{ display: 'block', color: '#666', marginTop: '5px' }}>Máximo: 800KB. Para arquivos maiores, use "Link Externo".</small>
+              </div>
+            ) : (
+              <div className={styles.inputGroup}>
+                <input
+                  type="text"
+                  placeholder="Cole o link do Google Drive/Dropbox aqui..."
+                  value={externalLink}
+                  onChange={(e) => setExternalLink(e.target.value)}
+                  className={styles.textInput}
+                  style={{ width: '100%', padding: '0.5rem' }}
+                />
+              </div>
+            )}
+
+            <button className={styles.button} onClick={handleSave} disabled={uploading}>
+              {uploading ? 'Salvando...' : 'Salvar Documento'}
+            </button>
+          </div>
+        )}
       </div>
 
       {loadingDocs ? (
         <p>Carregando documentos...</p>
       ) : (
-        <div className="document-list">
+        <div className={styles.documentList}>
+          <h4>Histórico de Documentos</h4>
           {documents.length > 0 ? (
             <ul>
               {documents.map(doc => (
-                <li key={doc.id}>
-                  <a href={doc.fileURL} target="_blank" rel="noopener noreferrer">{doc.fileName}</a>
+                <li key={doc.id} className={styles.documentItem}>
+                  <div className={styles.docInfo}>
+                    {doc.type === 'file' ? (
+                      <a href={doc.fileData} download={doc.fileName} className={styles.link}>
+                        📄 {doc.fileName} (Baixar)
+                      </a>
+                    ) : (
+                      <a href={doc.externalLink} target="_blank" rel="noopener noreferrer" className={styles.link}>
+                        🔗 {doc.externalLink} (Acessar Link)
+                      </a>
+                    )}
+                  </div>
                   {doc.uploadedAt && (
-                    <span> - {new Date(doc.uploadedAt.seconds * 1000).toLocaleDateString()}</span>
+                    <span className={styles.date}>{new Date(doc.uploadedAt.seconds * 1000).toLocaleDateString()}</span>
                   )}
                 </li>
               ))}
             </ul>
           ) : (
-            <p>Nenhum documento para este paciente.</p>
+            <p className={styles.noData}>Nenhum documento encontrado para este paciente.</p>
           )}
         </div>
       )}

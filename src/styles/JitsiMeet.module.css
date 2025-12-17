@@ -1,0 +1,10 @@
+/* src/styles/JitsiMeet.module.css */
+
+.container {
+    height: 600px;
+    width: 100%;
+}
+
+.iframeRef {
+    height: 600px;
+}

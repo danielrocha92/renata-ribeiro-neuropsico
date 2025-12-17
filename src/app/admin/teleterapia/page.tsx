@@ -5,9 +5,9 @@ import { useRouter } from 'next/navigation';
 import { collection, query, where, getDocs, Timestamp, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
-import styles from '@/styles/Teleterapia.module.css'; // Import the new specific styles
-import PrivateRoute from '@/components/PrivateRoute';
-import { Video, ArrowLeft, Calendar } from 'lucide-react';
+import styles from '@/styles/Teleterapia.module.css'; // Reusing the same styles
+import AdminPrivateRoute from '@/components/AdminPrivateRoute'; // Using AdminPrivateRoute
+import { Video, ArrowLeft, Calendar, User } from 'lucide-react';
 import JitsiMeetComponent from '@/components/JitsiMeetComponent';
 
 interface Appointment {
@@ -17,9 +17,10 @@ interface Appointment {
     status: string;
     meetLink?: string;
     meetingId?: string;
+    patientName?: string; // Additional field for admin view
 }
 
-const TeleterapiaPage: React.FC = () => {
+const AdminTeleterapiaPage: React.FC = () => {
     const { user } = useAuth();
     const router = useRouter();
     const [nextAppointment, setNextAppointment] = useState<Appointment | null>(null);
@@ -34,9 +35,13 @@ const TeleterapiaPage: React.FC = () => {
             try {
                 const now = new Date();
                 const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);
+                // Admin query: find appointments where psychologistId is current user (or just any upcoming relevant appointment)
+                // Assuming admin is the psychologist. If system spans multiple psychologists, filter by user.uid
+                // For "Renata Ribeiro", she sees all or her own. Let's filter by date first.
+
                 const q = query(
                     collection(db, "appointments"),
-                    where("patientId", "==", user.uid),
+                    // Removed patientId filter to find ANY next appointment
                     where("date", ">=", Timestamp.fromDate(twoHoursAgo)),
                     orderBy("date", "asc"),
                     limit(1)
@@ -45,7 +50,15 @@ const TeleterapiaPage: React.FC = () => {
                 const querySnapshot = await getDocs(q);
                 if (!querySnapshot.empty) {
                     const doc = querySnapshot.docs[0];
-                    setNextAppointment({ id: doc.id, ...doc.data() } as Appointment);
+                    const appointmentData = doc.data();
+
+                    // Fetch patient name if possible (optional enhancement)
+                    let patientName = "Paciente";
+                    if (appointmentData.patientId) {
+                        // We could fetch user data here, but for now let's use what's available or generic
+                    }
+
+                    setNextAppointment({ id: doc.id, ...appointmentData, patientName } as Appointment);
                 } else {
                     setNextAppointment(null);
                 }
@@ -60,7 +73,7 @@ const TeleterapiaPage: React.FC = () => {
     }, [user]);
 
     return (
-        <PrivateRoute>
+        <AdminPrivateRoute>
             <div className={styles.container}>
                 <header className={styles.header}>
                     <div className={styles.headerContent}>
@@ -68,8 +81,8 @@ const TeleterapiaPage: React.FC = () => {
                             <ArrowLeft size={24} />
                         </button>
                         <div className={styles.welcomeMessage}>
-                            <h1>Teleterapia</h1>
-                            <p>Sua sala de atendimento online segura.</p>
+                            <h1>Sala de Atendimento (Admin)</h1>
+                            <p>Realize suas sessões de teleterapia.</p>
                         </div>
                     </div>
                 </header>
@@ -83,14 +96,14 @@ const TeleterapiaPage: React.FC = () => {
                                 {inCall ? (
                                     <JitsiMeetComponent
                                         roomName={meetingId}
-                                        userName={user?.displayName || "Paciente"}
+                                        userName={user?.displayName || "Psicóloga"}
                                         onEnd={() => setInCall(false)}
                                     />
                                 ) : (
                                     <>
                                         <div className={styles.infoContainer}>
                                             <Video size={64} color="#6A7EBD" className={styles.videoIcon} />
-                                            <h2>Sua próxima sessão</h2>
+                                            <h2>Próximo Atendimento</h2>
                                             <p className={styles.appointmentTitle}>
                                                 {nextAppointment.title}
                                             </p>
@@ -118,10 +131,10 @@ const TeleterapiaPage: React.FC = () => {
                                                 className={styles.startButton}
                                             >
                                                 <Video size={20} />
-                                                Entrar na Sala de Espera / Iniciar
+                                                Iniciar Sessão (Como Anfitrião)
                                             </button>
                                             <p className={styles.helperText}>
-                                                Clique acima para entrar na sala virtual da consulta.
+                                                Ao clicar, você entrará na sala da consulta.
                                             </p>
                                         </div>
                                     </>
@@ -130,31 +143,21 @@ const TeleterapiaPage: React.FC = () => {
                         ) : (
                             <>
                                 <Video size={48} color="#ccc" className={styles.emptyStateIcon} />
-                                <h3>Nenhuma sessão agendada</h3>
-                                <p>Você não possui atendimentos online agendados para os próximos dias.</p>
+                                <h3>Nenhuma sessão agendada em breve</h3>
+                                <p>Não há atendimentos online agendados para os próximos horários.</p>
                                 <button
-                                    onClick={() => router.push('/cliente')}
+                                    onClick={() => router.push('/admin')}
                                     className={styles.homeButton}
                                 >
-                                    Voltar para o Início
+                                    Voltar ao Dashboard
                                 </button>
                             </>
                         )}
                     </div>
-
-                    <div className={styles.recommendationsSection}>
-                        <h3>Recomendações para Teleterapia</h3>
-                        <ul className={styles.recommendationsList}>
-                            <li>Escolha um local silencioso e com boa iluminação.</li>
-                            <li>Verifique sua conexão com a internet antes de começar.</li>
-                            <li>Utilize fones de ouvido para garantir privacidade e melhor qualidade de áudio.</li>
-                            <li>Tenha papel e caneta à mão se desejar fazer anotações.</li>
-                        </ul>
-                    </div>
                 </div>
             </div>
-        </PrivateRoute>
+        </AdminPrivateRoute>
     );
 };
 
-export default TeleterapiaPage;
+export default AdminTeleterapiaPage;

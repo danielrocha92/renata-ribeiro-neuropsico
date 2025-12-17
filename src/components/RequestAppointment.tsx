@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import styles from './RequestAppointment.module.css';
+import styles from '@/styles/RequestAppointment.module.css';
 
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -64,7 +64,7 @@ const RequestAppointment: React.FC = () => {
 
       <div className={styles.inputGroup}>
         <label htmlFor="message">Mensagem (Opcional)</label>
-        <p style={{ fontSize: '0.8rem', color: '#666', margin: '0 0 8px 0' }}>
+        <p className={styles.helperText}>
           Se desejar, descreva brevemente o motivo da consulta ou seus horários de preferência.
         </p>
         <textarea

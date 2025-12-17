@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import styles from './AppointmentModal.module.css';
+import styles from '@/styles/AppointmentModal.module.css';
 
 interface AppointmentModalProps {
   isOpen: boolean;
@@ -127,8 +127,8 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onClose, ev
 
         <div className={styles.field}>
           <label>Tipo de Paciente:</label>
-          <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 'normal' }}>
+          <div className={styles.radioGroup}>
+            <label className={styles.radioLabel}>
               <input
                 type="radio"
                 checked={!isExternal}
@@ -136,7 +136,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({ isOpen, onClose, ev
               />
               Cadastrado na Plataforma
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 'normal' }}>
+            <label className={styles.radioLabel}>
               <input
                 type="radio"
                 checked={isExternal}

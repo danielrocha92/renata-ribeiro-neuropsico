@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import styles from './VideoModal.module.css';
+import styles from '@/styles/VideoModal.module.css';
 
 interface VideoModalProps {
   videoUrl: string;
@@ -71,7 +71,7 @@ export default function VideoModal({ videoUrl }: VideoModalProps) {
         <div onClick={openModal} className={styles.thumbnail}>
           <div className={styles.playButton}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M8 5v14l11-7z"/>
+              <path d="M8 5v14l11-7z" />
             </svg>
           </div>
         </div>

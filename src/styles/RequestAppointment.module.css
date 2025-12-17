@@ -18,6 +18,12 @@
   font-size: 0.9rem;
 }
 
+.helperText {
+  font-size: 0.8rem;
+  color: #666;
+  margin: 0 0 8px 0;
+}
+
 .inputGroup input,
 .inputGroup textarea {
   padding: 0.75rem;
@@ -30,12 +36,14 @@
 .inputGroup input:focus,
 .inputGroup textarea:focus {
   outline: none;
-  border-color: #6A7EBD; /* Purplish-blue from palette */
+  border-color: #6A7EBD;
+  /* Purplish-blue from palette */
   box-shadow: 0 0 0 3px rgba(106, 126, 189, 0.2);
 }
 
 .button {
-  background-color: #6A7EBD; /* Purplish-blue from palette */
+  background-color: #6A7EBD;
+  /* Purplish-blue from palette */
   color: white;
   border: none;
   padding: 0.85rem;

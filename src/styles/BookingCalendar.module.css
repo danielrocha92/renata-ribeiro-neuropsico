@@ -185,3 +185,19 @@
         padding: 0 2px;
     }
 }
+
+.eventAvailable {
+    background-color: #726FB2 !important;
+    color: white !important;
+    cursor: pointer !important;
+    border: none !important;
+}
+
+.eventUnavailable {
+    background-color: #e0e0e0 !important;
+    opacity: 0.8;
+    color: #666 !important;
+    border: 1px solid #ccc !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+}

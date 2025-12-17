@@ -16,30 +16,25 @@
   gap: 1.5rem;
 }
 
-.navCard {
-  background-color: #e7f3ff;
-  /* A light blue to stand out */
-  border: 1px solid #b8d8f2;
-  transition: all 0.3s ease;
+.calendarSection {
+  margin-top: 3rem;
+  border-top: 1px solid #eee;
+  padding-top: 2rem;
 }
 
-.navCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-  background-color: #dbeffd;
+.headerNav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
-.navLink {
+.backLink {
   text-decoration: none;
-  color: inherit;
-  display: block;
-  height: 100%;
+  color: #666;
 }
 
-.navLink p {
-  font-size: 0.9rem;
-  color: #333;
-}
+
 
 .section {
   background-color: #fff;

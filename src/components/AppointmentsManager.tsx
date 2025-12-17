@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import styles from '@/styles/AppointmentsManager.module.css';
 import { db } from '../lib/firebase';
 import { collection, query, where, getDocs, updateDoc, doc, Timestamp, onSnapshot, documentId } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthContext';
@@ -39,12 +40,13 @@ const AppointmentsManager: React.FC = () => {
         setLoading(false);
         return;
       }
-      
+
       try {
         const appointmentsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Appointment));
-        
+
         // Get unique patient IDs
-        const patientIds = [...new Set(appointmentsData.map(app => app.patientId))];
+
+        const patientIds = [...new Set(appointmentsData.map(app => app.patientId).filter(pid => pid && pid !== "external"))];
 
         if (patientIds.length > 0) {
           // Fetch patient names (agora seguro)
@@ -52,11 +54,18 @@ const AppointmentsManager: React.FC = () => {
           const usersSnapshot = await getDocs(usersQuery);
           const userNames = Object.fromEntries(usersSnapshot.docs.map(doc => [doc.id, doc.data().name]));
 
-          // Add patient names to appointments
-          const finalAppointments = appointmentsData.map(app => ({ ...app, patientName: userNames[app.patientId] }));
+          // Add patient names to appointments, falling back to existing data if not found
+          const finalAppointments = appointmentsData.map(app => ({
+            ...app,
+            patientName: userNames[app.patientId] || app.patientName || 'Paciente Externo/Não Identificado'
+          }));
           setAppointments(finalAppointments);
         } else {
-          setAppointments([]);
+          // If no linked patients, just use the data we have
+          setAppointments(appointmentsData.map(app => ({
+            ...app,
+            patientName: app.patientName || 'Paciente Externo'
+          })));
         }
 
       } catch (err) {
@@ -88,43 +97,46 @@ const AppointmentsManager: React.FC = () => {
   if (error) return <p>Erro: {error}</p>;
 
   return (
-    <div className="appointments-manager">
-      <h3>Gerenciar Agendamentos</h3>
+    <div className={styles.container}>
+      <h3 className={styles.title}>Gerenciar Agendamentos</h3>
       {appointments.length === 0 ? (
         <p>Nenhum agendamento encontrado.</p>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Paciente</th>
-              <th>Data</th>
-              <th>Título</th>
-              <th>Status</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {appointments.map(app => (
-              <tr key={app.id}>
-                <td>{app.patientName || 'Carregando...'}</td>
-                <td>{new Date(app.date.seconds * 1000).toLocaleString()}</td>
-                <td>{app.title}</td>
-                <td>{app.status}</td>
-                <td>
-                  <select 
-                    value={app.status}
-                    onChange={(e) => handleStatusChange(app.id, e.target.value as Appointment['status'])}
-                  >
-                    <option value="Pendente">Pendente</option>
-                    <option value="Confirmado">Confirmado</option>
-                    <option value="Cancelado">Cancelado</option>
-                    <option value="Realizada">Realizada</option>
-                  </select>
-                </td>
+        <div className={styles.tableContainer}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Paciente</th>
+                <th>Data</th>
+                <th>Título</th>
+                <th>Status</th>
+                <th>Ações</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {appointments.map(app => (
+                <tr key={app.id}>
+                  <td>{app.patientName || 'Carregando...'}</td>
+                  <td>{new Date(app.date.seconds * 1000).toLocaleString()}</td>
+                  <td>{app.title}</td>
+                  <td className={styles[`status${app.status}`] || ''}>{app.status}</td>
+                  <td>
+                    <select
+                      className={styles.select}
+                      value={app.status}
+                      onChange={(e) => handleStatusChange(app.id, e.target.value as Appointment['status'])}
+                    >
+                      <option value="Pendente">Pendente</option>
+                      <option value="Confirmado">Confirmado</option>
+                      <option value="Cancelado">Cancelado</option>
+                      <option value="Realizada">Realizada</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

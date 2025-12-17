@@ -1,0 +1,66 @@
+.container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.tableContainer {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.table th {
+    background-color: #f9f9f9;
+    text-align: left;
+    padding: 1rem;
+    font-weight: 600;
+    color: #555;
+    border-bottom: 2px solid #eee;
+}
+
+.table td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
+
+.select {
+    padding: 0.4rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+}
+
+.statusPendente {
+    color: #f57c00;
+    font-weight: 500;
+}
+
+.statusConfirmado {
+    color: #388e3c;
+    font-weight: 500;
+}
+
+.statusCancelado {
+    color: #d32f2f;
+    font-weight: 500;
+}
+
+.statusRealizada {
+    color: #1976d2;
+    font-weight: 500;
+}

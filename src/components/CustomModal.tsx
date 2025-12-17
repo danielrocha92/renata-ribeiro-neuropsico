@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './CustomModal.module.css';
+import styles from '@/styles/CustomModal.module.css';
 
 interface CustomModalProps {
     isOpen: boolean;

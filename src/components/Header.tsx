@@ -15,7 +15,7 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname(); // Get current pathname
-  const { user, loading } = useAuth();
+  const { user, loading, isAdmin } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -56,8 +56,8 @@ const Header: React.FC = () => {
           Renata Ribeiro <span>Neuropsico</span>
         </Link>
 
-        <button 
-          className={styles.menuToggle} 
+        <button
+          className={styles.menuToggle}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Abrir menu"
         >
@@ -72,8 +72,16 @@ const Header: React.FC = () => {
             <li className={`${styles.navItem} ${pathname === '/contato' ? styles.activeNavItem : ''}`}><Link href="/contato" onClick={() => setIsMenuOpen(false)}>Contato</Link></li>
             {!loading && user ? (
               <>
-                <li className={`${styles.navItem} ${pathname === '/cliente' ? styles.activeNavItem : ''}`}><Link href="/cliente" onClick={() => setIsMenuOpen(false)}>Área do Cliente</Link></li>
-                <li className={styles.navItem}><button onClick={handleLogout} className={styles.logoutButton}>Logout</button></li>
+                {isAdmin ? (
+                  <li className={`${styles.navItem} ${pathname?.startsWith('/admin') ? styles.activeNavItem : ''}`}>
+                    <Link href="/admin" onClick={() => setIsMenuOpen(false)}>Dashboard Admin</Link>
+                  </li>
+                ) : (
+                  <li className={`${styles.navItem} ${pathname?.startsWith('/cliente') ? styles.activeNavItem : ''}`}>
+                    <Link href="/cliente" onClick={() => setIsMenuOpen(false)}>Área do Cliente</Link>
+                  </li>
+                )}
+                <li className={styles.navItem}><button onClick={handleLogout} className={styles.logoutButton}>Sair</button></li>
               </>
             ) : (
               <>
@@ -84,7 +92,7 @@ const Header: React.FC = () => {
           </ul>
         </nav>
       </div>
-    </header>
+    </header >
   );
 };
 

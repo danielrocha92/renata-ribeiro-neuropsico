@@ -5,7 +5,7 @@ import { Calendar, dateFnsLocalizer, Views, View } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import styles from './BookingCalendar.module.css';
+import styles from '@/styles/BookingCalendar.module.css';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const locales = {
