@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Verifica se o usuário é um psicólogo (Admin)
+    function isAdmin() {
+      return request.auth != null &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'psicologo';
+    }
+
+    // Regras para usuários (Users)
+    match /users/{userId} {
+      // O próprio usuário pode ler e escrever seus dados
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Admin pode ler todos os usuários (para listar pacientes)
+      allow read: if isAdmin();
+    }
+
+    // Regras para Conteúdos (Contents)
+    match /contents/{contentId} {
+      // Qualquer usuário autenticado pode ler
+      allow read: if request.auth != null;
+      // Apenas Admin pode criar, atualizar ou deletar
+      allow write: if isAdmin();
+    }
+
+    // Regras para Agendamentos (Appointments)
+    match /appointments/{appointmentId} {
+      // Usuário pode ler/escrever seus próprios agendamentos. Admin pode ler/escrever todos.
+      allow read, write: if request.auth != null && (request.auth.uid == resource.data.patientId || isAdmin());
+      // Permitir criação se o usuário estiver autenticado (normalmente o cliente cria a solicitação)
+      allow create: if request.auth != null;
+    }
+
+    // Regras para Chat
+    match /chats/{chatId} {
+       // O dono do chat ou o admin podem ler/escrever
+       allow read, write: if request.auth != null && (request.auth.uid == chatId || isAdmin());
+
+       match /messages/{messageId} {
+          allow read, write: if request.auth != null && (request.auth.uid == chatId || isAdmin());
+       }
+    }
+
+    // Regras para Documentos
+    match /documents/{docId} {
+       allow read, write: if request.auth != null && (request.auth.uid == resource.data.patientId || isAdmin());
+    }
+
+    // Regras para Faturas/Cobranças
+    match /invoices/{invoiceId} {
+       allow read: if request.auth != null && (request.auth.uid == resource.data.patientId || isAdmin());
+       allow write: if isAdmin();
+    }
+  }
+}

@@ -1,97 +1,126 @@
-<h1 align="center">🧠 Renata Ribeiro Neuropsicopedagoga <img src="https://vercelbadge.vercel.app/api/danielrocha92/renata-ribeiro-neuropsico" alt="Vercel Status"></h1>
+<h1 align="center">🧠 Plataforma Renata Ribeiro Neuropsicopedagoga <img src="https://vercelbadge.vercel.app/api/danielrocha92/renata-ribeiro-neuropsico" alt="Vercel Status"></h1>
 
-<p><strong>Site Institucional e Blog com Foco em Autoridade Profissional e SEO</strong><br>
-💡 Desenvolvido para estabelecer a presença digital e a credibilidade de uma profissional da saúde, otimizando o alcance e a conversão de agendamentos.</p>
+<p align="center"><strong>Sistema Completo de Gestão de Clínica e Atendimento ao Paciente</strong><br>
+Uma solução web robusta desenvolvida para digitalizar e otimizar os atendimentos de Neuropsicopedagogia, oferecendo áreas dedicadas para pacientes e administração.</p>
 
-<p>🔗 <strong><a href="https://renata-ribeiro-neuropsico.vercel.app/">Acesse o site</a></strong></p>
+<p align="center">🔗 <strong><a href="https://renata-ribeiro-neuropsico.vercel.app/">Acesse o Sistema</a></strong></p>
 
 <hr>
+
+<h2>� Sobre o Projeto</h2>
+
+Este projeto evoluiu de um site institucional para uma **Plataforma Web Completa (SaaS-like)**. Além de apresentar os serviços da profissional, o sistema agora gerencia toda a jornada do paciente, desde o agendamento até o pagamento e acompanhamento terapêutico.
+
+A aplicação conta com autenticação segura, níveis de acesso (Admin/Psicólogo e Paciente), chat em tempo real, gestão financeira automatizada e compartilhamento de conteúdo exclusivo.
+
+---
+
+## 🌟 Principais Funcionalidades
+
+### 🔐 Autenticação e Segurança
+- **Login e Cadastro Seguro:** Integração com Firebase Auth.
+- **Proteção de Rotas:** Middleware e componentes (`PrivateRoute`, `AdminPrivateRoute`) garantindo acesso restrito.
+- **Recuperação de Senha:** Fluxo automatizado via e-mail.
+
+### 👩‍⚕️ Área Administrativa (Psicólogo)
+- **Dashboard Geral:** Visão macro da clínica.
+- **Gestão de Pacientes:** Prontuário digital simplificado.
+- **Agenda e Disponibilidade:** Definição de horários livres para agendamentos.
+- **Financeiro:** Criação de faturas, links de pagamento e controle de inadimplência.
+- **Gestão de Conteúdo:** Upload de artigos e vídeos exclusivos para pacientes.
+- **Chat Centralizado:** Comunicação direta com todos os pacientes em uma única interface.
+- **Manual do Sistema:** Guia integrado para facilitar o uso da ferramenta.
+
+### 👤 Área do Paciente
+- **Painel Personalizado:** Resumo de agendamentos e pendências.
+- **Agendamento Online:** Marcação de consultas baseada na disponibilidade real da profissional.
+- **Teleterapia:** Link direto para sessões de vídeo.
+- **Financeiro:** Histórico de pagamentos e boletos pendentes.
+- **Conteúdos Exclusivos:** Acesso a materiais didáticos liberados pela profissional.
+- **Chat Privado:** Canal direto e seguro para tirar dúvidas.
+
+---
 
 <h2>🛠️ Tecnologias Utilizadas</h2>
 
-<ul>
-    <li><strong>Next.js</strong> &mdash; Framework React para alto desempenho, SEO e Server-Side Rendering (SSR).</li>
-    <li><strong>React.js</strong> &mdash; Biblioteca principal para construção da UI.</li>
-    <li><strong>HTML5 &amp; CSS3</strong> &mdash; Estrutura semântica e estilização customizada (CSS Dedicado) e responsiva.</li>
-    <li><strong>Markdown</strong> &mdash; Para o gerenciamento de conteúdo do blog (Blog estático/Headless CMS Lite).</li>
-    <li><strong>EmailJS</strong> &mdash; Integração para o formulário de contato (contato direto com a cliente).</li>
-</ul>
+O projeto utiliza uma stack moderna focada em performance, escalabilidade e experiência do usuário:
 
-<hr>
+- **Frontend:**
+  - [Next.js 14](https://nextjs.org/) (App Router, Server Components)
+  - [React](https://reactjs.org/)
+  - [TypeScript](https://www.typescriptlang.org/)
+  - [CSS Modules](https://github.com/css-modules/css-modules) (Design Responsivo Mobile-First)
+  - [Lucide React](https://lucide.dev/) (Ícones)
 
-<h2>🎯 Propósito e Impacto no Negócio</h2>
+- **Backend & Infraestrutura:**
+  - [Firebase Auth](https://firebase.google.com/products/auth) (Gestão de Identidade)
+  - [Firebase Firestore](https://firebase.google.com/products/firestore) (Banco de Dados NoSQL em Tempo Real)
+  - [Firebase Storage](https://firebase.google.com/products/storage) (Armazenamento de Arquivos/Mídia)
+  - [Vercel](https://vercel.com/) (Hospedagem e CI/CD)
 
-<p>O foco principal deste projeto foi traduzir a experiência profissional da Neuropsicopedagoga em uma plataforma digital que inspira <b>confiança</b> e <b>autoridade</b>:</p>
+---
 
-<ul>
-    <li>✅ <b>Estabelecimento de Marca:</b> Criação de uma identidade visual alinhada com a área de saúde.</li>
-    <li>✅ <b>Otimização de SEO:</b> Utilização de Next.js para metatags e performance (SSR/SSG), fundamentais para buscas orgânicas na área da saúde.</li>
-    <li>✅ <b>Jornada do Usuário:</b> Estruturação do conteúdo para guiar visitantes à informação e, posteriormente, ao contato (CTA).</li>
-    <li>✅ <b>Blog:</b> Sistema de blog simples via Markdown para fácil atualização de conteúdo educativo.</li>
-</ul>
+<h2>🖼️ Estrutura do Projeto</h2>
 
-<hr>
+```bash
+src/
+├── app/
+│   ├── admin/             # Rotas protegidas da Área Administrativa
+│   ├── cliente/           # Rotas protegidas da Área do Paciente
+│   ├── login/             # Fluxos de Autenticação
+│   └── (public)/          # Site Institucional e Blog
+├── components/            # Componentes Reutilizáveis (UI)
+├── contexts/              # Gestão de Estado Global (AuthContext)
+├── lib/                   # Configurações (Firebase, Utils)
+└── styles/                # CSS Modules globais e específicos
+```
 
-<h2>🖼️ Estrutura e Arquitetura do Projeto</h2>
+---
 
-<pre><code>renata-ribeiro-neuropsico/
-├── public/
-├── src/
-│   ├── components/            # Componentes reutilizáveis (Header, Footer, Cards)
-│   ├── data/                  # Dados estáticos e arquivos Markdown do blog
-│   ├── hooks/                 # Lógica customizada (ex: useForm, useScroll)
-│   ├── pages/                 # Rotas e páginas do Next.js
-│   ├── styles/                # Arquivos CSS Dedicado e variáveis
-│   └── lib/                   # Funções utilitárias (API de Markdown, EmailJS)
-└── package.json
-</code></pre>
+<h2>🚀 Como Executar Localmente</h2>
 
-<hr>
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/danielrocha92/renata-ribeiro-neuropsico.git
+   cd renata-ribeiro-neuropsico
+   ```
 
-<h2>🌱 Principais Aprendizados Técnicos</h2>
+2. **Instale as dependências:**
+   ```bash
+   npm install
+   ```
 
-<ol>
-    <li>
-        <p><strong>SEO e Next.js (SSR/SSG):</strong></p>
-        <ul>
-            <li><strong>Lição:</strong> Dominar a renderização do Next.js para garantir que o conteúdo seja indexável pelo Google (Time to Content, Metatags dinâmicas) e alcance a alta performance necessária para um site profissional.</li>
-        </ul>
-    </li>
-    <li>
-        <p><strong>A Importância do CSS Puro:</strong></p>
-        <ul>
-            <li><strong>Lição:</strong> Uso exclusivo de <b>CSS Dedicado/Puro</b> para garantir total controle sobre o design, minimizando o volume do bundle final e garantindo a responsividade em todos os dispositivos, um pilar da performance.</li>
-        </ul>
-    </li>
-    <li>
-        <p><strong>Gerenciamento de Conteúdo Estático:</strong></p>
-        <ul>
-            <li><strong>Lição:</strong> Implementação de um sistema "Headless" via Markdown e Next.js (para o Blog), simplificando a criação de conteúdo pela cliente sem depender de um CMS complexo.</li>
-        </ul>
-    </li>
-</ol>
+3. **Configure as Variáveis de Ambiente:**
+   Crie um arquivo `.env.local` na raiz e adicione suas credenciais do Firebase:
+   ```env
+   NEXT_PUBLIC_FIREBASE_API_KEY=seu_api_key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=seu_auth_domain
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=seu_project_id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=seu_storage_bucket
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=seu_messaging_id
+   NEXT_PUBLIC_FIREBASE_APP_ID=seu_app_id
+   ```
 
-<hr>
+4. **Inicie o servidor de desenvolvimento:**
+   ```bash
+   npm run dev
+   ```
+   Acesse `http://localhost:3000` no seu navegador.
 
-<h2>🚀 Como Rodar Localmente</h2>
+---
 
-<p>Clone o repositório:</p>
+<h2>🛡️ Regras de Segurança (Firestore)</h2>
 
-<pre><code>git clone https://github.com/danielrocha92/renata-ribeiro-neuropsico.git
-cd renata-ribeiro-neuropsico
-npm install
-npm run dev
-</code></pre>
+O sistema utiliza regras de segurança rigorosas para garantir a privacidade dos dados:
+- **Dados Médicos:** Apenas o próprio paciente e o admin têm acesso.
+- **Conteúdos:** Públicos ou restritos conforme configuração.
+- **Chat:** Totalmente isolado entre paciente e profissional.
 
-<p>Acesse: <code>http://localhost:3000</code></p>
-
-<hr>
+---
 
 <h2>👨‍💻 Autor</h2>
 
-<p><strong>Daniel Rocha</strong><br>
-Developer Web Full-Stack com foco em Soluções de Negócios e Produto.</p>
+**Daniel Rocha**
+*Desenvolvedor Full-Stack focado em Soluções Digitais de Alto Impacto.*
 
-<ul>
-    <li><strong>📫 LinkedIn:</strong> <a href="https://www.linkedin.com/in/danielrocha92">Daniel Rocha</a></li>
-</ul>
+[LinkedIn](https://www.linkedin.com/in/danielrocha92)
