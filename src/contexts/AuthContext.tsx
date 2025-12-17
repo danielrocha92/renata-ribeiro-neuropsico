@@ -42,7 +42,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const userDocRef = doc(db, 'users', user.uid); // Esta é a linha 31 original
           const userDoc = await getDoc(userDocRef);
           // A user is an admin if they are a psychologist AND their status is active
-          if (userDoc.exists() && userDoc.data().userType === 'psicologo' && userDoc.data().status === 'active') {
+          // Also hardcoding access for 'Renata Ribeiro' as requested.
+          if ((userDoc.exists() && userDoc.data().userType === 'psicologo' && userDoc.data().status === 'active') || (user.displayName === 'Renata Ribeiro') || (user.email === 'renataribeiro.neuropsico@gmail.com')) {
             setIsAdmin(true);
           } else {
             setIsAdmin(false);

@@ -4,7 +4,8 @@ import React from 'react';
 import Link from 'next/link';
 import AdminPrivateRoute from '@/components/AdminPrivateRoute';
 import styles from '@/styles/Admin.module.css';
-import { BookOpen, CreditCard, MessageCircle, Calendar } from 'lucide-react';
+import { BookOpen, CreditCard, MessageCircle } from 'lucide-react';
+import AdminCalendar from '@/components/AdminCalendar';
 
 const AdminDashboardPage = () => {
   return (
@@ -17,13 +18,7 @@ const AdminDashboardPage = () => {
 
         <div className={styles.grid}>
 
-          <Link href="/admin/disponibilidade" className={styles.navLink}>
-            <div className={styles.navCard} style={{ padding: '2rem', textAlign: 'center', cursor: 'pointer' }}>
-              <Calendar size={48} color="#6A7EBD" style={{ marginBottom: '1rem' }} />
-              <h3>Agenda e Disponibilidade</h3>
-              <p>Gerencie horários livres.</p>
-            </div>
-          </Link>
+          {/* Agenda card removed, calendar is now embedded below */}
 
           <Link href="/admin/conteudo" className={styles.navLink}>
             <div className={styles.navCard} style={{ padding: '2rem', textAlign: 'center', cursor: 'pointer' }}>
@@ -58,6 +53,11 @@ const AdminDashboardPage = () => {
           </Link>
 
         </div>
+
+        <section style={{ marginTop: '3rem', borderTop: '1px solid #eee', paddingTop: '2rem' }}>
+          <AdminCalendar />
+        </section>
+
       </div>
     </AdminPrivateRoute>
   );

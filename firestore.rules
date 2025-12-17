@@ -2,64 +2,68 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Verifica se o usuário é um psicólogo (Admin)
-    function isAdmin() {
+    // Função auxiliar para verificar se é psicólogo (Admin)
+    function isPsychologist() {
       return request.auth != null &&
              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'psicologo';
     }
 
-    // Regras para usuários (Users)
+    // --- USERS ---
     match /users/{userId} {
-      // O próprio usuário pode ler e escrever seus dados
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-      // Admin pode ler todos os usuários (para listar pacientes)
-      allow read: if isAdmin();
+      allow create: if request.auth.uid == userId;
+      // Permite que o próprio usuário edite seus dados
+      // E permite que o Psicólogo LEIA todos os usuários (para listar no chat e financeiro)
+      allow read: if request.auth.uid == userId || isPsychologist();
+      allow update: if request.auth.uid == userId;
+      allow delete: if false;
     }
 
-    // Regras para Conteúdos (Contents)
-    match /contents/{contentId} {
-      // Qualquer usuário autenticado pode ler
+    // --- AVAILABILITY ---
+    match /availability/{availabilityId} {
+      allow create: if isPsychologist();
       allow read: if request.auth != null;
-      // Apenas Admin pode criar, atualizar ou deletar
-      allow write: if isAdmin();
+      allow delete: if request.auth != null; // Mantido conforme sua regra atual
+      allow update: if false;
     }
 
-    // Regras para Disponibilidade (Availability)
-    match /availability/{slotId} {
-      allow read: if request.auth != null;
-      allow delete: if request.auth != null; // Permitir que o cliente delete ao agendar
-      allow create, update: if isAdmin();
-    }
-
-    // Regras para Agendamentos (Appointments)
+    // --- APPOINTMENTS ---
     match /appointments/{appointmentId} {
-      // Permitir leitura para todos autenticados (para mostrar horário indisponível)
+      allow create: if request.auth.uid == request.resource.data.patientId || isPsychologist();
+      // IMPORTANTE: Permitir leitura para todos autenticados para que o calendário mostre "Indisponível"
       allow read: if request.auth != null;
-      // Escrita restrita ao dono ou admin
-      allow update, delete: if request.auth != null && (request.auth.uid == resource.data.patientId || isAdmin());
-      // Permitir criação
-      allow create: if request.auth != null;
+      // O Psicólogo pode atualizar/deletar, e o paciente pode atualizar (para cancelar, por exemplo)
+      allow update: if isPsychologist() || request.auth.uid == resource.data.patientId;
+      allow delete: if isPsychologist();
     }
 
-    // Regras para Chat
+    // --- DOCUMENTS ---
+    match /documents/{documentId} {
+      allow read: if request.auth.uid == resource.data.patientId || isPsychologist();
+      allow create: if isPsychologist();
+      // Permitir delete para o Admin limpar documentos antigos
+      allow delete: if isPsychologist();
+      allow update: if false;
+    }
+
+    // --- CONTENTS (Para os artigos/vídeos) ---
+    match /contents/{contentId} {
+      allow read: if request.auth != null;
+      allow write: if isPsychologist();
+    }
+
+    // --- CHATS (Para as mensagens) ---
     match /chats/{chatId} {
-       // O dono do chat ou o admin podem ler/escrever
-       allow read, write: if request.auth != null && (request.auth.uid == chatId || isAdmin());
+       allow read, write: if request.auth != null && (request.auth.uid == chatId || isPsychologist());
 
        match /messages/{messageId} {
-          allow read, write: if request.auth != null && (request.auth.uid == chatId || isAdmin());
+          allow read, write: if request.auth != null && (request.auth.uid == chatId || isPsychologist());
        }
     }
 
-    // Regras para Documentos
-    match /documents/{docId} {
-       allow read, write: if request.auth != null && (request.auth.uid == resource.data.patientId || isAdmin());
-    }
-
-    // Regras para Faturas/Cobranças
+    // --- INVOICES (Para o financeiro) ---
     match /invoices/{invoiceId} {
-       allow read: if request.auth != null && (request.auth.uid == resource.data.patientId || isAdmin());
-       allow write: if isAdmin();
+       allow read: if request.auth != null && (request.auth.uid == resource.data.patientId || isPsychologist());
+       allow write: if isPsychologist();
     }
   }
 }

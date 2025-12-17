@@ -1,0 +1,160 @@
+.calendarContainer {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    height: 600px;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+}
+
+/* Custom Toolbar Styles */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.navigationButtons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    background: #f0f2f5;
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.navButton {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--color-text-dark);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.navButton:hover {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    color: var(--color-primary);
+}
+
+.navButton.active {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: var(--color-primary);
+}
+
+.label {
+    font-family: 'Comfortaa', cursive;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-secondary);
+    text-transform: capitalize;
+    text-align: center;
+    min-width: 200px;
+}
+
+.viewButtons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.viewButton {
+    background: transparent;
+    border: 1px solid var(--color-secondary);
+    color: var(--color-secondary);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+}
+
+.viewButton.active {
+    background: var(--color-secondary);
+    color: white;
+}
+
+/* React Big Calendar Overrides */
+:global(.rbc-calendar) {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+:global(.rbc-header) {
+    padding: 1rem 0;
+    font-weight: 600;
+    color: var(--color-secondary);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    border-bottom: 2px solid #f0f2f5;
+}
+
+:global(.rbc-today) {
+    background-color: var(--color-light-yellow) !important;
+}
+
+:global(.rbc-time-content) {
+    border-top: none;
+}
+
+:global(.rbc-time-view) {
+    border: none;
+}
+
+:global(.rbc-timeslot-group) {
+    border-bottom: 1px solid #f0f2f5;
+}
+
+:global(.rbc-time-header-content) {
+    border-left: none;
+}
+
+:global(.rbc-day-slot .rbc-time-slot) {
+    border-top: none;
+}
+
+:global(.rbc-event) {
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 4px 8px !important;
+    font-size: 0.85rem;
+    border-radius: 6px !important;
+}
+
+:global(.rbc-current-time-indicator) {
+    background-color: var(--color-primary);
+}
+
+/* Estilização para Mobile */
+@media (max-width: 768px) {
+    .calendarContainer {
+        height: auto;
+        min-height: 500px;
+        padding: 1rem;
+    }
+
+    .toolbar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .label {
+        order: -1;
+        /* Título no topo */
+        font-size: 1.1rem;
+    }
+
+    .navigationButtons,
+    .viewButtons {
+        width: 100%;
+        justify-content: center;
+    }
+}

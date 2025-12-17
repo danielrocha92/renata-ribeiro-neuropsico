@@ -2,42 +2,16 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import AdminPrivateRoute from '@/components/AdminPrivateRoute';
-import { Calendar, dateFnsLocalizer, Views } from 'react-big-calendar';
-import { format, parse, startOfWeek, getDay } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 import styles from '@/styles/Admin.module.css';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, getDocs, query, where, Timestamp, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, Timestamp, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import AppointmentModal from '@/components/AppointmentModal';
-import { useRouter } from 'next/navigation';
-
-const locales = {
-  'pt-BR': ptBR,
-};
-
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales,
-});
-
-interface CalendarEvent {
-  id?: string;
-  title: string;
-  start: Date;
-  end: Date;
-  type: 'availability' | 'appointment';
-  status?: 'confirmed' | 'pending';
-  patientId?: string;
-}
+import UnifiedCalendar, { CalendarEvent } from '@/components/UnifiedCalendar';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const DisponibilidadePage = () => {
   const { user } = useAuth();
-  const router = useRouter();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
@@ -48,26 +22,42 @@ const DisponibilidadePage = () => {
     const availabilityCol = collection(db, 'availability');
     const availQuery = query(availabilityCol, where('psychologistId', '==', user.uid));
     const availSnapshot = await getDocs(availQuery);
-    const fetchedAvail = availSnapshot.docs.map(doc => ({
-      id: doc.id,
-      title: 'Disponível',
-      start: (doc.data().start as Timestamp).toDate(),
-      end: (doc.data().end as Timestamp).toDate(),
-      type: 'availability' as const,
-    }));
+    // @ts-ignore
+    const fetchedAvail: CalendarEvent[] = availSnapshot.docs.map(doc => {
+      const data = doc.data();
+      const start = data.start instanceof Timestamp ? data.start.toDate() : null;
+      const end = data.end instanceof Timestamp ? data.end.toDate() : null;
+      if (!start || !end) return null;
+
+      return {
+        id: doc.id,
+        title: 'Disponível',
+        start,
+        end,
+        type: 'availability' as const,
+      };
+    }).filter(e => e !== null);
 
     const appointmentsCol = collection(db, 'appointments');
     const apptQuery = query(appointmentsCol, where('psychologistId', '==', user.uid));
     const apptSnapshot = await getDocs(apptQuery);
-    const fetchedAppts = apptSnapshot.docs.map(doc => ({
-      id: doc.id,
-      title: doc.data().patientName || 'Agendado',
-      start: (doc.data().start as Timestamp).toDate(),
-      end: (doc.data().end as Timestamp).toDate(),
-      type: 'appointment' as const,
-      status: doc.data().status,
-      patientId: doc.data().patientId,
-    }));
+    // @ts-ignore
+    const fetchedAppts: CalendarEvent[] = apptSnapshot.docs.map(doc => {
+      const data = doc.data();
+      const start = data.start instanceof Timestamp ? data.start.toDate() : null;
+      const end = data.end instanceof Timestamp ? data.end.toDate() : null;
+      if (!start || !end) return null;
+
+      return {
+        id: doc.id,
+        title: doc.data().patientName || 'Agendado',
+        start,
+        end,
+        type: 'appointment' as const,
+        status: doc.data().status,
+        patientId: doc.data().patientId,
+      };
+    }).filter(e => e !== null);
 
     setEvents([...fetchedAvail, ...fetchedAppts]);
   }, [user]);
@@ -104,23 +94,37 @@ const DisponibilidadePage = () => {
   const handleSave = async (eventData: any) => {
     if (!user || !db) return;
 
-    const { id, title, start, end, type } = eventData;
+    const { id, title, start, end, type, patientId, patientName } = eventData;
 
-    if (type === 'new') { // Create new appointment
-      const newAppointment = {
-        psychologistId: user.uid,
-        patientName: title,
-        start,
-        end,
-        status: 'pending', // New appointments are pending
-      };
-      await addDoc(collection(db, 'appointments'), newAppointment);
-    } else if (id && type === 'appointment') { // Update existing appointment
-      const eventRef = doc(db, 'appointments', id);
-      await updateDoc(eventRef, { patientName: title, start, end });
+    try {
+      if (type === 'new') { // Create new appointment
+        const newAppointment = {
+          psychologistId: user.uid,
+          patientName: patientName || title, // Use correct name
+          patientId: patientId, // Save patient ID (or 'external')
+          start,
+          end,
+          status: 'confirmed', // Admin appointments are confirmed by default
+          createdAt: serverTimestamp() // Add creation time
+        };
+
+        await addDoc(collection(db, 'appointments'), newAppointment);
+      } else if (id && type === 'appointment') { // Update existing appointment
+        const eventRef = doc(db, 'appointments', id);
+        // Allow updating patient info too
+        await updateDoc(eventRef, {
+          patientName: patientName || title,
+          patientId: patientId,
+          start,
+          end
+        });
+      }
+      fetchEvents();
+      closeModal();
+    } catch (err) {
+      console.error("Error saving appointment:", err);
+      alert("Erro ao salvar agendamento.");
     }
-    fetchEvents();
-    closeModal();
   };
 
   const handleConfirm = async (id: string) => {
@@ -139,21 +143,29 @@ const DisponibilidadePage = () => {
   };
 
   const eventStyleGetter = (event: CalendarEvent) => {
-    let backgroundColor = '#e0e0e0'; // Default for availability
+    let backgroundColor = '#3174ad';
     if (event.type === 'appointment') {
       if (event.status === 'confirmed') {
-        backgroundColor = '#4caf50'; // Green for confirmed
+        backgroundColor = '#D95C41'; // Brand Primary
       } else {
-        backgroundColor = '#3174ad'; // Blue for pending
+        backgroundColor = '#726FB2'; // Brand Secondary (Pending)
       }
     }
+
+    // Availability styling
+    if (event.type === 'availability') {
+      backgroundColor = '#3174ad';
+    }
+
     const style = {
       backgroundColor,
-      borderRadius: '5px',
-      opacity: 0.8,
+      borderRadius: '6px',
+      opacity: 0.9,
       color: 'white',
-      border: '0px',
-      display: 'block'
+      border: 'none',
+      display: 'block',
+      fontSize: '0.85rem',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
     };
     return { style };
   };
@@ -174,28 +186,13 @@ const DisponibilidadePage = () => {
             Vincular com Google Agenda
           </button>
         </header>
-        <div className={styles.content} style={{ height: '70vh' }}>
-          <Calendar
-            localizer={localizer}
+        <div style={{ height: '70vh' }}>
+          <UnifiedCalendar
             events={events}
-            startAccessor="start"
-            endAccessor="end"
-            defaultView={Views.WEEK}
-            views={[Views.WEEK, Views.DAY, Views.MONTH]}
-            selectable
+            selectable={true} // Admin can select slots
             onSelectSlot={handleSelectSlot}
             onSelectEvent={handleSelectEvent}
             eventPropGetter={eventStyleGetter}
-            culture='pt-BR'
-            messages={{
-              next: "Próximo",
-              previous: "Anterior",
-              today: "Hoje",
-              month: "Mês",
-              week: "Semana",
-              day: "Dia",
-              // ... other messages
-            }}
           />
         </div>
         <AppointmentModal
