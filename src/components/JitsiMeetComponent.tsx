@@ -9,29 +9,29 @@ interface JitsiMeetComponentProps {
 }
 
 const JitsiMeetComponent: React.FC<JitsiMeetComponentProps> = ({ roomName, userName, onEnd }) => {
+    const configOverwrite = React.useMemo(() => ({
+        startWithAudioMuted: true,
+        disableModeratorIndicator: false, // Enable to see if user is moderator
+        startScreenSharing: true,
+        enableEmailInStats: false,
+        prejoinPageEnabled: true, // Enable prejoin page to allow host authentication
+    }), []);
+
+    const interfaceConfigOverwrite = React.useMemo(() => ({
+        DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
+        // Removed explicit TOOLBAR_BUTTONS to restore default UI elements,
+        // ensuring the 'I am the host' authentication flow works correctly on desktop.
+        SHOW_JITSI_WATERMARK: true,
+        SHOW_WATERMARK_FOR_GUESTS: true,
+    }), []);
+
     return (
         <div className={styles.container}>
             <JitsiMeeting
                 domain="meet.jit.si"
                 roomName={roomName}
-                configOverwrite={{
-                    startWithAudioMuted: true,
-                    disableModeratorIndicator: true,
-                    startScreenSharing: true,
-                    enableEmailInStats: false,
-                    prejoinPageEnabled: false,
-                }}
-                interfaceConfigOverwrite={{
-                    DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
-                    TOOLBAR_BUTTONS: [
-                        'microphone', 'camera', 'closedcaptions', 'desktop', 'fullscreen',
-                        'fodeviceselection', 'hangup', 'profile', 'chat', 'recording',
-                        'livestreaming', 'etherpad', 'sharedvideo', 'settings', 'raisehand',
-                        'videoquality', 'filmstrip', 'invite', 'feedback', 'stats', 'shortcuts',
-                        'tileview', 'videobackgroundblur', 'download', 'help', 'mute-everyone',
-                        'security'
-                    ],
-                }}
+                configOverwrite={configOverwrite}
+                interfaceConfigOverwrite={interfaceConfigOverwrite}
                 userInfo={{
                     displayName: userName,
                     email: '' // Email is required by type but can be empty if privacy is needed

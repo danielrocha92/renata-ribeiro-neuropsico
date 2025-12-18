@@ -7,7 +7,7 @@ import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from '@/styles/Teleterapia.module.css'; // Reusing the same styles
 import AdminPrivateRoute from '@/components/AdminPrivateRoute'; // Using AdminPrivateRoute
-import { Video, ArrowLeft, Calendar, User } from 'lucide-react';
+import { Video, ArrowLeft, Calendar, User, ExternalLink } from 'lucide-react';
 import JitsiMeetComponent from '@/components/JitsiMeetComponent';
 
 interface Appointment {
@@ -94,11 +94,48 @@ const AdminTeleterapiaPage: React.FC = () => {
                         ) : nextAppointment ? (
                             <>
                                 {inCall ? (
-                                    <JitsiMeetComponent
-                                        roomName={meetingId}
-                                        userName={user?.displayName || "Psicóloga"}
-                                        onEnd={() => setInCall(false)}
-                                    />
+                                    <>
+                                        <div style={{
+                                            marginBottom: '1rem',
+                                            padding: '0.75rem',
+                                            backgroundColor: '#fff3cd',
+                                            color: '#856404',
+                                            border: '1px solid #ffeeba',
+                                            borderRadius: '8px',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            gap: '0.5rem',
+                                            fontSize: '0.9rem'
+                                        }}>
+                                            <span>
+                                                <strong>Anfitrião:</strong> Se a sala pedir "Waiting for host", autentique-se abaixo:
+                                            </span>
+                                            <button
+                                                onClick={() => window.open(`https://meet.jit.si/${meetingId}`, '_blank')}
+                                                style={{
+                                                    background: 'none',
+                                                    border: '1px solid #856404',
+                                                    color: '#856404',
+                                                    padding: '4px 12px',
+                                                    borderRadius: '4px',
+                                                    cursor: 'pointer',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '5px',
+                                                    fontSize: '0.85rem'
+                                                }}
+                                            >
+                                                <ExternalLink size={14} />
+                                                Autenticar em Nova Aba
+                                            </button>
+                                        </div>
+                                        <JitsiMeetComponent
+                                            roomName={meetingId}
+                                            userName={user?.displayName || "Psicóloga"}
+                                            onEnd={() => setInCall(false)}
+                                        />
+                                    </>
                                 ) : (
                                     <>
                                         <div className={styles.infoContainer}>
