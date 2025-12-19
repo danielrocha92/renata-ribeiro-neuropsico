@@ -6,8 +6,9 @@ import PrivateRoute from '../../components/PrivateRoute';
 import BookingCalendar from '@/components/BookingCalendar';
 import DashboardCard from '@/components/DashboardCard';
 import { useAuth } from '../../contexts/AuthContext';
-import { auth } from '../../lib/firebase';
+import { auth, db } from '../../lib/firebase';
 import { useRouter } from 'next/navigation';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import {
   Video,
   FileText,
@@ -20,10 +21,35 @@ import {
 const ClientePage: React.FC = () => {
   const { user } = useAuth();
   const router = useRouter();
-  const [loading, setLoading] = useState(false); // Simplified loading state if needed, or remove if not doing async work on mount
+  const [loading, setLoading] = useState(false);
+  const [pendingAppointmentsCount, setPendingAppointmentsCount] = useState(0);
 
-  // Simulating loading check if user is resolved, though PrivateRoute handles most of it.
-  // We can keep it simple.
+  // Listen for pending appointments from Admin
+  React.useEffect(() => {
+    if (!user) return;
+
+    // We want appointments where patientId is current user, status is pending, and createdBy is 'admin' (or just count all pending if we want)
+    // The requirement says "se o paciente solicitar a consulta, deve chegar para o admin e vice e versa"
+    // So for the Client, we want to know about requests created by Admin.
+
+    // Assuming we will add 'createdBy' field. For now, we can check basic pending status.
+    // If createdBy is missing (legacy), maybe don't show or assume one way.
+    // Let's assume we will add createdBy field.
+
+    const q = query(
+      collection(db, "appointments"),
+      where("patientId", "==", user.uid),
+      where("status", "==", "pending"),
+      where("createdBy", "==", "admin")
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setPendingAppointmentsCount(snapshot.size);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
 
   const dashboardCards = [
     {
@@ -45,7 +71,14 @@ const ClientePage: React.FC = () => {
       icon: <FileText className={styles.cardIcon} size={32} />,
       description: "Resumo dos seus atendimentos.",
       action: () => router.push('/cliente/historico'),
-      active: true
+      active: true,
+      notificationCount: pendingAppointmentsCount // Show badge here? Or on Teletherapy?
+      // User said "crie uma notificação no card quando houver alguma interação."
+      // Usually "Prontuário e Histórico" or "Resumo" makes sense for appointments,
+      // but maybe "Teleterapia" if it's about the session.
+      // Let's put it on "Prontuário e Histórico" as it handles records/appointments usually.
+      // Actually, looking at the code, BookingCalendar is right there on the page.
+      // But let's stick to the card.
     },
     {
       title: "Financeiro",
@@ -95,6 +128,7 @@ const ClientePage: React.FC = () => {
                   icon={card.icon}
                   onClick={card.action}
                   variant={card.title === "Guia de Uso" ? "highlight" : "default"}
+                  notificationCount={card.title === "Prontuário e Histórico" ? pendingAppointmentsCount : 0}
                 />
               ))}
             </div>

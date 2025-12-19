@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import styles from '@/styles/Teleterapia.module.css'; // Import the new specific styles
 import PrivateRoute from '@/components/PrivateRoute';
 import { Video, ArrowLeft, Calendar } from 'lucide-react';
-import JitsiMeetComponent from '@/components/JitsiMeetComponent';
+import WherebyComponent from '@/components/WherebyComponent';
 
 interface Appointment {
     id: string;
@@ -25,7 +25,10 @@ const TeleterapiaPage: React.FC = () => {
     const [nextAppointment, setNextAppointment] = useState<Appointment | null>(null);
     const [loading, setLoading] = useState(true);
     const [inCall, setInCall] = useState(false);
-    const [meetingId, setMeetingId] = useState<string>('');
+
+    // CONFIGURATION: Replace this URL with your actual Whereby room URL (e.g. https://whereby.com/your-room-name)
+    // You can also get this from a database setting in the future.
+    const wherebyRoomUrl = "https://whereby.com/neuropsico-renata-ribeiro";
 
     useEffect(() => {
         const fetchNextAppointment = async () => {
@@ -81,11 +84,7 @@ const TeleterapiaPage: React.FC = () => {
                         ) : nextAppointment ? (
                             <>
                                 {inCall ? (
-                                    <JitsiMeetComponent
-                                        roomName={meetingId}
-                                        userName={user?.displayName || "Paciente"}
-                                        onEnd={() => setInCall(false)}
-                                    />
+                                    <WherebyComponent roomUrl={wherebyRoomUrl} />
                                 ) : (
                                     <>
                                         <div className={styles.infoContainer}>
@@ -111,17 +110,14 @@ const TeleterapiaPage: React.FC = () => {
 
                                         <div className={styles.actionContainer}>
                                             <button
-                                                onClick={() => {
-                                                    setMeetingId(`RRNeuropsico-${nextAppointment.id}`);
-                                                    setInCall(true);
-                                                }}
+                                                onClick={() => setInCall(true)}
                                                 className={styles.startButton}
                                             >
                                                 <Video size={20} />
-                                                Entrar na Sala de Espera / Iniciar
+                                                Entrar na Sala Virtual
                                             </button>
                                             <p className={styles.helperText}>
-                                                Clique acima para entrar na sala virtual da consulta.
+                                                Clique acima para entrar na sala da consulta.
                                             </p>
                                         </div>
                                     </>

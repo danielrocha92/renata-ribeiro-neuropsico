@@ -128,7 +128,8 @@ const AdminCalendar = () => {
                     date: start, // Adding compatibility field
                     start,
                     end,
-                    status: 'confirmed', // Admin appointments are confirmed by default
+                    status: 'pending', // Per requirement: "se o paciente solicitar a consulta, deve chegar para o admin e vice e versa"
+                    createdBy: 'admin',
                     createdAt: serverTimestamp()
                 };
 

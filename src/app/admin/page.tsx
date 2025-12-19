@@ -8,9 +8,38 @@ import styles from '@/styles/Admin.module.css';
 import { BookOpen, CreditCard, MessageCircle, FileText, CalendarCheck, Video } from 'lucide-react';
 import AdminCalendar from '@/components/AdminCalendar';
 import DashboardCard from '@/components/DashboardCard';
+import { db } from '@/lib/firebase';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
 const AdminDashboardPage = () => {
   const router = useRouter();
+  const [pendingAppointmentsCount, setPendingAppointmentsCount] = React.useState(0);
+
+  React.useEffect(() => {
+    // Listen for appointments created by client with status pending
+    // Assuming 'createdBy' field exists now.
+    // If not, we might count all pending? But let's stick to the plan: pending + createdBy client.
+
+    // Note: We need to import db, collection, query, where, onSnapshot
+    // We'll add imports in a separate step or assume they are added if I utilize multi_replace properly?
+    // I can't add imports with this tool call if they are at the top.
+    // I will use replace_file_content for the whole file or logic blocks.
+    // The previous tool call for ClientPage used multiple steps.
+    // Here I will replace the component body and separate step for imports.
+
+    const q = query(
+      collection(db, "appointments"),
+      where("status", "==", "pending"),
+      where("createdBy", "==", "client")
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setPendingAppointmentsCount(snapshot.size);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <AdminPrivateRoute>
       <div className={styles.container}>
@@ -21,22 +50,23 @@ const AdminDashboardPage = () => {
 
         <div className={styles.grid}>
           <DashboardCard
-            title="Prontuário e Histórico"
-            description="Gerencie documentos e histórico."
-            icon={<FileText size={48} />}
-            onClick={() => router.push('/admin/prontuarios')}
-          />
-          <DashboardCard
-            title="Resumo dos Atendimentos"
-            description="Visualize seus agendamentos."
-            icon={<CalendarCheck size={48} />}
-            onClick={() => router.push('/admin/atendimentos')}
+            title="Sessão de Teleterapia"
+            description="Acesse a sala de vídeo."
+            icon={<Video size={48} />}
+            variant="highlight"
+            onClick={() => router.push('/admin/teleterapia')}
           />
           <DashboardCard
             title="Conteúdos Didáticos"
             description="Publique artigos e vídeos."
             icon={<BookOpen size={48} />}
             onClick={() => router.push('/admin/conteudo')}
+          />
+          <DashboardCard
+            title="Prontuário e Histórico"
+            description="Gerencie documentos e histórico."
+            icon={<FileText size={48} />}
+            onClick={() => router.push('/admin/prontuarios')}
           />
           <DashboardCard
             title="Financeiro"
@@ -51,17 +81,17 @@ const AdminDashboardPage = () => {
             onClick={() => router.push('/admin/chat')}
           />
           <DashboardCard
-            title="Sessão de Teleterapia"
-            description="Acesse a sala de vídeo."
-            icon={<Video size={48} />}
-            variant="highlight"
-            onClick={() => router.push('/admin/teleterapia')}
-          />
-          <DashboardCard
             title="Manual do Sistema"
             description="Tutorial de uso para Admins."
             icon={<BookOpen size={48} />}
             onClick={() => router.push('/admin/ajuda')}
+          />
+          <DashboardCard
+            title="Resumo dos Atendimentos"
+            description="Visualize seus agendamentos."
+            icon={<CalendarCheck size={48} />}
+            onClick={() => router.push('/admin/atendimentos')}
+            notificationCount={pendingAppointmentsCount}
           />
         </div>
 

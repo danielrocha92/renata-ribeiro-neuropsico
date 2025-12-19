@@ -26,8 +26,9 @@ export interface CalendarEvent {
     start: Date;
     end: Date;
     type: 'availability' | 'appointment';
-    status?: 'confirmed' | 'pending' | 'cancelled';
+    status?: 'confirmed' | 'pending';
     patientId?: string;
+    createdBy?: 'admin' | 'client';
     psychologistId?: string;
     patientName?: string;
 }

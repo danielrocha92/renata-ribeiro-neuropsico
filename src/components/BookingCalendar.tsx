@@ -61,13 +61,27 @@ const BookingCalendar = () => {
       snapshot.forEach(doc => {
         const data = doc.data();
         if (data.start && data.end) {
+          const isMyAppointment = user && data.patientId === user.uid;
+
+          let title = 'Indisponível';
+          let type: 'appointment' = 'appointment';
+
+          if (isMyAppointment) {
+            title = data.status === 'pending'
+              ? (data.createdBy === 'admin' ? 'Solicitação de Consulta (Clique para confirmar)' : 'Aguardando Confirmação')
+              : 'Minha Consulta';
+          }
+
           list.push({
             id: doc.id,
-            title: 'Indisponível', // Masked
+            title,
             start: data.start instanceof Timestamp ? data.start.toDate() : new Date(data.start),
             end: data.end instanceof Timestamp ? data.end.toDate() : new Date(data.end),
-            type: 'appointment',
-            psychologistId: data.psychologistId
+            type,
+            psychologistId: data.psychologistId,
+            status: data.status,
+            patientId: data.patientId,
+            createdBy: data.createdBy
           } as CalendarEvent);
         }
       });
@@ -110,7 +124,8 @@ const BookingCalendar = () => {
         date: event.start,
         start: event.start,
         end: event.end,
-        status: 'confirmed',
+        status: 'pending',
+        createdBy: 'client',
         createdAt: serverTimestamp(),
       });
 
@@ -120,7 +135,7 @@ const BookingCalendar = () => {
         await deleteDoc(availabilityDocRef);
       }
 
-      showAlert("Consulta agendada com sucesso!", "Sucesso");
+      showAlert("Solicitação enviada! Aguarde a confirmação da profissional.", "Solicitação Enviada");
 
       // 4. Create Google Calendar event
       try {
@@ -150,23 +165,39 @@ const BookingCalendar = () => {
     }
   };
 
-  const handleSelectSlot = (slot: any) => {
+  const handleSelectSlot = async (slot: any) => {
     // slot here is actually an event in this logic
     const event = slot as CalendarEvent;
-
-    if (event.type === 'appointment') {
-      return;
-    }
 
     if (!user || !db) {
       showAlert("Você precisa estar logado para agendar.", "Atenção");
       return;
     }
 
+    if (event.type === 'appointment') {
+      // If it's my appointment and pending/admin created, allow confirm
+      if (event.patientId === user.uid && event.status === 'pending' && event.createdBy === 'admin') {
+        setModal({
+          isOpen: true,
+          title: "Confirmar Solicitação",
+          message: `Deseja confirmar o agendamento proposto para ${event.start.toLocaleString('pt-BR')}?`,
+          type: 'confirm',
+          onConfirm: async () => {
+            const eventRef = doc(db, 'appointments', event.id!);
+            await import('firebase/firestore').then(({ updateDoc }) => updateDoc(eventRef, { status: 'confirmed' }));
+            showAlert("Consulta confirmada com sucesso!", "Confirmado");
+            setModal(prev => ({ ...prev, isOpen: false }));
+          }
+        });
+        return;
+      }
+      return; // Can't interact with other appointments
+    }
+
     setModal({
       isOpen: true,
       title: "Confirmar Agendamento",
-      message: `Você gostaria de agendar uma consulta para ${event.start.toLocaleString('pt-BR')}?`,
+      message: `Você gostaria de solicitar uma consulta para ${event.start.toLocaleString('pt-BR')}?`,
       type: 'confirm',
       onConfirm: () => executeBooking(event)
     });
@@ -174,6 +205,12 @@ const BookingCalendar = () => {
 
   const eventStyleGetter = (event: CalendarEvent) => {
     if (event.type === 'appointment') {
+      if (event.patientId === user?.uid) {
+        if (event.status === 'pending') {
+          return { className: styles.eventPending }; // Need to define this style or use inline style
+        }
+        return { className: styles.eventConfirmed };
+      }
       return {
         className: styles.eventUnavailable
       };

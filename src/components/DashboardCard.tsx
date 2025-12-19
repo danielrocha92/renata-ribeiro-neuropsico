@@ -7,6 +7,7 @@ interface DashboardCardProps {
     icon: React.ReactNode;
     onClick?: () => void;
     variant?: 'default' | 'highlight';
+    notificationCount?: number;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
@@ -14,13 +15,17 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
     description,
     icon,
     onClick,
-    variant = 'default'
+    variant = 'default',
+    notificationCount = 0
 }) => {
     return (
         <div
             className={`${styles.card} ${variant === 'highlight' ? styles.highlight : ''}`}
             onClick={onClick}
         >
+            {notificationCount > 0 && (
+                <span className={styles.notificationBadge}>{notificationCount}</span>
+            )}
             <div className={styles.icon}>
                 {icon}
             </div>
