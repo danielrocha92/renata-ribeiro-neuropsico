@@ -66,7 +66,7 @@ export default function VideoModal({ videoUrl }: VideoModalProps) {
       <section id="video-modal-section" className={styles.videoModalSection}>
         <h2 className={styles.sectionTitle}>Conteúdo e Vídeos</h2>
         <p className={styles.sectionSubtitle}>
-          Assista a um vídeo com dicas e reflexões sobre saúde mental e neurociência.
+          Assista a um vídeo com dicas e reflexões sobre saúde mental e neuropsicologia.
         </p>
         <div onClick={openModal} className={styles.thumbnail}>
           <div className={styles.playButton}>

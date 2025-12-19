@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
           <h4>Renata Ribeiro | Neuropsicologia</h4>
           <p>CRP SP 06/53721-8</p>
           <p>
-            Especialista com foco em Neurociência, TCC e Reabilitação Cognitiva
+            Especialista com foco em neuropsicologia, TCC e Reabilitação Cognitiva
             (HC-FMUSP).
           </p>
         </div>

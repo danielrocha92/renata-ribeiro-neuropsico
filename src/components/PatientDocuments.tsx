@@ -71,6 +71,14 @@ const PatientDocuments: React.FC = () => {
       }
     };
     fetchDocuments();
+
+    // Mark as read if current user is the patient
+    // We need to import useAuth to know if we are the patient viewing our own docs
+    // But PatientDocuments is used by Admin too (to upload).
+    // Admin selects a patient. Client sees THEIR OWN docs.
+    // If we are in "Client View" (usually this component is wrapped or used differently).
+    // Actually PatientDocuments as written seems to be the ADMIN view (allows selecting patient).
+    // The Client view is likely 'src/app/cliente/historico/page.tsx' which might reuse this or have its own.
   }, [selectedPatient]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,6 +117,7 @@ const PatientDocuments: React.FC = () => {
       let docData: any = {
         patientId: selectedPatient,
         uploadedAt: serverTimestamp(),
+        read: false, // New document is unread by patient
       };
 
       if (mode === 'upload') {

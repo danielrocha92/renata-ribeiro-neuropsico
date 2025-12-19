@@ -26,7 +26,7 @@ const AdminTeleterapiaPage: React.FC = () => {
     const [inCall, setInCall] = useState(false);
 
     // Using the same room URL as the client side
-    const wherebyRoomUrl = "https://whereby.com/neuropsico-renata-ribeiro";
+    const wherebyRoomUrl = "https://whereby.com/renata-ribeiro-neuropsico?displayName=Renata%20Ribeiro";
 
     useEffect(() => {
         const fetchNextAppointment = async () => {

@@ -231,6 +231,10 @@
 .sidebarHeader {
     padding: 1rem;
     border-bottom: 1px solid #eee;
+    display: flex;
+    /* Added flex to align "Conversas" and "+" button */
+    justify-content: space-between;
+    align-items: center;
 }
 
 .roomItem {
@@ -248,7 +252,7 @@
 .unreadBadge {
     background: #d32f2f;
     color: white;
-    border-radius: 50%;
+    border-radius: 30%;
     padding: 2px 6px;
     font-size: 0.7rem;
     margin-left: auto;
@@ -289,6 +293,78 @@
     color: #ccc;
 }
 
+/* Modal Styles for New Chat */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.modalHeader h3 {
+    margin: 0;
+    color: #333;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+}
+
+.patientList {
+    overflow-y: auto;
+    flex: 1;
+}
+
+.patientItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.patientItem:hover {
+    background-color: #f0f7ff;
+}
+
+/* Icons */
+.iconRead {
+    color: #34B7F1;
+}
+
+.iconUnread {
+    color: #999;
+}
+
 /* Mobile visibility helpers */
 @media (min-width: 768px) {
     .mdNone {
@@ -298,12 +374,4 @@
     .adminChatLayout {
         grid-template-columns: 300px 1fr;
     }
-
-    /* Sidebar fixed width on desktop? */
-    /* In original inline: selectedRoomId ? '1fr' : '1fr'. Wait, user code had: gridTemplateColumns: selectedRoomId ? '1fr' : '1fr'.
-        But sidebar had width: selectedRoomId ? '300px' : '100%'.
-        It seems it was mocking a split view but using just flex or grid weirdly.
-        I'll try to replicate:
-        sidebar and main area side-by-side on desktop.
-     */
 }

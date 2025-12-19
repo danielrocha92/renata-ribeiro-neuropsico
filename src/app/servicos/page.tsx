@@ -11,7 +11,7 @@ export default function ServicosPage() {
     <main className={styles.main}>
       <h1 className={styles.heading}>Nossos Serviços Especializados</h1>
       <p className={styles.subHeading}>
-        Com uma abordagem baseada na Neurociência e na Terapia Cognitivo Comportamental (TCC), ofereço um acompanhamento completo para o seu desenvolvimento cognitivo e emocional.
+        Com uma abordagem baseada na Neuropsicologia e na Terapia Cognitivo Comportamental (TCC), ofereço um acompanhamento completo para o seu desenvolvimento cognitivo e emocional.
       </p>
 
       <section className={styles.cardsContainer}>

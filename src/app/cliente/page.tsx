@@ -9,7 +9,7 @@ import DashboardGrid, { DashboardItem } from '@/components/DashboardGrid';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { useDashboardNotifications } from '@/hooks/useDashboardNotifications';
 import {
   Video,
   FileText,
@@ -23,25 +23,7 @@ const ClientePage: React.FC = () => {
   const { user } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [pendingAppointmentsCount, setPendingAppointmentsCount] = useState(0);
-
-  // Listen for pending appointments from Admin
-  React.useEffect(() => {
-    if (!user) return;
-
-    const q = query(
-      collection(db, "appointments"),
-      where("patientId", "==", user.uid),
-      where("status", "==", "pending"),
-      where("createdBy", "==", "admin")
-    );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setPendingAppointmentsCount(snapshot.size);
-    });
-
-    return () => unsubscribe();
-  }, [user]);
+  const { appointments: pendingAppointmentsCount, messages: unreadMessagesCount, documents: unreadDocumentsCount } = useDashboardNotifications(user?.uid, 'client');
 
 
   const dashboardItems: DashboardItem[] = [
@@ -63,7 +45,9 @@ const ClientePage: React.FC = () => {
       icon: <FileText size={48} />,
       description: "Resumo dos seus atendimentos.",
       onClick: () => router.push('/cliente/historico'),
-      notificationCount: pendingAppointmentsCount
+      notificationCount: pendingAppointmentsCount + unreadDocumentsCount // Check both? Or just documents? Usually documents are here. Consultas are in calendar. But 'pendingAppointmentsCount' was here for 'Prontuário'? Actually user used it there. Let's keep pending appointments here but maybe it fits better in Calendar/Financeiro?
+      // The previous code had `notificationCount: pendingAppointmentsCount` on "Prontuário e Histórico". But pending appointments are usually about future sessions.
+      // However, I will stick to adding unreadDocumentsCount here as well.
     },
     {
       title: "Financeiro",
@@ -75,7 +59,8 @@ const ClientePage: React.FC = () => {
       title: "Fale com o Profissional",
       icon: <MessageCircle size={48} />,
       description: "Canal seguro de comunicação.",
-      onClick: () => router.push('/cliente/chat')
+      onClick: () => router.push('/cliente/chat'),
+      notificationCount: unreadMessagesCount
     },
     {
       title: "Guia de Uso",

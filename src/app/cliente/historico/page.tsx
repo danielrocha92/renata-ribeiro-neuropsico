@@ -60,6 +60,15 @@ const HistoricoPage: React.FC = () => {
                     });
                 setDocuments(docs);
 
+                // Mark unread documents as read
+                docs.forEach(async (docData) => {
+                    if (docData.read === false) {
+                        await import('firebase/firestore').then(({ updateDoc, doc }) => {
+                            updateDoc(doc(db, 'documents', docData.id), { read: true });
+                        });
+                    }
+                });
+
             } catch (error) {
                 console.error("Erro ao buscar dados:", error);
             } finally {

@@ -1,18 +1,19 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import UnifiedCalendar, { CalendarEvent } from '@/components/UnifiedCalendar';
+import { useCalendarEvents } from '@/hooks/useCalendarEvents'; // Added import
 import styles from '@/styles/Admin.module.css';
 import utils from '@/styles/Utils.module.css';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, getDocs, query, where, Timestamp, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import AppointmentModal from '@/components/AppointmentModal';
 import CustomModal from './CustomModal';
 
 const AdminCalendar = () => {
     const { user } = useAuth();
-    const [events, setEvents] = useState<CalendarEvent[]>([]);
+    const { events } = useCalendarEvents({ userId: user?.uid, role: 'admin' });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const [modal, setModal] = useState<{
@@ -39,56 +40,6 @@ const AdminCalendar = () => {
             type: 'alert'
         });
     };
-
-    const fetchEvents = useCallback(async () => {
-        if (!user || !db) return;
-
-        const availabilityCol = collection(db, 'availability');
-        const availQuery = query(availabilityCol, where('psychologistId', '==', user.uid));
-        const availSnapshot = await getDocs(availQuery);
-        // @ts-ignore
-        const fetchedAvail: CalendarEvent[] = availSnapshot.docs.map(doc => {
-            const data = doc.data();
-            const start = data.start instanceof Timestamp ? data.start.toDate() : null;
-            const end = data.end instanceof Timestamp ? data.end.toDate() : null;
-            if (!start || !end) return null;
-
-            return {
-                id: doc.id,
-                title: 'Disponível',
-                start,
-                end,
-                type: 'availability' as const,
-            };
-        }).filter(e => e !== null);
-
-        const appointmentsCol = collection(db, 'appointments');
-        const apptQuery = query(appointmentsCol, where('psychologistId', '==', user.uid));
-        const apptSnapshot = await getDocs(apptQuery);
-        // @ts-ignore
-        const fetchedAppts: CalendarEvent[] = apptSnapshot.docs.map(doc => {
-            const data = doc.data();
-            const start = data.start instanceof Timestamp ? data.start.toDate() : null;
-            const end = data.end instanceof Timestamp ? data.end.toDate() : null;
-            if (!start || !end) return null;
-
-            return {
-                id: doc.id,
-                title: doc.data().patientName || 'Agendado',
-                start,
-                end,
-                type: 'appointment' as const,
-                status: doc.data().status,
-                patientId: doc.data().patientId,
-            };
-        }).filter(e => e !== null);
-
-        setEvents([...fetchedAvail, ...fetchedAppts]);
-    }, [user]);
-
-    useEffect(() => {
-        fetchEvents();
-    }, [fetchEvents]);
 
     const handleSelectSlot = ({ start, end }: { start: Date; end: Date }) => {
         // Check for overlapping events
@@ -145,8 +96,8 @@ const AdminCalendar = () => {
                     end
                 });
             }
-            fetchEvents();
             closeModal();
+            // No need to fetchEvents(), onSnapshot in hook will update
         } catch (err) {
             console.error("Error saving appointment:", err);
             showAlert("Erro ao salvar agendamento.", "Erro");
@@ -157,14 +108,35 @@ const AdminCalendar = () => {
         if (!db) return;
         const eventRef = doc(db, 'appointments', id);
         await updateDoc(eventRef, { status: 'confirmed' });
-        fetchEvents();
+
+        // Notify Client
+        const eventToConfirm = events.find(e => e.id === id);
+        if (eventToConfirm && eventToConfirm.patientId) {
+            // We need to fetch patient Email ideally, or use a notification system that the client listens to.
+            // But user asked for email.
+            // I'll import sendNotificationEmail.
+            await import('@/lib/notifications').then(async ({ sendNotificationEmail }) => {
+                // Try to fetch patient email
+                try {
+                    const patientDoc = await import('firebase/firestore').then(({ getDoc, doc }) => getDoc(doc(db, 'users', eventToConfirm.patientId!)));
+                    if (patientDoc.exists()) {
+                        const patientEmail = patientDoc.data().email;
+                        if (patientEmail) {
+                            sendNotificationEmail(patientEmail, 'appointment_confirmed', `Data: ${eventToConfirm.start.toLocaleString()}`);
+                        }
+                    }
+                } catch (err) {
+                    console.error("Error fetching patient email for notification:", err);
+                }
+            });
+        }
+
         closeModal();
     };
 
     const handleDelete = async (id: string) => {
         if (!db) return;
         await deleteDoc(doc(db, 'appointments', id));
-        fetchEvents();
         closeModal();
     };
 

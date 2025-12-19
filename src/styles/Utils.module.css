@@ -265,6 +265,7 @@
     transition: background-color 0.2s;
 }
 
-.btnOutlinePrimary:hover {
-    background-color: rgba(106, 126, 189, 0.1);
+
+.ml05 {
+    margin-left: 0.5rem;
 }

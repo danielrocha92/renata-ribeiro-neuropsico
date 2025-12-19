@@ -28,7 +28,7 @@ const TeleterapiaPage: React.FC = () => {
 
     // CONFIGURATION: Replace this URL with your actual Whereby room URL (e.g. https://whereby.com/your-room-name)
     // You can also get this from a database setting in the future.
-    const wherebyRoomUrl = "https://whereby.com/neuropsico-renata-ribeiro";
+    const wherebyRoomUrl = `https://whereby.com/renata-ribeiro-neuropsico?displayName=${encodeURIComponent(user?.displayName || 'Paciente')}`;
 
     useEffect(() => {
         const fetchNextAppointment = async () => {

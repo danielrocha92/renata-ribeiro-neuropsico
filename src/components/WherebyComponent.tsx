@@ -10,7 +10,7 @@ const WherebyComponent: React.FC<WherebyComponentProps> = ({ roomUrl }) => {
         <div className={styles.container}>
             <iframe
                 src={roomUrl}
-                allow="camera; microphone; fullscreen; speaker; display-capture"
+                allow="camera; microphone; fullscreen; speaker-selection; display-capture"
                 className={styles.iframe}
                 title="Sala de Teleterapia"
             />

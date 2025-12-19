@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import styles from '@/styles/Chat.module.css'; // Updated import
 import utils from '@/styles/Utils.module.css';
 import PrivateRoute from '@/components/PrivateRoute';
-import { ArrowLeft, Send, Lock, FileText, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Send, Lock, FileText, Image as ImageIcon, Check, CheckCheck } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
 import {
@@ -28,6 +28,7 @@ interface Message {
     fileUrl?: string;
     fileName?: string;
     fileType?: string;
+    read?: boolean;
 }
 
 const ChatPage: React.FC = () => {
@@ -51,6 +52,15 @@ const ChatPage: React.FC = () => {
                 id: doc.id,
                 ...doc.data()
             } as Message));
+            // Mark admin messages as read
+            msgs.forEach(async (msg) => {
+                if (msg.senderId === 'admin' && msg.read === false) {
+                    await import('firebase/firestore').then(({ updateDoc, doc }) => {
+                        updateDoc(doc(db, `chats/${user.uid}/messages`, msg.id), { read: true });
+                    });
+                }
+            });
+
             setMessages(msgs);
             // Scroll to bottom
             setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
@@ -144,6 +154,11 @@ const ChatPage: React.FC = () => {
                                         {renderMessageContent(msg)}
                                         <span className={styles.messageTime}>
                                             {msg.createdAt ? new Date(msg.createdAt.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '...'}
+                                            {isMe && (
+                                                <span className={utils.ml05}>
+                                                    {msg.read ? <CheckCheck size={14} className={styles.iconRead} /> : <Check size={14} className={styles.iconUnread} />}
+                                                </span>
+                                            )}
                                         </span>
                                     </div>
                                 );

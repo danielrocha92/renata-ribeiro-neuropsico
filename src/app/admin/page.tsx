@@ -8,37 +8,14 @@ import styles from '@/styles/Admin.module.css';
 import { BookOpen, CreditCard, MessageCircle, FileText, CalendarCheck, Video } from 'lucide-react';
 import AdminCalendar from '@/components/AdminCalendar';
 import DashboardGrid, { DashboardItem } from '@/components/DashboardGrid';
-import { db } from '@/lib/firebase';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { useAuth } from '@/contexts/AuthContext';
+import { useDashboardNotifications } from '@/hooks/useDashboardNotifications';
 
 const AdminDashboardPage = () => {
   const router = useRouter();
-  const [pendingAppointmentsCount, setPendingAppointmentsCount] = React.useState(0);
-
-  React.useEffect(() => {
-    // Listen for appointments created by client with status pending
-    // Assuming 'createdBy' field exists now.
-    // If not, we might count all pending? But let's stick to the plan: pending + createdBy client.
-
-    // Note: We need to import db, collection, query, where, onSnapshot
-    // We'll add imports in a separate step or assume they are added if I utilize multi_replace properly?
-    // I can't add imports with this tool call if they are at the top.
-    // I will use replace_file_content for the whole file or logic blocks.
-    // The previous tool call for ClientPage used multiple steps.
-    // Here I will replace the component body and separate step for imports.
-
-    const q = query(
-      collection(db, "appointments"),
-      where("status", "==", "pending"),
-      where("createdBy", "==", "client")
-    );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setPendingAppointmentsCount(snapshot.size);
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const { user } = useAuth(); // Need to ensure useAuth is imported or available (it wasn't imported in original file but usually needed)
+  // Actually original file didn't import useAuth. Let's add it.
+  const { appointments: pendingAppointmentsCount, messages: unreadMessagesCount } = useDashboardNotifications(user?.uid, 'admin');
 
   const dashboardItems: DashboardItem[] = [
     {
@@ -70,7 +47,8 @@ const AdminDashboardPage = () => {
       title: "Atendimento Online",
       description: "Responda mensagens dos pacientes.",
       icon: <MessageCircle size={48} />,
-      onClick: () => router.push('/admin/chat')
+      onClick: () => router.push('/admin/chat'),
+      notificationCount: unreadMessagesCount
     },
     {
       title: "Resumo dos Atendimentos",

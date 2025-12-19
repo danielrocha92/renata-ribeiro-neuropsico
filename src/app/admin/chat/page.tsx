@@ -14,10 +14,11 @@ import {
     serverTimestamp,
     doc,
     updateDoc,
-    Timestamp
+    Timestamp,
+    where
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { Send, User, MessageSquare, Paperclip, FileText, Image as ImageIcon } from 'lucide-react';
+import { Send, User, MessageSquare, Paperclip, FileText, Image as ImageIcon, Check, CheckCheck, Plus, X, Search } from 'lucide-react';
 
 interface ChatRoom {
     id: string; // This is the patientId
@@ -35,6 +36,7 @@ interface Message {
     fileUrl?: string;
     fileName?: string;
     fileType?: string;
+    read?: boolean;
 }
 
 const AdminChatPage = () => {
@@ -46,6 +48,9 @@ const AdminChatPage = () => {
     const bottomRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    const [allPatients, setAllPatients] = useState<any[]>([]);
+    const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
+
     // Fetch Chat Rooms (Inbox)
     useEffect(() => {
         const q = query(collection(db, 'chats'), orderBy('lastUpdated', 'desc'));
@@ -54,6 +59,16 @@ const AdminChatPage = () => {
             setRooms(roomList);
         });
         return () => unsubscribe();
+    }, []);
+
+    // Fetch All Patients for New Chat
+    useEffect(() => {
+        const fetchPatients = async () => {
+            const q = query(collection(db, 'users'), where('userType', '==', 'paciente'));
+            const snap = await import('firebase/firestore').then(({ getDocs }) => getDocs(q));
+            setAllPatients(snap.docs.map(d => ({ uid: d.id, ...d.data() })));
+        };
+        fetchPatients();
     }, []);
 
     // Fetch Messages when a room is selected
@@ -67,6 +82,25 @@ const AdminChatPage = () => {
 
         const unsubscribe = onSnapshot(q, (snap) => {
             const msgs = snap.docs.map(d => ({ id: d.id, ...d.data() } as Message));
+
+            // Mark patient messages as read
+            msgs.forEach(async (msg) => {
+                if (msg.senderId !== 'admin' && msg.read === false) {
+                    // Update message read status
+                    await import('firebase/firestore').then(({ updateDoc, doc }) => {
+                        updateDoc(doc(db, `chats/${selectedRoomId}/messages`, msg.id), { read: true });
+                    });
+                }
+            });
+            // Also update room unread count to 0 if needed (already done in handleSendReply but good to do on open too if just reading)
+            if (snap.docs.some(d => d.data().senderId !== 'admin' && d.data().read === false)) {
+                // But simplified: we can just reset unreadCount on the room doc if we are viewing it.
+                // However, the room list listener might need this update to clear the badge.
+                import('firebase/firestore').then(({ updateDoc, doc }) => {
+                    updateDoc(doc(db, 'chats', selectedRoomId), { unreadCount: 0 });
+                });
+            }
+
             setMessages(msgs);
             setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
         });
@@ -86,11 +120,20 @@ const AdminChatPage = () => {
                 read: false
             });
 
-            await updateDoc(doc(db, 'chats', selectedRoomId), {
-                lastMessage: `Você: ${reply}`,
-                lastUpdated: serverTimestamp(),
-                unreadCount: 0 // Admin replied
+            // Use setDoc with merge: true to create the room if it doesn't exist
+            await import('firebase/firestore').then(({ setDoc, doc }) => {
+                setDoc(doc(db, 'chats', selectedRoomId), {
+                    lastMessage: `Você: ${reply}`,
+                    lastUpdated: serverTimestamp(),
+                    unreadCount: 0, // Admin replied
+                    // If creates new, we might need patientId and patientName.
+                    // If it's a new chat initiated by admin, these fields are crucial for the list.
+                    // We can try to find the patientName from allPatients if available.
+                    patientId: selectedRoomId,
+                    patientName: rooms.find(r => r.id === selectedRoomId)?.patientName || allPatients.find(p => p.uid === selectedRoomId)?.name || 'Paciente'
+                }, { merge: true });
             });
+
             setReply('');
         } catch (error) {
             console.error("Error replying:", error);
@@ -179,8 +222,11 @@ const AdminChatPage = () => {
                     <div className={`${styles.chatList} ${selectedRoomId ? styles.hiddenMobile : ''}`}>
                         <div className={styles.sidebarHeader}>
                             <h3 className={utils.m0}>Conversas</h3>
+                            <button onClick={() => setIsNewChatModalOpen(true)} className={utils.iconButtonSecondary} title="Nova Conversa">
+                                <Plus size={20} />
+                            </button>
                         </div>
-                        {rooms.length === 0 && <p className={`${utils.p1} ${utils.textMuted}`}>Nenhuma conversa.</p>}
+                        {rooms.length === 0 && <p className={`${utils.p1} ${utils.textMuted}`}>Nenhuma conversa iniciada.</p>}
                         {rooms.map(room => (
                             <div
                                 key={room.id}
@@ -188,7 +234,7 @@ const AdminChatPage = () => {
                                 className={`${styles.roomItem} ${selectedRoomId === room.id ? styles.roomItemSelected : ''}`}
                             >
                                 <div className={`${utils.flexRow} ${utils.mb05}`}>
-                                    <User size={16} color="#666" />
+                                    <User size={16} className={utils.textMuted} />
                                     <span className={utils.fw600}>{room.patientName || 'Usuário'}</span>
                                     {room.unreadCount ? (
                                         <span className={styles.unreadBadge}>
@@ -203,6 +249,32 @@ const AdminChatPage = () => {
                         ))}
                     </div>
 
+                    {isNewChatModalOpen && (
+                        <div className={styles.modalOverlay}>
+                            <div className={styles.modalContent}>
+                                <div className={styles.modalHeader}>
+                                    <h3>Nova Conversa</h3>
+                                    <button onClick={() => setIsNewChatModalOpen(false)} className={styles.closeButton}><X size={20} /></button>
+                                </div>
+                                <div className={styles.patientList}>
+                                    {allPatients.map(patient => (
+                                        <div
+                                            key={patient.uid}
+                                            className={styles.patientItem}
+                                            onClick={() => {
+                                                setSelectedRoomId(patient.uid);
+                                                setIsNewChatModalOpen(false);
+                                            }}
+                                        >
+                                            <User size={20} />
+                                            <span>{patient.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Main Chat Area */}
                     <div className={`${styles.chatMain} ${!selectedRoomId ? styles.hiddenMobile : ''}`}>
                         {selectedRoomId ? (
@@ -211,7 +283,7 @@ const AdminChatPage = () => {
                                     <button onClick={() => setSelectedRoomId(null)} className={styles.backButton}>
                                         ←
                                     </button>
-                                    <strong>{rooms.find(r => r.id === selectedRoomId)?.patientName}</strong>
+                                    <strong>{rooms.find(r => r.id === selectedRoomId)?.patientName || allPatients.find(p => p.uid === selectedRoomId)?.name || 'Paciente'}</strong>
                                 </div>
 
                                 <div className={styles.messagesContainer}>
@@ -225,6 +297,11 @@ const AdminChatPage = () => {
                                                 {renderMessageContent(msg)}
                                                 <span className={styles.messageTime}>
                                                     {msg.createdAt ? new Date(msg.createdAt.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '...'}
+                                                    {isAdmin && (
+                                                        <span className={utils.ml05}>
+                                                            {msg.read ? <CheckCheck size={14} className={styles.iconRead} /> : <Check size={14} className={styles.iconUnread} />}
+                                                        </span>
+                                                    )}
                                                 </span>
                                             </div>
                                         )
