@@ -2,8 +2,11 @@
 import styles from '@/styles/Servicos.module.css';
 
 export const metadata = {
-  title: 'Serviços de Neuropsicologia e Psicoterapia | Renata Ribeiro Neuropsico',
-  description: 'Descubra os serviços especializados de neuropsicologia e psicoterapia de Renata Ribeiro. Avaliação neuropsicológica, TCC e reabilitação cognitiva para seu bem-estar.',
+  title: 'Serviços de Neuropsicologia e Psicoterapia',
+  description: 'Ofereço Avaliação Neuropsicológica (TDAH, TEA, Memória), Psicoterapia Online (TCC) e Supervisão Clínica. Atendimento especializado na Barra Funda, SP.',
+  alternates: {
+    canonical: '/servicos',
+  },
 };
 
 export default function ServicosPage() {

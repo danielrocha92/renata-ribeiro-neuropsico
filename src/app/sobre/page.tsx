@@ -5,8 +5,11 @@ import React from 'react';
 import Image from 'next/image';
 
 export const metadata = {
-  title: 'Sobre Renata Ribeiro: Neuropsicóloga e Psicoterapeuta | São Paulo',
-  description: 'Conheça Renata Ribeiro, psicóloga clínica com experiência em Terapia Cognitivo-Comportamental (TCC) e Neuropsicologia. Foco em avaliação e reabilitação de funções cognitivas.',
+  title: 'Sobre Mim',
+  description: 'Saiba mais sobre Renata Ribeiro, especialista em Neuropsicologia pela USP e psicóloga clínica (TCC). Experiência em avaliação, reabilitação cognitiva e terapia integrativa em São Paulo.',
+  alternates: {
+    canonical: '/sobre',
+  },
 };
 
 // Dados da Formação
