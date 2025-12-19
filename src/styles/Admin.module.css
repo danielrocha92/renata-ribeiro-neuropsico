@@ -1,100 +1,109 @@
-.dashboard {
+/* styles/Admin.module.css */
+
+.container {
   padding: 2rem;
-  background-color: #f4f7f6;
+  background-color: #fdfbf7;
+  /* Light cream from palette (Match Client) */
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.header p {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
 }
 
 .title {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-weight: 600;
   color: #333;
+  margin: 0 0 0.5rem 0;
 }
 
+.logoutButton {
+  background-color: #D97462;
+  /* Reddish-orange */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logoutButton:hover {
+  background-color: #c76552;
+}
+
+/* Grid is now handled by DashboardGrid, but we keep this for legacy or specific layouts if needed */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.calendarSection {
-  margin-top: 3rem;
-  border-top: 1px solid #eee;
-  padding-top: 2rem;
-}
-
-.headerNav {
+.card {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid transparent;
 }
 
-.backLink {
-  text-decoration: none;
-  color: #666;
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border-color: #e0e0e0;
 }
-
-
 
 .section {
-  background-color: #fff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
 }
 
 .sectionTitle {
   font-size: 1.5rem;
   font-weight: 600;
-  margin-bottom: 1rem;
-  color: #555;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 0.5rem;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
 }
 
-.fullWidth {
-  grid-column: 1 / -1;
-}
-
-.container {
-  padding: 2rem;
-  max-width: 1280px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-@media (max-width: 768px) {
-  .container {
-    padding: 1rem;
-  }
-}
-
-.header {
-  margin-bottom: 2rem;
-}
-
-.header h1 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.content {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-}
-
-.googleButton {
-  background-color: #4285F4;
-  /* Google Blue */
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 1rem;
-}
-
+/* Form Styles */
 .formGroup {
   margin-bottom: 1rem;
 }
@@ -103,6 +112,7 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
+  color: #333;
 }
 
 .input,
@@ -111,8 +121,10 @@
   width: 100%;
   padding: 0.8rem;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 6px;
+  /* Match client radius usually 6-8px */
   font-size: 1rem;
+  background-color: #fff;
 }
 
 .textarea {
@@ -124,36 +136,30 @@
   background-color: #6A7EBD;
   color: white;
   border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
+  font-weight: 500;
   transition: background-color 0.2s;
 }
 
 .button:hover {
-  background-color: #5a6ca8;
+  background-color: #5365a2;
 }
 
-.tableContainer {
-  overflow-x: auto;
+.googleButton {
+  background-color: #4285F4;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
   margin-top: 1rem;
+  font-weight: 500;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-}
-
-
-/* Chat Responsive Styles */
+/* Chat Responsive Styles - Preserving Admin Specific Chat Layout */
 .chatContainer {
   display: grid;
   grid-template-columns: 300px 1fr;
@@ -163,27 +169,30 @@
 
 .chatList {
   background: white;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 1rem;
   overflow-y: auto;
-  border: 1px solid #eee;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .chatMain {
   background: white;
-  border-radius: 8px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  border: 1px solid #eee;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .chatHeader {
   padding: 1rem;
   border-bottom: 1px solid #eee;
-  background: #f9f9f9;
+  background: #fdfbf7;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-radius: 12px 12px 0 0;
 }
 
 .backButton {
@@ -209,6 +218,7 @@
   max-width: 70%;
   padding: 0.8rem 1.2rem;
   border-radius: 12px;
+  line-height: 1.5;
 }
 
 .messageAdmin {
@@ -228,14 +238,25 @@
   border-top: 1px solid #eee;
   display: flex;
   gap: 1rem;
+  background: #fff;
+  border-radius: 0 0 12px 12px;
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
   .chatContainer {
     display: flex;
     flex-direction: column;
     height: calc(100vh - 150px);
-    /* Adjust for mobile header/nav */
   }
 
   .chatList.hiddenMobile {
@@ -258,7 +279,152 @@
 
   .backButton {
     display: block;
-    /* Show back button on mobile when in chat */
     margin-right: 1rem;
   }
+}
+
+.statusSelect {
+  padding: 5px;
+  font-size: 0.9rem;
+}
+
+.statusPending {
+  border-color: #ccc;
+  color: #e65100;
+}
+
+.statusPaid {
+  border-color: green;
+  color: green;
+}
+
+.statusOverdue {
+  border-color: red;
+  color: red;
+}
+
+.uploadButton {
+  background: #f0f0f0;
+  color: #333;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 10px;
+  top: 12px;
+  color: #999;
+}
+
+.inputWithIcon {
+  padding-left: 35px;
+}
+
+.progressBar {
+  width: 100%;
+  background: #eee;
+  height: 5px;
+  margin-top: 5px;
+  border-radius: 3px;
+}
+
+.progressFill {
+  background: #6A7EBD;
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.calendarContainer {
+  height: 70vh;
+}
+
+.calendarEvent {
+  border-radius: 6px;
+  opacity: 0.9;
+  color: white;
+  border: none;
+  display: block;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom Dropdown Styles */
+.dropdownContainer {
+  position: relative;
+  width: 100%;
+}
+
+.dropdownList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  max-height: 250px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdownItem {
+  padding: 0.8rem;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.1s;
+}
+
+.dropdownItem:last-child {
+  border-bottom: none;
+}
+
+.dropdownItem:hover {
+  background-color: #f5f5f5;
+}
+
+.dropdownItemName {
+  font-weight: 600;
+  color: #333;
+  display: block;
+}
+
+.dropdownItemEmail {
+  font-size: 0.85rem;
+  color: #666;
+  display: block;
+}
+
+.dropdownSearchContainer {
+  padding: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.dropdownSearchWrapper {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+
+.dropdownSearchInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  margin-left: 8px;
+  font-size: 0.9rem;
+}
+
+.dropdownNoResult {
+  padding: 1rem;
+  text-align: center;
+  color: #999;
+  font-size: 0.9rem;
 }

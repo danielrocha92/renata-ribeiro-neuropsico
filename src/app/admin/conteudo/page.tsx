@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/Admin.module.css';
+import utils from '@/styles/Utils.module.css';
 import AdminPrivateRoute from '@/components/AdminPrivateRoute';
 import { db, storage } from '@/lib/firebase';
 import { collection, addDoc, query, getDocs, deleteDoc, doc, orderBy } from 'firebase/firestore';
@@ -168,36 +169,35 @@ const AdminConteudoPage = () => {
                             {(formData.type === 'PDF' || formData.type === 'Vídeo') ? (
                                 <div className={styles.formGroup}>
                                     <label className={styles.label}>Upload de Arquivo (PC ou Celular)</label>
-                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                        <label className={styles.button} style={{ background: '#f0f0f0', color: '#333', cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
-                                            <Upload size={18} style={{ marginRight: '8px' }} />
+                                    <div className={utils.flexRow}>
+                                        <label className={styles.uploadButton}>
+                                            <Upload size={18} className={utils.mr05} />
                                             {selectedFile ? 'Alterar Arquivo' : 'Escolher Arquivo'}
                                             <input
                                                 type="file"
                                                 onChange={handleFileChange}
                                                 accept={formData.type === 'PDF' ? "application/pdf" : "video/*"}
-                                                style={{ display: 'none' }}
+                                                className={utils.dNone}
                                             />
                                         </label>
-                                        <span style={{ fontSize: '0.9rem', color: '#666' }}>
+                                        <span className={`${utils.textSmall} ${utils.textMuted}`}>
                                             {selectedFile ? selectedFile.name : 'Nenhum arquivo selecionado'}
                                         </span>
                                     </div>
                                     {uploadProgress > 0 && uploadProgress < 100 && (
-                                        <div style={{ width: '100%', background: '#eee', height: '5px', marginTop: '5px', borderRadius: '3px' }}>
-                                            <div style={{ width: `${uploadProgress}%`, background: '#6A7EBD', height: '100%', borderRadius: '3px', transition: 'width 0.3s' }}></div>
+                                        <div className={styles.progressBar}>
+                                            <div className={styles.progressFill} style={{ width: `${uploadProgress}%` }}></div>
                                         </div>
                                     )}
                                 </div>
                             ) : (
                                 <div className={styles.formGroup}>
                                     <label className={styles.label}>URL do Recurso</label>
-                                    <div style={{ position: 'relative' }}>
-                                        <LinkIcon size={18} style={{ position: 'absolute', left: '10px', top: '12px', color: '#999' }} />
+                                    <div className={utils.relative}>
+                                        <LinkIcon size={18} className={styles.inputIcon} />
                                         <input
                                             type="url"
-                                            className={styles.input}
-                                            style={{ paddingLeft: '35px' }}
+                                            className={`${styles.input} ${styles.inputWithIcon}`}
                                             placeholder="https://..."
                                             value={formData.url}
                                             onChange={e => setFormData({ ...formData, url: e.target.value })}
@@ -206,7 +206,7 @@ const AdminConteudoPage = () => {
                                 </div>
                             )}
 
-                            <div className={styles.formGroup} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <div className={`${styles.formGroup} ${utils.flexRow} ${utils.gap05}`}>
                                 <input
                                     type="checkbox"
                                     id="locked"
@@ -219,7 +219,7 @@ const AdminConteudoPage = () => {
                             <button type="submit" className={styles.button} disabled={uploadProgress > 0 && uploadProgress < 100}>
                                 {uploadProgress > 0 && uploadProgress < 100 ? 'Enviando...' : (
                                     <>
-                                        <Plus size={18} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
+                                        <Plus size={18} className={`${utils.verticalAlignMiddle} ${utils.mr05}`} />
                                         {selectedFile ? 'Enviar e Adicionar' : 'Adicionar Conteúdo'}
                                     </>
                                 )}
@@ -243,15 +243,15 @@ const AdminConteudoPage = () => {
                                     {contents.map(content => (
                                         <tr key={content.id}>
                                             <td>
-                                                <div style={{ fontWeight: 600 }}>{content.title}</div>
-                                                <a href={content.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8rem', color: '#6A7EBD' }}>Ver recurso</a>
+                                                <div className={utils.fw600}>{content.title}</div>
+                                                <a href={content.url} target="_blank" rel="noopener noreferrer" className={`${utils.textSmall} ${utils.textPrimary}`}>Ver recurso</a>
                                             </td>
                                             <td>{content.type}</td>
                                             <td>{content.locked ? '🔒 Exclusivo' : '🔓 Aberto'}</td>
                                             <td>
                                                 <button
                                                     onClick={() => handleDelete(content.id)}
-                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#e57373' }}
+                                                    className={utils.iconButtonDanger}
                                                     title="Excluir"
                                                 >
                                                     <Trash2 size={18} />
@@ -261,7 +261,7 @@ const AdminConteudoPage = () => {
                                     ))}
                                     {contents.length === 0 && !loading && (
                                         <tr>
-                                            <td colSpan={4} style={{ textAlign: 'center', color: '#888' }}>Nenhum conteúdo cadastrado.</td>
+                                            <td colSpan={4} className={`${utils.textCenter} ${utils.textMuted}`}>Nenhum conteúdo cadastrado.</td>
                                         </tr>
                                     )}
                                 </tbody>

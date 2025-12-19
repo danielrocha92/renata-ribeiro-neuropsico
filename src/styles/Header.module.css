@@ -24,11 +24,13 @@
 }
 
 .header.scrolled .logo {
-  font-size: 1.1rem; /* Smaller logo when scrolled */
+  font-size: 1.1rem;
+  /* Smaller logo when scrolled */
 }
 
 .header.scrolled .menuToggle svg {
-  font-size: 24px; /* Smaller icon when scrolled */
+  font-size: 24px;
+  /* Smaller icon when scrolled */
 }
 
 .navContainer {
@@ -65,7 +67,8 @@
   cursor: pointer;
   padding: 5px;
   z-index: 1001;
-  display: block; /* Visível no Mobile */
+  display: block;
+  /* Visível no Mobile */
 }
 
 .nav {
@@ -103,7 +106,7 @@
 .navItem a {
   color: var(--color-text-dark);
   text-decoration: none;
-  font-size: 1.6rem; 
+  font-size: 1.6rem;
   font-weight: 500;
   padding: 10px;
   display: block;
@@ -117,6 +120,22 @@
 .ctaLink a {
   color: var(--color-primary);
   font-weight: 600;
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  padding: 10px;
+  font-family: inherit;
+  transition: color 0.2s ease;
+}
+
+.logoutButton:hover {
+  color: var(--color-primary);
 }
 
 
@@ -147,7 +166,8 @@
     font-size: 1rem;
     font-weight: 500;
     padding: 5px;
-    position: relative; /* Needed for absolute positioning of the underline */
+    position: relative;
+    /* Needed for absolute positioning of the underline */
   }
 
   .ctaLink a {
@@ -157,44 +177,54 @@
     border-radius: 6px;
     transition: background-color 0.3s ease;
   }
-  
+
   .ctaLink a:hover {
-    background-color: #C04F38; /* Tom mais escuro do Azul Sereno */
+    background-color: #C04F38;
+    /* Tom mais escuro do Azul Sereno */
     color: var(--color-text-light);
   }
 
   .header.scrolled {
-    padding: 5px 25px; /* Smaller padding when scrolled */
+    padding: 5px 25px;
+    /* Smaller padding when scrolled */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    background-color: var(--color-card-bg); /* Ensure background color is set */
+    background-color: var(--color-card-bg);
+    /* Ensure background color is set */
   }
 
   .header.scrolled .logo {
-    font-size: 1.2rem; /* Smaller logo when scrolled */
+    font-size: 1.2rem;
+    /* Smaller logo when scrolled */
   }
 
   .header.scrolled .navItem a {
-    font-size: 0.9rem; /* Smaller nav items when scrolled */
+    font-size: 0.9rem;
+    /* Smaller nav items when scrolled */
   }
 
   /* Active Nav Item Styles */
   .activeNavItem a {
-    color: var(--color-primary); /* Highlight active link text */
+    color: var(--color-primary);
+    /* Highlight active link text */
     font-weight: 600;
   }
 
   .activeNavItem a::after {
     content: '';
     position: absolute;
-    bottom: -5px; /* Position below the text */
+    bottom: -5px;
+    /* Position below the text */
     left: 0;
     width: 100%;
     height: 2px;
-    background-color: var(--color-primary); /* Underline color */
-    transform: scaleX(1); /* Ensure it's visible */
-    transition: transform 0.3s ease; /* Smooth transition */
+    background-color: var(--color-primary);
+    /* Underline color */
+    transform: scaleX(1);
+    /* Ensure it's visible */
+    transition: transform 0.3s ease;
+    /* Smooth transition */
   }
-  
+
   .navItem a:hover::after {
     transform: scaleX(1);
   }
@@ -224,6 +254,9 @@
     padding: 8px 16px;
     border-radius: 6px;
     cursor: pointer;
+    font-size: 0.95rem;
+    /* Match typical nav link size */
+    font-weight: 500;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 

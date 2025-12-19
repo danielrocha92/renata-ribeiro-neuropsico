@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import styles from '../../styles/Cliente.module.css';
-import PrivateRoute from '../../components/PrivateRoute';
+import styles from '@/styles/Cliente.module.css';
+import utils from '@/styles/Utils.module.css';
+import PrivateRoute from '@/components/PrivateRoute';
 import BookingCalendar from '@/components/BookingCalendar';
-import DashboardCard from '@/components/DashboardCard';
-import { useAuth } from '../../contexts/AuthContext';
-import { auth, db } from '../../lib/firebase';
+import DashboardGrid, { DashboardItem } from '@/components/DashboardGrid';
+import { useAuth } from '@/contexts/AuthContext';
+import { db } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import {
@@ -28,14 +29,6 @@ const ClientePage: React.FC = () => {
   React.useEffect(() => {
     if (!user) return;
 
-    // We want appointments where patientId is current user, status is pending, and createdBy is 'admin' (or just count all pending if we want)
-    // The requirement says "se o paciente solicitar a consulta, deve chegar para o admin e vice e versa"
-    // So for the Client, we want to know about requests created by Admin.
-
-    // Assuming we will add 'createdBy' field. For now, we can check basic pending status.
-    // If createdBy is missing (legacy), maybe don't show or assume one way.
-    // Let's assume we will add createdBy field.
-
     const q = query(
       collection(db, "appointments"),
       where("patientId", "==", user.uid),
@@ -51,55 +44,44 @@ const ClientePage: React.FC = () => {
   }, [user]);
 
 
-  const dashboardCards = [
+  const dashboardItems: DashboardItem[] = [
     {
       title: "Teleterapia",
-      icon: <Video className={styles.cardIcon} size={32} />,
+      icon: <Video size={48} />,
       description: "Acesse sua sessão online segura.",
-      action: () => router.push('/cliente/teleterapia'),
-      active: true
+      variant: "highlight",
+      onClick: () => router.push('/cliente/teleterapia')
     },
     {
       title: "Conteúdo Exclusivo",
-      icon: <BookOpen className={styles.cardIcon} size={32} />,
+      icon: <BookOpen size={48} />,
       description: "Artigos, vídeos e exercícios para você.",
-      action: () => router.push('/cliente/conteudo'),
-      active: true
+      onClick: () => router.push('/cliente/conteudo')
     },
     {
       title: "Prontuário e Histórico",
-      icon: <FileText className={styles.cardIcon} size={32} />,
+      icon: <FileText size={48} />,
       description: "Resumo dos seus atendimentos.",
-      action: () => router.push('/cliente/historico'),
-      active: true,
-      notificationCount: pendingAppointmentsCount // Show badge here? Or on Teletherapy?
-      // User said "crie uma notificação no card quando houver alguma interação."
-      // Usually "Prontuário e Histórico" or "Resumo" makes sense for appointments,
-      // but maybe "Teleterapia" if it's about the session.
-      // Let's put it on "Prontuário e Histórico" as it handles records/appointments usually.
-      // Actually, looking at the code, BookingCalendar is right there on the page.
-      // But let's stick to the card.
+      onClick: () => router.push('/cliente/historico'),
+      notificationCount: pendingAppointmentsCount
     },
     {
       title: "Financeiro",
-      icon: <CreditCard className={styles.cardIcon} size={32} />,
+      icon: <CreditCard size={48} />,
       description: "Histórico de pagamentos e notas.",
-      action: () => router.push('/cliente/financeiro'),
-      active: true
+      onClick: () => router.push('/cliente/financeiro')
     },
     {
       title: "Fale com o Profissional",
-      icon: <MessageCircle className={styles.cardIcon} size={32} />,
+      icon: <MessageCircle size={48} />,
       description: "Canal seguro de comunicação.",
-      action: () => router.push('/cliente/chat'),
-      active: true
+      onClick: () => router.push('/cliente/chat')
     },
     {
       title: "Guia de Uso",
-      icon: <HelpCircle className={styles.cardIcon} size={32} color="#FBC02D" />,
+      icon: <HelpCircle size={48} color="#FBC02D" />,
       description: "Aprenda como usar a plataforma.",
-      action: () => router.push('/cliente/ajuda'),
-      active: true
+      onClick: () => router.push('/cliente/ajuda')
     }
   ];
 
@@ -107,11 +89,8 @@ const ClientePage: React.FC = () => {
     <PrivateRoute>
       <div className={styles.container}>
         <header className={styles.header}>
-          <div className={styles.welcomeMessage}>
-            <h1>Área do Cliente</h1>
-            <p>Olá, {user?.displayName || 'Cliente'}. Bem-vindo(a) ao seu espaço de saúde e bem-estar.</p>
-          </div>
-
+          <h1>Área do Cliente</h1>
+          <p>Olá, {user?.displayName || 'Cliente'}. Bem-vindo(a) ao seu espaço de saúde e bem-estar.</p>
         </header>
 
         {loading ? (
@@ -119,22 +98,10 @@ const ClientePage: React.FC = () => {
         ) : (
           <>
             {/* Quick Actions / Features Grid */}
-            <div className={styles.dashboardGrid}>
-              {dashboardCards.map((card, index) => (
-                <DashboardCard
-                  key={index}
-                  title={card.title}
-                  description={card.description}
-                  icon={card.icon}
-                  onClick={card.action}
-                  variant={card.title === "Guia de Uso" ? "highlight" : "default"}
-                  notificationCount={card.title === "Prontuário e Histórico" ? pendingAppointmentsCount : 0}
-                />
-              ))}
-            </div>
+            <DashboardGrid items={dashboardItems} />
 
             <div className={styles.mainContent}>
-              <section className={styles.requestSection} style={{ width: '100%' }}>
+              <section className={`${styles.requestSection} ${utils.w100}`}>
                 <h2>Agende Nova Sessão</h2>
                 <BookingCalendar />
               </section>

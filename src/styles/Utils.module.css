@@ -1,0 +1,270 @@
+/* src/styles/Utils.module.css */
+
+.block {
+    display: block;
+}
+
+.w100 {
+    width: 100%;
+}
+
+.textCenter {
+    text-align: center;
+}
+
+.textMuted {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.textSmall {
+    font-size: 0.8rem;
+}
+
+.flexRow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.justifyBetween {
+    justify-content: space-between;
+}
+
+.mt1 {
+    margin-top: 1rem;
+}
+
+.mt05 {
+    margin-top: 0.5rem;
+}
+
+.mb1 {
+    margin-bottom: 1rem;
+}
+
+/* Specific component helpers */
+.roundImage {
+    border-radius: 50%;
+}
+
+.noBorder {
+    border: 0;
+}
+
+.cursorPointer {
+    cursor: pointer;
+}
+
+.iconButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6A7EBD;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: opacity 0.2s;
+}
+
+.iconButton:hover {
+    opacity: 0.8;
+}
+
+.iconButtonSecondary {
+    color: #666;
+}
+
+.cardBorder {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.alertError {
+    color: #d32f2f;
+    background-color: #ffebee;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.alertInfo {
+    color: #0288d1;
+    background-color: #e1f5fe;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.p2 {
+    padding: 2rem;
+}
+
+.opacity30 {
+    opacity: 0.3;
+}
+
+.quoteBlock {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #555;
+    font-style: italic;
+    border-left: 3px solid #ddd;
+    padding-left: 0.5rem;
+}
+
+.textMedium {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.fw600 {
+    font-weight: 600;
+}
+
+.opacityHalf {
+    opacity: 0.5;
+}
+
+.mb2 {
+    margin-bottom: 2rem;
+}
+
+.borderError {
+    border: 1px solid #e57373;
+}
+
+.textError {
+    color: #d32f2f;
+}
+
+.fwBold {
+    font-weight: bold;
+}
+
+.fw500 {
+    font-weight: 500;
+}
+
+.tableResponsive {
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.textLeft {
+    text-align: left;
+}
+
+.m0 {
+    margin: 0;
+}
+
+.mr05 {
+    margin-right: 0.5rem;
+}
+
+.mt2 {
+    margin-top: 2rem;
+}
+
+.verticalAlignMiddle {
+    vertical-align: middle;
+}
+
+.preLine {
+    white-space: pre-line;
+}
+
+.buttonDisabled {
+    opacity: 0.7;
+    cursor: not-allowed !important;
+}
+
+.dNone {
+    display: none;
+}
+
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mb05 {
+    margin-bottom: 0.5rem;
+}
+
+.mb0 {
+    margin-bottom: 0;
+}
+
+.p1 {
+    padding: 1rem;
+}
+
+.gap1 {
+    gap: 1rem;
+}
+
+.gap05 {
+    gap: 0.5rem;
+}
+
+.span2 {
+    grid-column: span 2;
+}
+
+.textPrimary {
+    color: #6A7EBD;
+}
+
+.iconButtonDanger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #e57373;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: opacity 0.2s;
+}
+
+.iconButtonDanger:hover {
+    opacity: 0.8;
+}
+
+
+.btnOutlinePrimary {
+    text-decoration: none;
+    color: #6A7EBD;
+    border: 1px solid #6A7EBD;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    transition: background-color 0.2s;
+}
+
+.btnOutlinePrimary:hover {
+    background-color: rgba(106, 126, 189, 0.1);
+}

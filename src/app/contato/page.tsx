@@ -3,6 +3,7 @@
 import React, { useRef, useState } from 'react';
 import emailjs from '@emailjs/browser';
 import styles from '@/styles/Contato.module.css';
+import utils from '@/styles/Utils.module.css';
 
 const ContatoPage: React.FC = () => {
   const form = useRef<HTMLFormElement>(null);
@@ -75,9 +76,7 @@ const ContatoPage: React.FC = () => {
             </div>
             <button
               type="submit"
-              className={styles.submitButton}
-              disabled={loading}
-              style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+              className={`${styles.submitButton} ${loading ? utils.buttonDisabled : ''}`}
             >
               {loading ? 'Enviando...' : 'Enviar'}
             </button>
@@ -90,7 +89,7 @@ const ContatoPage: React.FC = () => {
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.072832242412!2d-46.65686388533719!3d-23.56407238468107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59a6b6a6a6a7%3A0x7d7b3b3b3b3b3b3b!2sAv.%20Paulista%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1620000000000!5m2!1spt-BR!2sbr"
             width="100%"
             height="100%"
-            style={{ border: 0 }}
+            className={utils.noBorder}
             allowFullScreen={false}
             loading="lazy"
           ></iframe>

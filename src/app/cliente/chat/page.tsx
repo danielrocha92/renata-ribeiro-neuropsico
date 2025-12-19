@@ -3,8 +3,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/Chat.module.css'; // Updated import
+import utils from '@/styles/Utils.module.css';
 import PrivateRoute from '@/components/PrivateRoute';
-import { ArrowLeft, Send, Lock } from 'lucide-react';
+import { ArrowLeft, Send, Lock, FileText, Image as ImageIcon } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
 import {
@@ -24,6 +25,9 @@ interface Message {
     text: string;
     senderId: string;
     createdAt: Timestamp;
+    fileUrl?: string;
+    fileName?: string;
+    fileType?: string;
 }
 
 const ChatPage: React.FC = () => {
@@ -82,11 +86,38 @@ const ChatPage: React.FC = () => {
         }
     };
 
+    const renderMessageContent = (msg: Message) => {
+        if (msg.fileUrl) {
+            const isImage = msg.fileType?.startsWith('image/');
+            return (
+                <div className={utils.flexColumn}>
+                    {isImage ? (
+                        <img
+                            src={msg.fileUrl}
+                            alt={msg.fileName}
+                            className={styles.chatImage}
+                            onClick={() => window.open(msg.fileUrl, '_blank')}
+                        />
+                    ) : (
+                        <div className={styles.fileAttachment}>
+                            <FileText size={20} />
+                            <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer" className={styles.fileLink}>
+                                {msg.fileName || 'Arquivo'}
+                            </a>
+                        </div>
+                    )}
+                    {msg.text && <p className={utils.m0}>{msg.text}</p>}
+                </div>
+            );
+        }
+        return <p className={utils.m0}>{msg.text}</p>;
+    };
+
     return (
         <PrivateRoute>
             <div className={styles.container}>
                 <header className={styles.header}>
-                    <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666' }}>
+                    <button onClick={() => router.back()} className={utils.iconButtonSecondary}>
                         <ArrowLeft size={24} />
                     </button>
                     <div className={styles.headerContent}>
@@ -99,7 +130,7 @@ const ChatPage: React.FC = () => {
                     <div className={styles.chatMain}>
                         <div className={styles.messagesContainer}>
                             {messages.length === 0 && (
-                                <p style={{ textAlign: 'center', color: '#999', marginTop: '2rem' }}>
+                                <p className={`${utils.textCenter} ${utils.textMuted} ${utils.mt2}`}>
                                     Envie uma mensagem para iniciar o atendimento.
                                 </p>
                             )}
@@ -110,7 +141,7 @@ const ChatPage: React.FC = () => {
                                         key={msg.id}
                                         className={`${styles.messageBubble} ${isMe ? styles.messageOwn : styles.messageOther}`}
                                     >
-                                        <p style={{ margin: 0 }}>{msg.text}</p>
+                                        {renderMessageContent(msg)}
                                         <span className={styles.messageTime}>
                                             {msg.createdAt ? new Date(msg.createdAt.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '...'}
                                         </span>
@@ -137,7 +168,7 @@ const ChatPage: React.FC = () => {
                             </button>
                         </form>
                         <div className={styles.encryptionNote}>
-                            <Lock size={10} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
+                            <Lock size={10} className={`${utils.verticalAlignMiddle} ${utils.mr05}`} />
                             Esta conversa é criptografada e confidencial.
                         </div>
                     </div>

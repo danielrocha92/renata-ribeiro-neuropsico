@@ -200,3 +200,110 @@
         max-width: 85%;
     }
 }
+
+.chatImage {
+    max-width: 200px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.fileAttachment {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.fileLink {
+    color: inherit;
+    text-decoration: underline;
+    word-break: break-all;
+}
+
+.adminChatLayout {
+    display: grid;
+    grid-template-columns: 1fr;
+    height: calc(100vh - 80px);
+}
+
+.sidebarHeader {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.roomItem {
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.2s;
+}
+
+.roomItemSelected {
+    background-color: #f0f7ff;
+}
+
+.unreadBadge {
+    background: #d32f2f;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    margin-left: auto;
+}
+
+.lastMsg {
+    font-size: 0.9rem;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+}
+
+.chatHeaderAdmin {
+    background-color: #f9f9f9;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.attachButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 10px;
+    color: #666;
+    display: flex;
+    align-items: center;
+}
+
+.emptyState {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+}
+
+/* Mobile visibility helpers */
+@media (min-width: 768px) {
+    .mdNone {
+        display: none;
+    }
+
+    .adminChatLayout {
+        grid-template-columns: 300px 1fr;
+    }
+
+    /* Sidebar fixed width on desktop? */
+    /* In original inline: selectedRoomId ? '1fr' : '1fr'. Wait, user code had: gridTemplateColumns: selectedRoomId ? '1fr' : '1fr'.
+        But sidebar had width: selectedRoomId ? '300px' : '100%'.
+        It seems it was mocking a split view but using just flex or grid weirdly.
+        I'll try to replicate:
+        sidebar and main area side-by-side on desktop.
+     */
+}

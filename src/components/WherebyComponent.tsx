@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from '@/styles/WherebyComponent.module.css';
 
 interface WherebyComponentProps {
     roomUrl: string;
@@ -6,16 +7,11 @@ interface WherebyComponentProps {
 
 const WherebyComponent: React.FC<WherebyComponentProps> = ({ roomUrl }) => {
     return (
-        <div style={{ width: '100%', height: '100%', minHeight: '600px', borderRadius: '12px', overflow: 'hidden' }}>
+        <div className={styles.container}>
             <iframe
                 src={roomUrl}
                 allow="camera; microphone; fullscreen; speaker; display-capture"
-                style={{
-                    width: '100%',
-                    height: '100%',
-                    border: 'none',
-                    minHeight: '600px'
-                }}
+                className={styles.iframe}
                 title="Sala de Teleterapia"
             />
         </div>

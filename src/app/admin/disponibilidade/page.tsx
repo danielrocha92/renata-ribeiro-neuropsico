@@ -158,16 +158,9 @@ const DisponibilidadePage = () => {
     }
 
     const style = {
-      backgroundColor,
-      borderRadius: '6px',
-      opacity: 0.9,
-      color: 'white',
-      border: 'none',
-      display: 'block',
-      fontSize: '0.85rem',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+      backgroundColor
     };
-    return { style };
+    return { style, className: styles.calendarEvent };
   };
 
   const handleGoogleCalendarSync = () => {
@@ -186,7 +179,7 @@ const DisponibilidadePage = () => {
             Vincular com Google Agenda
           </button>
         </header>
-        <div style={{ height: '70vh' }}>
+        <div className={styles.calendarContainer}>
           <UnifiedCalendar
             events={events}
             selectable={true} // Admin can select slots

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import UnifiedCalendar, { CalendarEvent } from '@/components/UnifiedCalendar';
 import styles from '@/styles/Admin.module.css';
+import utils from '@/styles/Utils.module.css';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, getDocs, query, where, Timestamp, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
@@ -183,16 +184,9 @@ const AdminCalendar = () => {
         }
 
         const style = {
-            backgroundColor,
-            borderRadius: '6px',
-            opacity: 0.9,
-            color: 'white',
-            border: 'none',
-            display: 'block',
-            fontSize: '0.85rem',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            backgroundColor
         };
-        return { style };
+        return { style, className: styles.calendarEvent };
     };
 
     const handleGoogleCalendarSync = () => {
@@ -206,7 +200,7 @@ const AdminCalendar = () => {
 
     return (
         <div className={styles.container}>
-            <header className={styles.header} style={{ marginBottom: '0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <header className={`${styles.header} ${utils.mb0}`}>
                 <div>
                     <h1>Gerenciar Agendamentos</h1>
                     <p>Clique em um horário para agendar ou em um agendamento para editar/excluir.</p>
@@ -217,7 +211,7 @@ const AdminCalendar = () => {
                     </button>
                 )}
             </header>
-            <div style={{ marginTop: '1rem' }}>
+            <div className={utils.mt1}>
                 <UnifiedCalendar
                     events={events}
                     selectable={true}

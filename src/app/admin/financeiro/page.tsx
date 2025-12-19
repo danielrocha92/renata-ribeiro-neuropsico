@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/Admin.module.css';
+import utils from '@/styles/Utils.module.css';
 import AdminPrivateRoute from '@/components/AdminPrivateRoute';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, query, getDocs, where, Timestamp, orderBy, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { Check, Clock, Plus, Trash2 } from 'lucide-react';
+import SearchableUserSelect from '@/components/SearchableUserSelect';
 
 interface Invoice {
     id: string;
@@ -128,17 +130,12 @@ const AdminFinanceiroPage = () => {
                         <form onSubmit={handleSubmit}>
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>Paciente</label>
-                                <select
-                                    className={styles.select}
-                                    required
+                                <SearchableUserSelect
+                                    users={users.map(u => ({ id: u.uid, displayName: u.displayName, email: u.email }))}
                                     value={formData.patientId}
-                                    onChange={e => setFormData({ ...formData, patientId: e.target.value })}
-                                >
-                                    <option value="">Selecione...</option>
-                                    {users.map(u => (
-                                        <option key={u.uid} value={u.uid}>{u.displayName || u.email}</option>
-                                    ))}
-                                </select>
+                                    onChange={(value) => setFormData({ ...formData, patientId: value })}
+                                    placeholder="Selecione o paciente..."
+                                />
                             </div>
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>Descrição</label>
@@ -181,7 +178,7 @@ const AdminFinanceiroPage = () => {
                                     value={formData.paymentLink}
                                     onChange={e => setFormData({ ...formData, paymentLink: e.target.value })}
                                 />
-                                <small style={{ color: '#666', marginTop: '4px', display: 'block' }}>
+                                <small className={`${utils.textMuted} ${utils.block} ${utils.mt05}`}>
                                     Cole aqui o link do Mercado Pago, Stripe, etc.
                                 </small>
                             </div>
@@ -198,13 +195,13 @@ const AdminFinanceiroPage = () => {
                                 </select>
                             </div>
                             <button type="submit" className={styles.button}>
-                                <Plus size={18} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
+                                <Plus size={18} className={`${utils.verticalAlignMiddle} ${utils.mr05}`} />
                                 Gerar Cobrança
                             </button>
                         </form>
                     </div>
 
-                    <div className={styles.section} style={{ gridColumn: 'span 2' }}>
+                    <div className={`${styles.section} ${utils.span2}`}>
                         <h2 className={styles.sectionTitle}>Registros Financeiros</h2>
                         <div className={styles.tableContainer}>
                             <table className={styles.table}>
@@ -228,7 +225,7 @@ const AdminFinanceiroPage = () => {
                                             <td>R$ {inv.amount.toFixed(2)}</td>
                                             <td>
                                                 {inv.paymentLink ? (
-                                                    <a href={inv.paymentLink} target="_blank" rel="noopener noreferrer" style={{ color: '#6A7EBD' }}>
+                                                    <a href={inv.paymentLink} target="_blank" rel="noopener noreferrer" className={utils.textPrimary}>
                                                         Link 🔗
                                                     </a>
                                                 ) : '-'}
@@ -237,13 +234,7 @@ const AdminFinanceiroPage = () => {
                                                 <select
                                                     value={inv.status}
                                                     onChange={(e) => handleStatusChange(inv.id, e.target.value)}
-                                                    className={styles.select}
-                                                    style={{
-                                                        padding: '5px',
-                                                        fontSize: '0.9rem',
-                                                        borderColor: inv.status === 'paid' ? 'green' : inv.status === 'overdue' ? 'red' : '#ccc',
-                                                        color: inv.status === 'paid' ? 'green' : inv.status === 'overdue' ? 'red' : '#e65100'
-                                                    }}
+                                                    className={`${styles.select} ${styles.statusSelect} ${styles['status' + (inv.status.charAt(0).toUpperCase() + inv.status.slice(1))]}`}
                                                 >
                                                     <option value="pending">Pendente</option>
                                                     <option value="paid">Pago</option>
@@ -253,7 +244,7 @@ const AdminFinanceiroPage = () => {
                                             <td>
                                                 <button
                                                     onClick={() => handleDelete(inv.id)}
-                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#e57373' }}
+                                                    className={utils.iconButtonDanger}
                                                 >
                                                     <Trash2 size={18} />
                                                 </button>

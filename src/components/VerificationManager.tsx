@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import utils from '@/styles/Utils.module.css';
 import { db } from '../lib/firebase';
 import { collection, query, where, updateDoc, doc, onSnapshot } from 'firebase/firestore';
 
@@ -56,14 +57,14 @@ const VerificationManager: React.FC = () => {
   }
 
   if (error) {
-    return <p style={{ color: 'red' }}>{error}</p>;
+    return <p className={utils.alertError}>{error}</p>;
   }
 
   return (
     <div>
       {pendingUsers.length > 0 ? (
         pendingUsers.map(user => (
-          <div key={user.uid} style={{ border: '1px solid #ccc', padding: '1rem', marginBottom: '1rem' }}>
+          <div key={user.uid} className={`${utils.cardBorder} ${utils.mb1}`}>
             <p><strong>Nome:</strong> {user.name}</p>
             <p><strong>Email:</strong> {user.email}</p>
             <p><strong>CRP:</strong> {user.crp}</p>

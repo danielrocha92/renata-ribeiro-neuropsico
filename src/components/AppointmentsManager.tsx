@@ -117,7 +117,11 @@ const AppointmentsManager: React.FC = () => {
               {appointments.map(app => (
                 <tr key={app.id}>
                   <td>{app.patientName || 'Carregando...'}</td>
-                  <td>{new Date(app.date.seconds * 1000).toLocaleString()}</td>
+                  <td>
+                    {app.date && app.date.seconds
+                      ? new Date(app.date.seconds * 1000).toLocaleString()
+                      : 'Data não definida'}
+                  </td>
                   <td>{app.title}</td>
                   <td className={styles[`status${app.status}`] || ''}>{app.status}</td>
                   <td>

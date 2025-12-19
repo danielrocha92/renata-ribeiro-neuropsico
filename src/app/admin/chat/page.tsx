@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import styles from '@/styles/Chat.module.css';
+import utils from '@/styles/Utils.module.css';
 import AdminPrivateRoute from '@/components/AdminPrivateRoute';
-import { db } from '@/lib/firebase';
+import { db, storage } from '@/lib/firebase';
 import {
     collection,
     query,
@@ -15,13 +16,15 @@ import {
     updateDoc,
     Timestamp
 } from 'firebase/firestore';
-import { Send, User, MessageSquare } from 'lucide-react';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { Send, User, MessageSquare, Paperclip, FileText, Image as ImageIcon } from 'lucide-react';
 
 interface ChatRoom {
     id: string; // This is the patientId
     patientName: string;
     lastMessage: string;
     lastUpdated: Timestamp;
+    unreadCount?: number;
 }
 
 interface Message {
@@ -29,6 +32,9 @@ interface Message {
     text: string;
     senderId: string;
     createdAt: Timestamp;
+    fileUrl?: string;
+    fileName?: string;
+    fileType?: string;
 }
 
 const AdminChatPage = () => {
@@ -36,7 +42,9 @@ const AdminChatPage = () => {
     const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const [reply, setReply] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
     const bottomRef = useRef<HTMLDivElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Fetch Chat Rooms (Inbox)
     useEffect(() => {
@@ -89,6 +97,75 @@ const AdminChatPage = () => {
         }
     };
 
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || !selectedRoomId) return;
+
+        // Validar tamanho (ex: 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Arquivo muito grande. Máximo 5MB.');
+            return;
+        }
+
+        setIsUploading(true);
+        try {
+            const storageRef = ref(storage, `chat_uploads/${selectedRoomId}/${Date.now()}_${file.name}`);
+            await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+
+            // Send message with file
+            await addDoc(collection(db, `chats/${selectedRoomId}/messages`), {
+                text: '', // Empty text for file messages
+                fileUrl: downloadURL,
+                fileName: file.name,
+                fileType: file.type,
+                senderId: 'admin',
+                createdAt: serverTimestamp(),
+                read: false
+            });
+
+            await updateDoc(doc(db, 'chats', selectedRoomId), {
+                lastMessage: `Você enviou um arquivo: ${file.name}`,
+                lastUpdated: serverTimestamp(),
+                unreadCount: 0
+            });
+
+        } catch (error) {
+            console.error("Error uploading file:", error);
+            alert("Erro ao enviar arquivo.");
+        } finally {
+            setIsUploading(false);
+            if (fileInputRef.current) fileInputRef.current.value = '';
+        }
+    };
+
+    const renderMessageContent = (msg: Message) => {
+        if (msg.fileUrl) {
+            const isImage = msg.fileType?.startsWith('image/');
+            return (
+                <div className={utils.flexColumn}>
+                    {isImage ? (
+                        <img
+                            src={msg.fileUrl}
+                            alt={msg.fileName}
+                            className={styles.chatImage}
+                            onClick={() => window.open(msg.fileUrl, '_blank')}
+                        />
+                    ) : (
+                        <div className={styles.fileAttachment}>
+                            <FileText size={20} />
+                            <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer" className={styles.fileLink}>
+                                {msg.fileName || 'Arquivo'}
+                            </a>
+                        </div>
+                    )}
+                    {msg.text && <p className={utils.m0}>{msg.text}</p>}
+                </div>
+            );
+        }
+        return <p className={utils.m0}>{msg.text}</p>;
+    };
+
     return (
         <AdminPrivateRoute>
             <div className={styles.container}>
@@ -96,43 +173,30 @@ const AdminChatPage = () => {
                     <h1 className={styles.headerTitle}>Atendimento Online</h1>
                 </header>
 
-                <div className={styles.chatLayout} style={{ display: 'grid', gridTemplateColumns: selectedRoomId ? '1fr' : '1fr', height: 'calc(100vh - 80px)' }}>
-                    {/* Simplified for now, using Chat.module rules */}
-
-                    {/* We need sidebar + main. Chat.module doesn't mandate sidebar styles yet.
-                        Let's reuse Admin styles for sidebar or create specific ones.
-                        Actually, let's keep the existing logic but using Chat.module for the message bubbles.
-                    */}
+                <div className={styles.adminChatLayout}>
 
                     {/* Sidebar: Room List */}
-                    <div className={`${styles.chatList || 'sidebar'}`} style={{
-                        width: selectedRoomId ? '300px' : '100%',
-                        display: selectedRoomId && window.innerWidth < 768 ? 'none' : 'block',
-                        borderRight: '1px solid #ddd',
-                        overflowY: 'auto',
-                        background: 'white'
-                    }}>
-                        {/* Inline styles for sidebar temporarily until we add Sidebar styles to Chat.module or reuse */}
-                        <div style={{ padding: '1rem', borderBottom: '1px solid #eee' }}>
-                            <h3 style={{ margin: 0 }}>Conversas</h3>
+                    <div className={`${styles.chatList} ${selectedRoomId ? styles.hiddenMobile : ''}`}>
+                        <div className={styles.sidebarHeader}>
+                            <h3 className={utils.m0}>Conversas</h3>
                         </div>
-                        {rooms.length === 0 && <p style={{ padding: '1rem', color: '#888' }}>Nenhuma conversa.</p>}
+                        {rooms.length === 0 && <p className={`${utils.p1} ${utils.textMuted}`}>Nenhuma conversa.</p>}
                         {rooms.map(room => (
                             <div
                                 key={room.id}
                                 onClick={() => setSelectedRoomId(room.id)}
-                                style={{
-                                    padding: '1rem',
-                                    borderBottom: '1px solid #f0f0f0',
-                                    cursor: 'pointer',
-                                    backgroundColor: selectedRoomId === room.id ? '#f0f7ff' : 'transparent'
-                                }}
+                                className={`${styles.roomItem} ${selectedRoomId === room.id ? styles.roomItemSelected : ''}`}
                             >
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem' }}>
+                                <div className={`${utils.flexRow} ${utils.mb05}`}>
                                     <User size={16} color="#666" />
-                                    <span style={{ fontWeight: 600 }}>{room.patientName || 'Usuário'}</span>
+                                    <span className={utils.fw600}>{room.patientName || 'Usuário'}</span>
+                                    {room.unreadCount ? (
+                                        <span className={styles.unreadBadge}>
+                                            {room.unreadCount}
+                                        </span>
+                                    ) : null}
                                 </div>
-                                <p style={{ fontSize: '0.9rem', color: '#666', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', margin: 0 }}>
+                                <p className={styles.lastMsg}>
                                     {room.lastMessage}
                                 </p>
                             </div>
@@ -140,16 +204,11 @@ const AdminChatPage = () => {
                     </div>
 
                     {/* Main Chat Area */}
-                    {/* Styles from Chat.module can be used for the message area */}
-                    <div className={styles.chatMain} style={{
-                        margin: 0,
-                        display: !selectedRoomId && window.innerWidth < 768 ? 'none' : 'flex',
-                        flex: 1
-                    }}>
+                    <div className={`${styles.chatMain} ${!selectedRoomId ? styles.hiddenMobile : ''}`}>
                         {selectedRoomId ? (
                             <>
-                                <div className={styles.header} style={{ backgroundColor: '#f9f9f9', padding: '0.5rem 1rem' }}>
-                                    <button onClick={() => setSelectedRoomId(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', marginRight: '1rem', display: 'md-none' }}>
+                                <div className={styles.chatHeaderAdmin}>
+                                    <button onClick={() => setSelectedRoomId(null)} className={styles.backButton}>
                                         ←
                                     </button>
                                     <strong>{rooms.find(r => r.id === selectedRoomId)?.patientName}</strong>
@@ -161,10 +220,9 @@ const AdminChatPage = () => {
                                         return (
                                             <div
                                                 key={msg.id}
-                                                className={`${styles.messageBubble} ${isAdmin ? styles.messageOwn : styles.messageOther}`} // Using Chat.module styles
-                                                style={{ backgroundColor: isAdmin ? '#6A7EBD' : '#fff', color: isAdmin ? 'white' : '#333' }}
+                                                className={`${styles.messageBubble} ${isAdmin ? styles.messageOwn : styles.messageOther}`}
                                             >
-                                                <p style={{ margin: 0 }}>{msg.text}</p>
+                                                {renderMessageContent(msg)}
                                                 <span className={styles.messageTime}>
                                                     {msg.createdAt ? new Date(msg.createdAt.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '...'}
                                                 </span>
@@ -176,20 +234,37 @@ const AdminChatPage = () => {
 
                                 <form onSubmit={handleSendReply} className={styles.inputArea}>
                                     <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        className={utils.dNone}
+                                        onChange={handleFileUpload}
+                                        accept="image/*,application/pdf"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className={styles.attachButton}
+                                        disabled={isUploading}
+                                    >
+                                        <Paperclip size={20} />
+                                    </button>
+
+                                    <input
                                         type="text"
                                         value={reply}
                                         onChange={e => setReply(e.target.value)}
-                                        placeholder="Digite sua resposta..."
+                                        placeholder={isUploading ? "Enviando arquivo..." : "Digite sua resposta..."}
+                                        disabled={isUploading}
                                         className={styles.inputField}
                                     />
-                                    <button type="submit" className={styles.sendButton}>
+                                    <button type="submit" className={styles.sendButton} disabled={isUploading || !reply.trim()}>
                                         <Send size={20} />
                                     </button>
                                 </form>
                             </>
                         ) : (
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#ccc' }}>
-                                <MessageSquare size={48} style={{ marginBottom: '1rem' }} />
+                            <div className={styles.emptyState}>
+                                <MessageSquare size={48} className={utils.mb1} />
                                 <p>Selecione uma conversa.</p>
                             </div>
                         )}

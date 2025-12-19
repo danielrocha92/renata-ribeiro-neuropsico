@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/Cliente.module.css';
+import utils from '@/styles/Utils.module.css';
 import PrivateRoute from '@/components/PrivateRoute';
 import { ArrowLeft, BookOpen, Lock } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -61,8 +62,8 @@ const ConteudoPage: React.FC = () => {
         <PrivateRoute>
             <div className={styles.container}>
                 <header className={styles.header}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666' }}>
+                    <div className={utils.flexRow}>
+                        <button onClick={() => router.back()} className={utils.iconButtonSecondary}>
                             <ArrowLeft size={24} />
                         </button>
                         <div className={styles.welcomeMessage}>
@@ -90,16 +91,19 @@ const ConteudoPage: React.FC = () => {
                                     )}
                                     <BookOpen className={styles.cardIcon} size={32} />
                                     <h3 className={styles.cardTitle}>{item.title}</h3>
-                                    <span style={{ fontSize: '0.8rem', color: '#999', textTransform: 'uppercase', fontWeight: 600 }}>{item.type}</span>
+                                    <span className={`${utils.textSmall} ${utils.textMuted} ${utils.uppercase} ${utils.fw600}`}>{item.type}</span>
                                     <p className={styles.cardDescription}>{item.description}</p>
-                                    <button className={styles.actionButton} disabled={item.locked} style={{ marginTop: '1rem', opacity: item.locked ? 0.5 : 1 }}>
+                                    <button
+                                        className={`${styles.actionButton} ${item.locked ? utils.opacityHalf : ''} ${utils.mt1}`}
+                                        disabled={item.locked}
+                                    >
                                         {item.locked ? 'Bloqueado' : 'Acessar'}
                                     </button>
                                 </div>
                             ))}
                         </div>
                     ) : (
-                        <p className={styles.noData} style={{ textAlign: 'center' }}>Nenhum conteúdo disponível no momento.</p>
+                        <p className={`${styles.noData} ${utils.textCenter}`}>Nenhum conteúdo disponível no momento.</p>
                     )}
                 </div>
             </div>

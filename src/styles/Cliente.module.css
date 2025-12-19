@@ -17,14 +17,14 @@
   border-bottom: 1px solid #e0e0e0;
 }
 
-.welcomeMessage h1 {
+.header h1 {
   font-size: 1.8rem;
   font-weight: 600;
   color: #333;
   margin: 0;
 }
 
-.welcomeMessage p {
+.header p {
   font-size: 1rem;
   color: #666;
   margin: 0;
@@ -402,4 +402,49 @@
     padding: 1rem;
     overflow-x: auto;
   }
+}
+
+/* Help/Manual Page Utilities */
+.helpSection {
+  margin-bottom: 2rem;
+}
+
+.helpIcon {
+  vertical-align: middle;
+  margin-right: 10px;
+  color: #6A7EBD;
+}
+
+.helpText {
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.helpList {
+  list-style: disc;
+  padding-left: 1.5rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.iconButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.iconButton:hover {
+  color: #333;
 }

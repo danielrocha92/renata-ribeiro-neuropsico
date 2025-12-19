@@ -24,18 +24,20 @@ A aplicação conta com autenticação segura, níveis de acesso (Admin/Psicólo
 
 ### 👩‍⚕️ Área Administrativa (Psicólogo)
 - **Dashboard Geral:** Visão macro da clínica.
-- **Gestão de Pacientes:** Prontuário digital simplificado.
-- **Agenda e Disponibilidade:** Definição de horários livres para agendamentos.
-- **Financeiro:** Criação de faturas, links de pagamento e controle de inadimplência.
-- **Gestão de Conteúdo:** Upload de artigos e vídeos exclusivos para pacientes.
-- **Chat Centralizado:** Comunicação direta com todos os pacientes em uma única interface.
-- **Manual do Sistema:** Guia integrado para facilitar o uso da ferramenta.
+- **Prontuário Digital:** Histórico completo unificado (Consultas Passadas + Documentos/Anexos).
+- **Agenda e Disponibilidade:** Gestão eficiente de horários.
+- **Financeiro:** Emissão de cobranças com busca inteligente de pacientes e controle de status (Pago/Pendente).
+- **Teleterapia:** Integração fluida com Whereby (Sala embutida ou link externo).
+- **Gestão de Conteúdo:** Upload de materiais didáticos exclusivos.
+- **Chat Centralizado:** Envio de mensagens e arquivos para pacientes.
+- **Manual do Sistema:** Guia integrado para o administrador.
 
 ### 👤 Área do Paciente
 - **Painel Personalizado:** Resumo de agendamentos e pendências.
 - **Agendamento Online:** Marcação de consultas baseada na disponibilidade real da profissional.
 - **Teleterapia:** Link direto para sessões de vídeo.
 - **Financeiro:** Histórico de pagamentos e boletos pendentes.
+- **Prontuário e Histórico:** Visualização integrada de consultas passadas e documentos compartilhados.
 - **Conteúdos Exclusivos:** Acesso a materiais didáticos liberados pela profissional.
 - **Chat Privado:** Canal direto e seguro para tirar dúvidas.
 

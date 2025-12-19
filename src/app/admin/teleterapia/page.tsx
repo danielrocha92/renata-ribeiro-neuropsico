@@ -5,19 +5,17 @@ import { useRouter } from 'next/navigation';
 import { collection, query, where, getDocs, Timestamp, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
-import styles from '@/styles/Teleterapia.module.css'; // Reusing the same styles
-import AdminPrivateRoute from '@/components/AdminPrivateRoute'; // Using AdminPrivateRoute
-import { Video, ArrowLeft, Calendar, User, ExternalLink } from 'lucide-react';
-import JitsiMeetComponent from '@/components/JitsiMeetComponent';
+import styles from '@/styles/Teleterapia.module.css';
+import AdminPrivateRoute from '@/components/AdminPrivateRoute';
+import { Video, ArrowLeft, Calendar, ExternalLink } from 'lucide-react';
+import WherebyComponent from '@/components/WherebyComponent';
 
 interface Appointment {
     id: string;
     date: Timestamp;
     title: string;
     status: string;
-    meetLink?: string;
-    meetingId?: string;
-    patientName?: string; // Additional field for admin view
+    patientName?: string;
 }
 
 const AdminTeleterapiaPage: React.FC = () => {
@@ -26,7 +24,9 @@ const AdminTeleterapiaPage: React.FC = () => {
     const [nextAppointment, setNextAppointment] = useState<Appointment | null>(null);
     const [loading, setLoading] = useState(true);
     const [inCall, setInCall] = useState(false);
-    const [meetingId, setMeetingId] = useState<string>('');
+
+    // Using the same room URL as the client side
+    const wherebyRoomUrl = "https://whereby.com/neuropsico-renata-ribeiro";
 
     useEffect(() => {
         const fetchNextAppointment = async () => {
@@ -35,13 +35,9 @@ const AdminTeleterapiaPage: React.FC = () => {
             try {
                 const now = new Date();
                 const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);
-                // Admin query: find appointments where psychologistId is current user (or just any upcoming relevant appointment)
-                // Assuming admin is the psychologist. If system spans multiple psychologists, filter by user.uid
-                // For "Renata Ribeiro", she sees all or her own. Let's filter by date first.
 
                 const q = query(
                     collection(db, "appointments"),
-                    // Removed patientId filter to find ANY next appointment
                     where("date", ">=", Timestamp.fromDate(twoHoursAgo)),
                     orderBy("date", "asc"),
                     limit(1)
@@ -52,11 +48,9 @@ const AdminTeleterapiaPage: React.FC = () => {
                     const doc = querySnapshot.docs[0];
                     const appointmentData = doc.data();
 
-                    // Fetch patient name if possible (optional enhancement)
+                    // Optional: Fetch patient details if needed
                     let patientName = "Paciente";
-                    if (appointmentData.patientId) {
-                        // We could fetch user data here, but for now let's use what's available or generic
-                    }
+                    // if (appointmentData.patientId) { ... }
 
                     setNextAppointment({ id: doc.id, ...appointmentData, patientName } as Appointment);
                 } else {
@@ -95,46 +89,25 @@ const AdminTeleterapiaPage: React.FC = () => {
                             <>
                                 {inCall ? (
                                     <>
-                                        <div style={{
-                                            marginBottom: '1rem',
-                                            padding: '0.75rem',
-                                            backgroundColor: '#fff3cd',
-                                            color: '#856404',
-                                            border: '1px solid #ffeeba',
-                                            borderRadius: '8px',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'center',
-                                            gap: '0.5rem',
-                                            fontSize: '0.9rem'
-                                        }}>
+                                        <div className={styles.alertInfoBox}>
                                             <span>
-                                                <strong>Anfitrião:</strong> Se a sala pedir "Waiting for host", autentique-se abaixo:
+                                                <strong>Nota:</strong> Você está acessando a sala como Administrador. Se necessário, faça login no Whereby.
                                             </span>
                                             <button
-                                                onClick={() => window.open(`https://meet.jit.si/${meetingId}`, '_blank')}
-                                                style={{
-                                                    background: 'none',
-                                                    border: '1px solid #856404',
-                                                    color: '#856404',
-                                                    padding: '4px 12px',
-                                                    borderRadius: '4px',
-                                                    cursor: 'pointer',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '5px',
-                                                    fontSize: '0.85rem'
-                                                }}
+                                                onClick={() => window.open(wherebyRoomUrl, '_blank')}
+                                                className={styles.alertActionBtn}
                                             >
                                                 <ExternalLink size={14} />
-                                                Autenticar em Nova Aba
+                                                Abrir em Nova Aba
                                             </button>
                                         </div>
-                                        <JitsiMeetComponent
-                                            roomName={meetingId}
-                                            userName={user?.displayName || "Psicóloga"}
-                                            onEnd={() => setInCall(false)}
-                                        />
+                                        <WherebyComponent roomUrl={wherebyRoomUrl} />
+                                        <button
+                                            onClick={() => setInCall(false)}
+                                            className={styles.exitButton}
+                                        >
+                                            Sair da Sala
+                                        </button>
                                     </>
                                 ) : (
                                     <>
@@ -161,14 +134,11 @@ const AdminTeleterapiaPage: React.FC = () => {
 
                                         <div className={styles.actionContainer}>
                                             <button
-                                                onClick={() => {
-                                                    setMeetingId(`RRNeuropsico-${nextAppointment.id}`);
-                                                    setInCall(true);
-                                                }}
+                                                onClick={() => setInCall(true)}
                                                 className={styles.startButton}
                                             >
                                                 <Video size={20} />
-                                                Iniciar Sessão (Como Anfitrião)
+                                                Entrar na Sala (Whereby)
                                             </button>
                                             <p className={styles.helperText}>
                                                 Ao clicar, você entrará na sala da consulta.

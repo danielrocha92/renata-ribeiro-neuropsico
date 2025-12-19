@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/PatientDocuments.module.css';
+import utils from '@/styles/Utils.module.css';
 import { db } from '../lib/firebase';
 import { collection, getDocs, query, where, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 
@@ -195,7 +196,7 @@ const PatientDocuments: React.FC = () => {
             {mode === 'upload' ? (
               <div className={styles.inputGroup}>
                 <input type="file" onChange={handleFileChange} className={styles.fileInput} accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" />
-                <small style={{ display: 'block', color: '#666', marginTop: '5px' }}>Máximo: 800KB. Para arquivos maiores, use "Link Externo".</small>
+                <small className={`${utils.textMuted} ${utils.mt05} ${utils.w100} ${utils.block}`}>Máximo: 800KB. Para arquivos maiores, use "Link Externo".</small>
               </div>
             ) : (
               <div className={styles.inputGroup}>
@@ -204,8 +205,7 @@ const PatientDocuments: React.FC = () => {
                   placeholder="Cole o link do Google Drive/Dropbox aqui..."
                   value={externalLink}
                   onChange={(e) => setExternalLink(e.target.value)}
-                  className={styles.textInput}
-                  style={{ width: '100%', padding: '0.5rem' }}
+                  className={`${styles.textInput} ${utils.w100}`}
                 />
               </div>
             )}
@@ -248,7 +248,68 @@ const PatientDocuments: React.FC = () => {
           )}
         </div>
       )}
+
+      {selectedPatient && (
+        <div className={utils.mt2}>
+          <h4 className={styles.title}>
+            Histórico de Consultas
+          </h4>
+          <AppointmentsList patientId={selectedPatient} />
+        </div>
+      )}
     </div>
+  );
+};
+
+const AppointmentsList = ({ patientId }: { patientId: string }) => {
+  const [appointments, setAppointments] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchApps = async () => {
+      setLoading(true);
+      try {
+        // Simplified query
+        const q = query(
+          collection(db, "appointments"),
+          where("patientId", "==", patientId)
+        );
+        const snap = await getDocs(q);
+        // Client-side sort
+        const apps = snap.docs.map(d => ({ id: d.id, ...d.data() } as any))
+          .sort((a, b) => (b.date?.seconds || 0) - (a.date?.seconds || 0));
+        setAppointments(apps);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchApps();
+  }, [patientId]);
+
+  if (loading) return <p>Carregando consultas...</p>;
+  if (appointments.length === 0) return <p className={styles.noData}>Nenhuma consulta registrada.</p>;
+
+  return (
+    <table className={`${utils.table} ${utils.textSmall}`}>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Título</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {appointments.map(app => (
+          <tr key={app.id}>
+            <td>{app.date?.seconds ? new Date(app.date.seconds * 1000).toLocaleDateString() : '-'}</td>
+            <td>{app.title}</td>
+            <td>{app.status}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 };
 

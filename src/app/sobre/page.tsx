@@ -1,5 +1,6 @@
 // src/app/sobre/page.tsx
 import styles from '@/styles/Sobre.module.css';
+import utils from '@/styles/Utils.module.css';
 import React from 'react';
 import Image from 'next/image';
 
@@ -24,36 +25,36 @@ const formacaoData = [
 
 // Dados da Experiência
 const experienciaData = [
-    {
-        cargo: 'Neuropsicóloga',
-        empresa: 'Clínica Flora Psicologia',
-        periodo: 'novembro de 2023 - Presente',
-        descricao: 'Foco na elaboração de relatórios técnicos e intervenções terapêuticas para promover o bem-estar e o desenvolvimento pessoal.'
-    },
-    {
-        cargo: 'Psicóloga clínica',
-        empresa: 'Psicóloga Renata C Ribeiro',
-        periodo: 'abril de 2021 - Presente',
-        descricao: 'Psicóloga clínica comprometida com resultados para qualidade de vida e bem estar dos meus clientes, através da abordagem cognitivo comportamental.'
-    },
-    {
-        cargo: 'Psicólogo clínico',
-        empresa: 'Clínica Ame.C',
-        periodo: 'agosto de 2021 - novembro de 2022',
-        descricao: ''
-    },
-    {
-        cargo: 'Assistente de RH',
-        empresa: 'InforMaker',
-        periodo: 'fevereiro de 2020 - dezembro de 2020',
-        descricao: 'Recrutamento e seleção para vagas internas e externas para diversos cargos e níveis hierárquicos; Alinhamento de perfil com o solicitante da vaga, mapeamento e triagem de currículos; Experiência com as ferramentas de seleção ( Catho, Vagas.com e Linkedin); Divulgação de vagas na plataforma da empresa e outras fontes; Entrevistas individuais e de grupos (presencial e a distância); Utilização das ferramentas Teams, Skype e Google Met; Feedback positivo e negativo aos candidatos; Atividades administrativas da área de seleção.'
-    },
-    {
-        cargo: 'Estagiária Terapeuta',
-        empresa: 'CIECS -Clínica Escola de Psicologia da FMU',
-        periodo: 'janeiro de 2018 - julho de 2020',
-        descricao: 'Atendimento Psicoterápico De Crianças, Adolescentes, Adultos E Idosos: Psicodiagnóstico Infantil E Adulto; Orientação Vocacional; Plantão Psicológico; Aplicação De Testes. (TAT е HTP)'
-    },
+  {
+    cargo: 'Neuropsicóloga',
+    empresa: 'Clínica Flora Psicologia',
+    periodo: 'novembro de 2023 - Presente',
+    descricao: 'Foco na elaboração de relatórios técnicos e intervenções terapêuticas para promover o bem-estar e o desenvolvimento pessoal.'
+  },
+  {
+    cargo: 'Psicóloga clínica',
+    empresa: 'Psicóloga Renata C Ribeiro',
+    periodo: 'abril de 2021 - Presente',
+    descricao: 'Psicóloga clínica comprometida com resultados para qualidade de vida e bem estar dos meus clientes, através da abordagem cognitivo comportamental.'
+  },
+  {
+    cargo: 'Psicólogo clínico',
+    empresa: 'Clínica Ame.C',
+    periodo: 'agosto de 2021 - novembro de 2022',
+    descricao: ''
+  },
+  {
+    cargo: 'Assistente de RH',
+    empresa: 'InforMaker',
+    periodo: 'fevereiro de 2020 - dezembro de 2020',
+    descricao: 'Recrutamento e seleção para vagas internas e externas para diversos cargos e níveis hierárquicos; Alinhamento de perfil com o solicitante da vaga, mapeamento e triagem de currículos; Experiência com as ferramentas de seleção ( Catho, Vagas.com e Linkedin); Divulgação de vagas na plataforma da empresa e outras fontes; Entrevistas individuais e de grupos (presencial e a distância); Utilização das ferramentas Teams, Skype e Google Met; Feedback positivo e negativo aos candidatos; Atividades administrativas da área de seleção.'
+  },
+  {
+    cargo: 'Estagiária Terapeuta',
+    empresa: 'CIECS -Clínica Escola de Psicologia da FMU',
+    periodo: 'janeiro de 2018 - julho de 2020',
+    descricao: 'Atendimento Psicoterápico De Crianças, Adolescentes, Adultos E Idosos: Psicodiagnóstico Infantil E Adulto; Orientação Vocacional; Plantão Psicológico; Aplicação De Testes. (TAT е HTP)'
+  },
 ];
 
 
@@ -64,12 +65,12 @@ export default function SobrePage() {
 
       <section className={styles.profileSection}>
         <div className={styles.photoPlaceholder}>
-          <Image 
-            src="/Profile.jpeg" 
-            alt="Renata Claudino Ribeiro" 
-            width={200} 
-            height={200} 
-            style={{ borderRadius: '50%' }} // Mantém a imagem circular
+          <Image
+            src="/Profile.jpeg"
+            alt="Renata Claudino Ribeiro"
+            width={200}
+            height={200}
+            className={utils.roundImage}
           />
         </div>
         <div className={styles.bio}>
@@ -90,7 +91,7 @@ export default function SobrePage() {
             <li key={index} className={styles.formationItem}>
               <div className={styles.courseTitle}>{item.cargo}</div>
               <div className={styles.institution}>{item.empresa} ({item.periodo})</div>
-              {item.descricao && <p style={{marginTop: '10px', fontSize: '0.9rem', whiteSpace: 'pre-line'}}>{item.descricao}</p>}
+              {item.descricao && <p className={`${utils.mt1} ${utils.textMuted} ${utils.preLine}`}>{item.descricao}</p>}
             </li>
           ))}
         </ul>

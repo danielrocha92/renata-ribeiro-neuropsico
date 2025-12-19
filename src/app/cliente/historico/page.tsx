@@ -6,6 +6,7 @@ import { collection, query, where, getDocs, Timestamp, orderBy } from 'firebase/
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from '@/styles/Cliente.module.css';
+import utils from '@/styles/Utils.module.css';
 import PrivateRoute from '@/components/PrivateRoute';
 import { ArrowLeft, FileText, Calendar } from 'lucide-react';
 
@@ -21,51 +22,117 @@ const HistoricoPage: React.FC = () => {
     const { user } = useAuth();
     const router = useRouter();
     const [history, setHistory] = useState<Appointment[]>([]);
+    const [documents, setDocuments] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchHistory = async () => {
+        const fetchData = async () => {
             if (!user || !db) return;
             setLoading(true);
             try {
                 const now = new Date();
-                const q = query(
+
+                // Fetch Appointments
+                const appQuery = query(
                     collection(db, "appointments"),
                     where("patientId", "==", user.uid),
-                    where("date", "<", Timestamp.fromDate(now)), // Past appointments
+                    where("date", "<", Timestamp.fromDate(now)),
                     orderBy("date", "desc")
                 );
 
-                const querySnapshot = await getDocs(q);
-                const apps = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Appointment));
+                const appSnapshot = await getDocs(appQuery);
+                const apps = appSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Appointment));
                 setHistory(apps);
+
+                // Fetch Documents
+                const docQuery = query(
+                    collection(db, "documents"),
+                    where("patientId", "==", user.uid)
+                );
+
+                const docSnapshot = await getDocs(docQuery);
+                const docs = docSnapshot.docs
+                    .map(doc => ({ id: doc.id, ...doc.data() } as any))
+                    .sort((a, b) => {
+                        const dateA = a.uploadedAt?.seconds || 0;
+                        const dateB = b.uploadedAt?.seconds || 0;
+                        return dateB - dateA;
+                    });
+                setDocuments(docs);
+
             } catch (error) {
-                console.error("Erro ao buscar histórico:", error);
+                console.error("Erro ao buscar dados:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchHistory();
+        fetchData();
     }, [user]);
 
     return (
         <PrivateRoute>
             <div className={styles.container}>
                 <header className={styles.header}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666' }}>
+                    <div className={utils.flexRow}>
+                        <button onClick={() => router.back()} className={utils.iconButtonSecondary}>
                             <ArrowLeft size={24} />
                         </button>
                         <div className={styles.welcomeMessage}>
                             <h1>Prontuário e Histórico</h1>
-                            <p>Registro de suas consultas anteriores.</p>
+                            <p>Registro de suas consultas e documentos.</p>
                         </div>
                     </div>
                 </header>
 
                 <div className={styles.mainContent}>
+                    {/* Documents Section */}
+                    {documents.length > 0 && (
+                        <div className={`${styles.section} ${utils.mb2}`}>
+                            <h2 className={styles.sectionTitle}>Documentos Compartilhados</h2>
+                            <ul className={styles.appointmentList}>
+                                {documents.map(doc => (
+                                    <li key={doc.id} className={styles.appointmentItem}>
+                                        <div className={styles.appointmentDetails}>
+                                            <span className={utils.textMedium}>
+                                                {doc.type === 'file' ? '📄' : '🔗'} {doc.fileName || 'Documento sem nome'}
+                                            </span>
+                                            <div className={`${utils.flexRow} ${utils.mt05}`}>
+                                                <Calendar size={14} color="#888" />
+                                                <span className={utils.textMuted}>
+                                                    {doc.uploadedAt ? new Date(doc.uploadedAt.seconds * 1000).toLocaleDateString() : 'Data desconhecida'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            {doc.type === 'file' ? (
+                                                <a
+                                                    href={doc.fileData}
+                                                    download={doc.fileName}
+                                                    className={utils.btnOutlinePrimary}
+                                                >
+                                                    Baixar
+                                                </a>
+                                            ) : (
+                                                <a
+                                                    href={doc.externalLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className={utils.btnOutlinePrimary}
+                                                >
+                                                    Acessar
+                                                </a>
+                                            )}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {/* Appointments Section */}
                     <div className={styles.section}>
+                        <h2 className={styles.sectionTitle}>Histórico de Consultas</h2>
                         {loading ? (
                             <p>Carregando histórico...</p>
                         ) : history.length > 0 ? (
@@ -73,15 +140,15 @@ const HistoricoPage: React.FC = () => {
                                 {history.map(app => (
                                     <li key={app.id} className={styles.appointmentItem}>
                                         <div className={styles.appointmentDetails}>
-                                            <span style={{ fontSize: '1.1rem', color: '#333' }}>{app.title}</span>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.2rem' }}>
+                                            <span className={utils.textMedium}>{app.title}</span>
+                                            <div className={`${utils.flexRow} ${utils.mt05}`}>
                                                 <Calendar size={14} color="#888" />
-                                                <span style={{ fontSize: '0.9rem', color: '#666' }}>
+                                                <span className={utils.textMuted}>
                                                     {new Date(app.date.seconds * 1000).toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                                 </span>
                                             </div>
                                             {app.notes && (
-                                                <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#555', fontStyle: 'italic', borderLeft: '3px solid #ddd', paddingLeft: '0.5rem' }}>
+                                                <p className={utils.quoteBlock}>
                                                     "{app.notes}"
                                                 </p>
                                             )}
@@ -91,8 +158,8 @@ const HistoricoPage: React.FC = () => {
                                 ))}
                             </ul>
                         ) : (
-                            <div style={{ textAlign: 'center', padding: '2rem', color: '#999' }}>
-                                <FileText size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
+                            <div className={`${utils.textCenter} ${utils.p2} ${utils.textMuted}`}>
+                                <FileText size={48} className={`${utils.opacity30} ${utils.mb1}`} />
                                 <p>Nenhum histórico de atendimento encontrado.</p>
                             </div>
                         )}
