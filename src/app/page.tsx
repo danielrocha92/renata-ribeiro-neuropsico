@@ -7,20 +7,9 @@ import Image from 'next/image';
 import styles from '@/styles/Home.module.css';
 import utils from '@/styles/Utils.module.css';
 import VideoModal from '@/components/VideoModal';
+import GoogleReviews from '@/components/GoogleReviews';
 
-// --- Ícones SVG para a seção de serviços ---
-const OnlineIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><path d="M12 2a5 5 0 0 0-5 5c0 1.84.96 3.52 2.45 4.4a5.99 5.99 0 0 1-2.42 4.54C4.59 18.29 3 20.5 3 22h18c0-1.5-1.59-3.71-4.03-5.06a5.99 5.99 0 0 1-2.42-4.54C16.04 10.52 17 8.84 17 7a5 5 0 0 0-5-5z" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
-);
-const BrainIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v0A2.5 2.5 0 0 1 9.5 7h-3A2.5 2.5 0 0 1 4 4.5v0A2.5 2.5 0 0 1 6.5 2h3Z" /><path d="M14.5 2A2.5 2.5 0 0 1 17 4.5v0A2.5 2.5 0 0 1 14.5 7h-3a2.5 2.5 0 0 1-2.5-2.5v0A2.5 2.5 0 0 1 11.5 2h3Z" /><path d="M12 12a2.5 2.5 0 0 1 2.5 2.5v0A2.5 2.5 0 0 1 12 17h0a2.5 2.5 0 0 1-2.5-2.5v0A2.5 2.5 0 0 1 12 12Z" /><path d="M4.5 9.5A2.5 2.5 0 0 1 7 12v0a2.5 2.5 0 0 1-2.5 2.5h-2A2.5 2.5 0 0 1 0 12v0A2.5 2.5 0 0 1 2.5 9.5h2Z" /><path d="M19.5 9.5a2.5 2.5 0 0 1 2.5 2.5v0a2.5 2.5 0 0 1-2.5 2.5h-2a2.5 2.5 0 0 1-2.5-2.5v0a2.5 2.5 0 0 1 2.5-2.5h2Z" /><path d="M9.5 16.5A2.5 2.5 0 0 1 12 19v0a2.5 2.5 0 0 1-2.5 2.5h-3A2.5 2.5 0 0 1 4 19v0a2.5 2.5 0 0 1 2.5-2.5h3Z" /><path d="M14.5 16.5a2.5 2.5 0 0 1 2.5 2.5v0a2.5 2.5 0 0 1-2.5 2.5h-3a2.5 2.5 0 0 1-2.5-2.5v0a2.5 2.5 0 0 1 2.5-2.5h3Z" /></svg>
-);
-const PsychologyIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><path d="M12 2a5 5 0 0 0-5 5c0 1.84.96 3.52 2.45 4.4a5.99 5.99 0 0 1-2.42 4.54C4.59 18.29 3 20.5 3 22h18c0-1.5-1.59-3.71-4.03-5.06a5.99 5.99 0 0 1-2.42-4.54C16.04 10.52 17 8.84 17 7a5 5 0 0 0-5-5z" /></svg>
-);
-const CollaborationIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.serviceIcon}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
-);
+import { Video, Brain, ClipboardList, Users } from 'lucide-react';
 
 export default function Home() {
   // Efeito de fade-in ao rolar
@@ -45,22 +34,22 @@ export default function Home() {
 
   const servicos = [
     {
-      icon: <OnlineIcon />,
+      icon: <Video className={styles.serviceIcon} size={48} strokeWidth={1.5} />,
       title: 'Psicoterapia Online',
       description: 'Os atendimentos são realizados através do Google Meet, em ambiente confidencial e seguro.',
     },
     {
-      icon: <BrainIcon />,
+      icon: <Brain className={styles.serviceIcon} size={48} strokeWidth={1.5} />,
       title: 'Avaliação Neuropsicológica Presencial',
       description: 'A avaliação neuropsicológica é um processo clínico-científico que tem como objetivo compreender o funcionamento cognitivo, emocional e comportamental de uma pessoa.',
     },
     {
-      icon: <PsychologyIcon />,
+      icon: <ClipboardList className={styles.serviceIcon} size={48} strokeWidth={1.5} />,
       title: 'Avaliação Psicológica',
       description: 'A avaliação psicológica busca compreender aspectos emocionais, comportamentais e de personalidade, auxiliando no autoconhecimento e na tomada de decisões em diferentes contextos.',
     },
     {
-      icon: <CollaborationIcon />,
+      icon: <Users className={styles.serviceIcon} size={48} strokeWidth={1.5} />,
       title: 'Colaboração, Consultoria & Supervisão',
       description: 'Ofereço consultoria e supervisão clínica para psicólogos e profissionais em formação que desejam aprimorar o raciocínio clínico, o uso de instrumentos psicológicos e a condução de casos.',
     },
@@ -127,6 +116,9 @@ export default function Home() {
       {/* --- Video Modal Section --- */}
       <VideoModal videoUrl="https://www.linkedin.com/embed/feed/update/urn:li:activity:7029232180379693056?autoplay=1" />
 
+      {/* --- Google Reviews Section --- */}
+      <GoogleReviews />
+
       {/* --- Location Section --- */}
       <section id="localizacao" className={`${styles.locationSection} ${styles.fadeIn}`}>
         <h2 className={styles.sectionTitle}>Onde me encontrar</h2>
@@ -144,26 +136,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- Calendar Section --- */}
-      <section id="agenda" className={`${styles.calendarSection} ${styles.fadeIn}`}>
-        <h2 className={styles.sectionTitle}>Agende sua Consulta</h2>
-        <p className={styles.sectionSubtitle}>
-          Veja os horários disponíveis e agende sua consulta diretamente pelo calendário.
-        </p>
-        <div className={styles.calendarContainer}>
-          <iframe
-            src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FSao_Paulo&bgcolor=%23ffffff&showTitle=0&showNav=1&showPrint=0&showTabs=1&showCalendars=0&showTz=0&src=YOUR_CALENDAR_ID&color=%238a63d2"
-            className={utils.noBorder}
-            width="100%"
-            height="600"
-            frameBorder="0"
-            scrolling="no"
-          ></iframe>
-        </div>
-        <p className={styles.calendarHint}>
-          Clique nos eventos para mais detalhes ou para agendar sua consulta.
-        </p>
-      </section>
+
     </main>
   );
 }

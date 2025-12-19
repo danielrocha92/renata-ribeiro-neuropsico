@@ -33,6 +33,7 @@ const AdminConteudoPage = () => {
     });
 
     const fetchContents = async () => {
+        if (!db) return; // Guard clause
         setLoading(true);
         try {
             const q = query(collection(db, 'contents'));
@@ -46,7 +47,9 @@ const AdminConteudoPage = () => {
     };
 
     useEffect(() => {
-        fetchContents();
+        if (db) {
+            fetchContents();
+        }
     }, []);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,6 +96,10 @@ const AdminConteudoPage = () => {
     };
 
     const saveContentToFirestore = async (url: string) => {
+        if (!db) {
+            alert("Erro: Banco de dados não inicializado.");
+            return;
+        }
         try {
             await addDoc(collection(db, 'contents'), {
                 ...formData,
@@ -168,6 +175,25 @@ const AdminConteudoPage = () => {
                             {/* Conditional Input: File or URL */}
                             {(formData.type === 'PDF' || formData.type === 'Vídeo') ? (
                                 <div className={styles.formGroup}>
+                                    <div className={styles.alertInfoBox} style={{ backgroundColor: '#fff3cd', color: '#856404', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
+                                        <strong>Aviso:</strong> O upload de arquivos está temporariamente indisponível no plano gratuito devido a restrições de configuração do servidor. Por favor, utilize a opção "Link Externo" (Google Drive, Dropbox, YouTube) para compartilhar arquivos.
+                                    </div>
+
+                                    {/* Link input fallback for files */}
+                                    <label className={styles.label}>Link para o Arquivo (Substituto do Upload)</label>
+                                    <div className={utils.relative}>
+                                        <LinkIcon size={18} className={styles.inputIcon} />
+                                        <input
+                                            type="url"
+                                            className={`${styles.input} ${styles.inputWithIcon}`}
+                                            placeholder="https://..."
+                                            value={formData.url}
+                                            onChange={e => setFormData({ ...formData, url: e.target.value })}
+                                        />
+                                    </div>
+
+                                    {/* Hidden original file input to prevent errors but disable usage */}
+                                    {/*
                                     <label className={styles.label}>Upload de Arquivo (PC ou Celular)</label>
                                     <div className={utils.flexRow}>
                                         <label className={styles.uploadButton}>
@@ -178,17 +204,14 @@ const AdminConteudoPage = () => {
                                                 onChange={handleFileChange}
                                                 accept={formData.type === 'PDF' ? "application/pdf" : "video/*"}
                                                 className={utils.dNone}
+                                                disabled
                                             />
                                         </label>
                                         <span className={`${utils.textSmall} ${utils.textMuted}`}>
                                             {selectedFile ? selectedFile.name : 'Nenhum arquivo selecionado'}
                                         </span>
                                     </div>
-                                    {uploadProgress > 0 && uploadProgress < 100 && (
-                                        <div className={styles.progressBar}>
-                                            <div className={styles.progressFill} style={{ width: `${uploadProgress}%` }}></div>
-                                        </div>
-                                    )}
+                                    */}
                                 </div>
                             ) : (
                                 <div className={styles.formGroup}>

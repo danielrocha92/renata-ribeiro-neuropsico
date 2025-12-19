@@ -212,3 +212,66 @@
 .exitButton:hover {
     background-color: #ccc;
 }
+
+.optionsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.optionCard {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.optionCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-color: #6A7EBD;
+}
+
+.optionIcon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+}
+
+.optionTitle {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.meetIcon {
+    background-color: #e8f0fe;
+    color: #1a73e8;
+}
+
+.zoomIcon {
+    background-color: #e8f2fe;
+    color: #2D8CFF;
+}
+
+.whatsappIcon {
+    background-color: #e7f7ed;
+    color: #25D366;
+}
+
+.wherebyIcon {
+    background-color: #fce8e6;
+    color: #f44336;
+}

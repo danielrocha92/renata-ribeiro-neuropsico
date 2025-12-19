@@ -15,7 +15,9 @@ import {
     doc,
     updateDoc,
     Timestamp,
-    where
+    where,
+    getDocs,
+    setDoc
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { Send, User, MessageSquare, Paperclip, FileText, Image as ImageIcon, Check, CheckCheck, Plus, X, Search } from 'lucide-react';
@@ -64,9 +66,15 @@ const AdminChatPage = () => {
     // Fetch All Patients for New Chat
     useEffect(() => {
         const fetchPatients = async () => {
+            // Ensure db is ready (though normally it is)
+            if (!db) return;
             const q = query(collection(db, 'users'), where('userType', '==', 'paciente'));
-            const snap = await import('firebase/firestore').then(({ getDocs }) => getDocs(q));
-            setAllPatients(snap.docs.map(d => ({ uid: d.id, ...d.data() })));
+            try {
+                const snap = await getDocs(q);
+                setAllPatients(snap.docs.map(d => ({ uid: d.id, ...d.data() })));
+            } catch (e) {
+                console.error("Error fetching patients", e);
+            }
         };
         fetchPatients();
     }, []);
@@ -87,18 +95,18 @@ const AdminChatPage = () => {
             msgs.forEach(async (msg) => {
                 if (msg.senderId !== 'admin' && msg.read === false) {
                     // Update message read status
-                    await import('firebase/firestore').then(({ updateDoc, doc }) => {
-                        updateDoc(doc(db, `chats/${selectedRoomId}/messages`, msg.id), { read: true });
-                    });
+                    try {
+                        await updateDoc(doc(db, `chats/${selectedRoomId}/messages`, msg.id), { read: true });
+                    } catch (e) {
+                        console.error("Error updating read status", e);
+                    }
                 }
             });
             // Also update room unread count to 0 if needed (already done in handleSendReply but good to do on open too if just reading)
             if (snap.docs.some(d => d.data().senderId !== 'admin' && d.data().read === false)) {
                 // But simplified: we can just reset unreadCount on the room doc if we are viewing it.
                 // However, the room list listener might need this update to clear the badge.
-                import('firebase/firestore').then(({ updateDoc, doc }) => {
-                    updateDoc(doc(db, 'chats', selectedRoomId), { unreadCount: 0 });
-                });
+                updateDoc(doc(db, 'chats', selectedRoomId), { unreadCount: 0 }).catch(e => console.error("Error updating room unread", e));
             }
 
             setMessages(msgs);
@@ -121,18 +129,15 @@ const AdminChatPage = () => {
             });
 
             // Use setDoc with merge: true to create the room if it doesn't exist
-            await import('firebase/firestore').then(({ setDoc, doc }) => {
-                setDoc(doc(db, 'chats', selectedRoomId), {
-                    lastMessage: `Você: ${reply}`,
-                    lastUpdated: serverTimestamp(),
-                    unreadCount: 0, // Admin replied
-                    // If creates new, we might need patientId and patientName.
-                    // If it's a new chat initiated by admin, these fields are crucial for the list.
-                    // We can try to find the patientName from allPatients if available.
-                    patientId: selectedRoomId,
-                    patientName: rooms.find(r => r.id === selectedRoomId)?.patientName || allPatients.find(p => p.uid === selectedRoomId)?.name || 'Paciente'
-                }, { merge: true });
-            });
+            await setDoc(doc(db, 'chats', selectedRoomId), {
+                lastMessage: `Você: ${reply}`,
+                lastUpdated: serverTimestamp(),
+                unreadCount: 0, // Admin replied
+                patientId: selectedRoomId,
+                patientName: rooms.find(r => r.id === selectedRoomId)?.patientName || allPatients.find(p => p.uid === selectedRoomId)?.name || 'Paciente'
+            }, { merge: true });
+
+
 
             setReply('');
         } catch (error) {
@@ -310,6 +315,7 @@ const AdminChatPage = () => {
                                 </div>
 
                                 <form onSubmit={handleSendReply} className={styles.inputArea}>
+                                    {/* File upload temporarily disabled due to Free Plan limitations
                                     <input
                                         type="file"
                                         ref={fileInputRef}
@@ -325,6 +331,7 @@ const AdminChatPage = () => {
                                     >
                                         <Paperclip size={20} />
                                     </button>
+                                    */}
 
                                     <input
                                         type="text"

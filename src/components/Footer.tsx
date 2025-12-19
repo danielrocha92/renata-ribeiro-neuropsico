@@ -45,7 +45,7 @@ const Footer: React.FC = () => {
           <h4>Contato e Redes Sociais</h4>
           <p>
             <FiMapPin />
-            Rua João Cachoeira, 488 - Conj. 510, Itaim Bibi, SP
+            R. Mário de Andrade, 48 - conjunto 1710 - Barra Funda, São Paulo - SP, 05281-060
           </p>
           <p>
             <FiMail />

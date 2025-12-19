@@ -50,11 +50,12 @@ const ClienteAjudaPage: React.FC = () => {
                     <HelpSection
                         title="2. Teleterapia (Vídeo Online)"
                         icon={<Video size={24} />}
-                        description="Para suas sessões online:"
+                        description="Para suas sessões online, oferecemos flexibilidade:"
                         items={[
-                            <>Acesse o menu <strong>Teleterapia</strong> no dia da sua consulta.</>,
-                            'O botão "Entrar na Videochamada" ficará ativo 10 minutos antes do horário.',
-                            "Recomendamos usar fones de ouvido e estar em um local silencioso."
+                            <>Acesse o menu <strong>Teleterapia</strong> no horário agendado.</>,
+                            "Você poderá escolher por onde quer ser atendido: Google Meet, Zoom, WhatsApp ou Whereby.",
+                            "Basta clicar na opção combinada com a profissional para abrir a sala.",
+                            "O Whereby já preenche seu nome automaticamente para facilitar."
                         ]}
                     />
 

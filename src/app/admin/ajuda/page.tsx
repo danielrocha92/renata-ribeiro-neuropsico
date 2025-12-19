@@ -53,7 +53,7 @@ const AdminAjudaPage = () => {
                         items={[
                             "Ao entrar, você verá a lista de pacientes no lado esquerdo.",
                             "Novas mensagens sobem para o topo da lista.",
-                            "Clique em um nome para abrir a conversa e responder, podendo enviar arquivos.",
+                            "Para compartilhar arquivos grandes ou vídeos, recomendamos usar links externos (Drive, YouTube).",
                             "Todas as mensagens ficam salvas no histórico do paciente."
                         ]}
                     />
@@ -75,6 +75,7 @@ const AdminAjudaPage = () => {
                         icon={<BookOpen size={24} />}
                         description="Enriqueça a experiência do paciente com materiais exclusivos."
                         items={[
+                            <>Use preferencialmente a opção <strong>Link Externo</strong> para vídeos e arquivos pesados.</>,
                             "Adicione Artigos, Links de Vídeos, PDFs ou Imagens.",
                             <>Marque a opção <strong>Conteúdo Exclusivo</strong> para bloquear o acesso livre.</>,
                             "Organize sua biblioteca de materiais para seus pacientes acessarem."
@@ -82,13 +83,26 @@ const AdminAjudaPage = () => {
                     />
 
                     <HelpSection
-                        title="5. Teleterapia"
+                        title="5. Teleterapia (Plataformas)"
                         icon={<Settings size={24} />}
-                        description="Sua sala de atendimento virtual."
+                        description="Flexibilidade para atender onde preferir."
                         items={[
-                            "Acesse a página de Teleterapia para ver o próximo agendamento.",
-                            "Entre na sala (Whereby) diretamente pelo painel.",
-                            "Se necessário, autentique-se como anfitrião no link fornecido."
+                            "Acesse a página de Teleterapia para escolher a plataforma de vídeo.",
+                            "Opções disponíveis: Google Meet, Zoom, WhatsApp Web ou Whereby.",
+                            "Ao clicar, você será redirecionada para a plataforma escolhida em uma nova aba.",
+                            "O link do Whereby já inclui sua identificação como anfitriã."
+                        ]}
+                    />
+
+                    <HelpSection
+                        title="6. Prontuário e Documentos"
+                        icon={<BookOpen size={24} />} // Using BookOpen as generic file/record icon
+                        description="Gerencie o histórico clínico e troca de arquivos."
+                        items={[
+                            "Acesse 'Prontuário e Histórico' no painel principal.",
+                            "Selecione um paciente para ver seus documentos.",
+                            "Para adicionar: escolha entre Upload (arquivos pequenos) ou Link Externo (recomendado).",
+                            "Para remover: clique no ícone de lixeira ao lado do documento indesejado."
                         ]}
                     />
 

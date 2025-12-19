@@ -174,6 +174,17 @@ const ChatPage: React.FC = () => {
                                 placeholder="Digite sua mensagem..."
                                 className={styles.inputField}
                             />
+                            {/* File upload temporarily disabled due to Free Plan limitations
+                            <label className={styles.attachButton}>
+                                <Paperclip size={20} />
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    onChange={handleFileSelect}
+                                    style={{ display: 'none' }}
+                                />
+                            </label>
+                             */}
                             <button
                                 type="submit"
                                 className={styles.sendButton}

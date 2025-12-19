@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import styles from '@/styles/PatientDocuments.module.css';
 import utils from '@/styles/Utils.module.css';
 import { db } from '../lib/firebase';
-import { collection, getDocs, query, where, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, query, where, addDoc, serverTimestamp, Timestamp, deleteDoc, doc } from 'firebase/firestore';
+import { Trash2 } from 'lucide-react';
 
 // Define types for the data
 interface Patient {
@@ -71,14 +72,6 @@ const PatientDocuments: React.FC = () => {
       }
     };
     fetchDocuments();
-
-    // Mark as read if current user is the patient
-    // We need to import useAuth to know if we are the patient viewing our own docs
-    // But PatientDocuments is used by Admin too (to upload).
-    // Admin selects a patient. Client sees THEIR OWN docs.
-    // If we are in "Client View" (usually this component is wrapped or used differently).
-    // Actually PatientDocuments as written seems to be the ADMIN view (allows selecting patient).
-    // The Client view is likely 'src/app/cliente/historico/page.tsx' which might reuse this or have its own.
   }, [selectedPatient]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,6 +159,19 @@ const PatientDocuments: React.FC = () => {
     }
   };
 
+  const handleDelete = async (docId: string) => {
+    if (!confirm("Tem certeza que deseja excluir este documento?")) return;
+    try {
+      if (db) {
+        await deleteDoc(doc(db, "documents", docId));
+        setDocuments(prev => prev.filter(d => d.id !== docId));
+      }
+    } catch (err) {
+      console.error("Error deleting document: ", err);
+      alert("Erro ao excluir documento.");
+    }
+  };
+
   return (
     <div className={styles.container}>
       <h3 className={styles.title}>Documentos dos Pacientes</h3>
@@ -234,7 +240,7 @@ const PatientDocuments: React.FC = () => {
           {documents.length > 0 ? (
             <ul>
               {documents.map(doc => (
-                <li key={doc.id} className={styles.documentItem}>
+                <li key={doc.id} className={styles.documentItem} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div className={styles.docInfo}>
                     {doc.type === 'file' ? (
                       <a href={doc.fileData} download={doc.fileName} className={styles.link}>
@@ -245,10 +251,20 @@ const PatientDocuments: React.FC = () => {
                         🔗 {doc.externalLink} (Acessar Link)
                       </a>
                     )}
+                    {doc.uploadedAt && (
+                      <span className={styles.date} style={{ marginLeft: '10px', fontSize: '0.8em', color: '#666' }}>
+                        {new Date(doc.uploadedAt.seconds * 1000).toLocaleDateString()}
+                      </span>
+                    )}
                   </div>
-                  {doc.uploadedAt && (
-                    <span className={styles.date}>{new Date(doc.uploadedAt.seconds * 1000).toLocaleDateString()}</span>
-                  )}
+                  <button
+                    onClick={() => handleDelete(doc.id)}
+                    className={utils.iconButtonDanger}
+                    title="Excluir"
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc3545', display: 'flex', alignItems: 'center', padding: '5px' }}
+                  >
+                    <Trash2 size={18} />
+                  </button>
                 </li>
               ))}
             </ul>
