@@ -17,7 +17,7 @@ const reviews = [
         id: 1,
         name: "Maria Silva",
         initial: "M",
-        color: "#8e24aa",
+        colorClass: "avatarPurple",
         time: "há 2 meses",
         rating: 5,
         text: "Profissional excelente! A avaliação neuropsicológica foi fundamental para o diagnóstico do meu filho. Agradeço muito pela atenção e cuidado.",
@@ -26,7 +26,7 @@ const reviews = [
         id: 2,
         name: "João Pedro Santos",
         initial: "J",
-        color: "#039be5",
+        colorClass: "avatarBlue",
         time: "há 1 mês",
         rating: 5,
         text: "Atendimento online de muita qualidade. Me senti acolhido desde a primeira sessão. Recomendo fortemente a Dra. Renata.",
@@ -35,7 +35,7 @@ const reviews = [
         id: 3,
         name: "Ana Clara",
         initial: "A",
-        color: "#ef6c00",
+        colorClass: "avatarOrange",
         time: "há 3 meses",
         rating: 5,
         text: "A Dra. Renata é muito atenciosa e competente. O processo de psicoterapia tem me ajudado demais no meu autoconhecimento.",
@@ -64,7 +64,7 @@ const GoogleReviews: React.FC = () => {
                 {reviews.map((review) => (
                     <div key={review.id} className={styles.card}>
                         <div className={styles.userInfo}>
-                            <div className={styles.avatar} style={{ backgroundColor: review.color }}>
+                            <div className={`${styles.avatar} ${styles[review.colorClass]}`}>
                                 {review.initial}
                             </div>
                             <div className={styles.meta}>
@@ -83,12 +83,12 @@ const GoogleReviews: React.FC = () => {
                     </div>
                 ))}
             </div>
-            <div style={{ marginTop: '2rem' }}>
+            <div className={styles.linkContainer}>
                 <a
                     href="https://www.google.com/maps/place/Renata+C+Ribeiro+%E2%80%93+Psic%C3%B3loga+%26+Neuropsic%C3%B3loga/@-23.5308753,-46.6614918,17z/data=!4m8!3m7!1s0x94cef93c48e13f65:0x463f20561ff49c33!8m2!3d-23.5308753!4d-46.6589169!9m1!1b1!16s%2Fg%2F11svtkz889?hl=pt&entry=ttu"
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ color: '#1a73e8', textDecoration: 'none', fontWeight: 500 }}
+                    className={styles.link}
                 >
                     Ver todas as avaliações no Google Maps →
                 </a>

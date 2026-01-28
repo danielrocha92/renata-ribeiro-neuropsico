@@ -240,7 +240,7 @@ const PatientDocuments: React.FC = () => {
           {documents.length > 0 ? (
             <ul>
               {documents.map(doc => (
-                <li key={doc.id} className={styles.documentItem} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <li key={doc.id} className={styles.documentItem}>
                   <div className={styles.docInfo}>
                     {doc.type === 'file' ? (
                       <a href={doc.fileData} download={doc.fileName} className={styles.link}>
@@ -252,16 +252,15 @@ const PatientDocuments: React.FC = () => {
                       </a>
                     )}
                     {doc.uploadedAt && (
-                      <span className={styles.date} style={{ marginLeft: '10px', fontSize: '0.8em', color: '#666' }}>
+                      <span className={styles.date}>
                         {new Date(doc.uploadedAt.seconds * 1000).toLocaleDateString()}
                       </span>
                     )}
                   </div>
                   <button
                     onClick={() => handleDelete(doc.id)}
-                    className={utils.iconButtonDanger}
+                    className={styles.deleteButton}
                     title="Excluir"
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#dc3545', display: 'flex', alignItems: 'center', padding: '5px' }}
                   >
                     <Trash2 size={18} />
                   </button>

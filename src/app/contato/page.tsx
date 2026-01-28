@@ -86,12 +86,13 @@ const ContatoPage: React.FC = () => {
         </div>
         <div className={styles.mapContainer}>
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.072832242412!2d-46.65686388533719!3d-23.56407238468107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59a6b6a6a6a7%3A0x7d7b3b3b3b3b3b3b!2sAv.%20Paulista%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1620000000000!5m2!1spt-BR!2sbr"
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7316.090491854834!2d-46.658917!3d-23.530875!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cef93c48e13f65%3A0x463f20561ff49c33!2sRenata%20C%20Ribeiro%20%E2%80%93%20Psic%C3%B3loga%20%26%20Neuropsic%C3%B3loga!5e0!3m2!1spt-BR!2sbr!4v1769612419142!5m2!1spt-BR!2sbr"
             width="100%"
             height="100%"
             className={utils.noBorder}
-            allowFullScreen={false}
+            allowFullScreen={true}
             loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
       </div>

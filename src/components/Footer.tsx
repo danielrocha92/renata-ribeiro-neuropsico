@@ -1,5 +1,7 @@
 // src/components/Footer.tsx
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from '@/styles/Footer.module.css';
 import {
@@ -11,6 +13,12 @@ import {
 } from 'react-icons/fi';
 
 const Footer: React.FC = () => {
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
+
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContent}>
@@ -43,18 +51,20 @@ const Footer: React.FC = () => {
 
         <div className={styles.footerSection}>
           <h4>Contato e Redes Sociais</h4>
-          <p>
-            <FiMapPin />
-            R. Mário de Andrade, 48 - conjunto 1710 - Barra Funda, São Paulo - SP, 05281-060
+          <p className={styles.addressContainer}>
+            <FiMapPin size={32} />
+            <span className={styles.addressText}>
+              R. Mário de Andrade, 48 - conjunto 1710 - Barra Funda, São Paulo - SP, 05281-060
+            </span>
           </p>
           <p>
-            <FiMail />
+            <FiMail size={32} />
             <a href="mailto:contato@renataribeiropsico.com.br">
               contato@renataribeiropsico.com.br
             </a>
           </p>
           <p>
-            <FiPhone />
+            <FiPhone size={32} />
             <a href="https://wa.me/5511998765432">(11) 99876-5432</a>
           </p>
           <div className={styles.socialIcons}>
@@ -65,7 +75,7 @@ const Footer: React.FC = () => {
               className={styles.socialIcon}
               aria-label="Instagram de Renata Ribeiro"
             >
-              <FiInstagram size={28} />
+              <FiInstagram size={32} />
             </a>
             <a
               href="https://www.linkedin.com/in/renataribeiropsico"
@@ -74,13 +84,13 @@ const Footer: React.FC = () => {
               className={styles.socialIcon}
               aria-label="LinkedIn de Renata Ribeiro"
             >
-              <FiLinkedin size={28} />
+              <FiLinkedin size={32} />
             </a>
           </div>
         </div>
       </div>
       <div className={styles.copyright}>
-        &copy; {new Date().getFullYear()} Renata Ribeiro Neuropsicologia. Todos os
+        &copy; {currentYear} Renata Ribeiro Neuropsicologia. Todos os
         direitos reservados.
       </div>
       <div className={styles.madeBy}>

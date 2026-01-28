@@ -79,6 +79,18 @@
     font-size: 1.2rem;
 }
 
+.avatarPurple {
+    background-color: #8e24aa;
+}
+
+.avatarBlue {
+    background-color: #039be5;
+}
+
+.avatarOrange {
+    background-color: #ef6c00;
+}
+
 .meta {
     display: flex;
     flex-direction: column;
@@ -108,6 +120,7 @@
     line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 4;
+    line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -123,4 +136,18 @@
 .googleIconSmall {
     width: 18px;
     height: 18px;
+}
+
+.linkContainer {
+    margin-top: 2rem;
+}
+
+.link {
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.link:hover {
+    text-decoration: underline;
 }

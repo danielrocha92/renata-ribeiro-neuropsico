@@ -8,14 +8,16 @@
   --color-accent: #FFDE81;
   --color-text-dark: #3C3C3B;
   --color-text-light: #EDEDED;
-  --color-background: #F9FAFB; /* Keeping existing background for now */
-  --color-card-bg: #FFFFFF; /* Keeping white for card background */
+  --color-background: #F9FAFB;
+  /* Keeping existing background for now */
+  --color-card-bg: #FFFFFF;
+  /* Keeping white for card background */
   --color-light-reddish-orange: #EAB6AE;
   --color-light-yellow: #FFEFBB;
   --color-light-purplish-blue: #AEACD6;
   --color-primary-rgb: 217, 92, 65;
   --color-card-bg-rgb: 255, 255, 255;
-  
+
   --spacing-unit: 8px;
 }
 
@@ -34,10 +36,22 @@ body {
   line-height: 1.6;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Comfortaa', cursive;
 }
 
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .main-content {
+  flex: 1;
   padding-top: 70px;
 }

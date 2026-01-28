@@ -175,7 +175,7 @@ const AdminConteudoPage = () => {
                             {/* Conditional Input: File or URL */}
                             {(formData.type === 'PDF' || formData.type === 'Vídeo') ? (
                                 <div className={styles.formGroup}>
-                                    <div className={styles.alertInfoBox} style={{ backgroundColor: '#fff3cd', color: '#856404', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
+                                    <div className={styles.alertInfoBox}>
                                         <strong>Aviso:</strong> O upload de arquivos está temporariamente indisponível no plano gratuito devido a restrições de configuração do servidor. Por favor, utilize a opção "Link Externo" (Google Drive, Dropbox, YouTube) para compartilhar arquivos.
                                     </div>
 

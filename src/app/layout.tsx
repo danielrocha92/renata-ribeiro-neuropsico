@@ -66,9 +66,11 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body>
         <AuthProvider>
-          <Header />
-          <main className="main-content">{children}</main>
-          <Footer />
+          <div className="layout-wrapper">
+            <Header />
+            <main className="main-content">{children}</main>
+            <Footer />
+          </div>
           <DynamicWhatsAppButton />
           <ScrollToTopButton />
 

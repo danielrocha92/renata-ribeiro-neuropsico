@@ -422,9 +422,11 @@
   font-size: 0.9rem;
 }
 
-.dropdownNoResult {
-  padding: 1rem;
-  text-align: center;
-  color: #999;
-  font-size: 0.9rem;
+
+.alertInfoBox {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
