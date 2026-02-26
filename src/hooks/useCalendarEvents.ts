@@ -77,7 +77,7 @@ export const useCalendarEvents = ({ userId, role }: UseCalendarEventsProps) => {
 
                 let title = data.title || 'Agendado';
                 let type: 'appointment' = 'appointment';
-                const patientName = data.patientName || 'Paciente';
+                const patientName = data.patientName || (data.title && data.title.startsWith('Consulta com') ? data.title.replace('Consulta com ', '') : 'Paciente');
 
                 // CLIENT VIEW LOGIC
                 if (role === 'client') {
@@ -106,7 +106,7 @@ export const useCalendarEvents = ({ userId, role }: UseCalendarEventsProps) => {
                     type: type,
                     status: data.status,
                     patientId: data.patientId,
-                    patientName: data.patientName,
+                    patientName: patientName,
                     createdBy: data.createdBy,
                     psychologistId: data.psychologistId,
                 } as CalendarEvent;

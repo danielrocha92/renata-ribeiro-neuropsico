@@ -87,26 +87,21 @@ const AdminCalendar = () => {
 
                 await addDoc(collection(db, 'appointments'), newAppointment);
 
-                // Add Google Calendar event
-                try {
-                    const response = await fetch('/api/create-calendar-event', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            userId: user.uid,
-                            appointment: {
-                                title: `Consulta com ${patientName || title}`,
-                                start: start.toISOString(),
-                                end: end.toISOString(),
-                            },
-                            googleAccessToken: sessionStorage.getItem('googleOAuthToken') || undefined,
-                        }),
+                // Notify Client of new appointment
+                if (patientId) {
+                    await import('@/lib/notifications').then(async ({ sendNotificationEmail }) => {
+                        try {
+                            const patientDoc = await import('firebase/firestore').then(({ getDoc, doc }) => getDoc(doc(db, 'users', patientId)));
+                            if (patientDoc.exists()) {
+                                const patientEmail = patientDoc.data().email;
+                                if (patientEmail) {
+                                    sendNotificationEmail(patientEmail, 'appointment_confirmed', `Você tem um novo agendamento marcado para o dia ${start.toLocaleString('pt-BR')}. Acesse o painel para mais detalhes.`);
+                                }
+                            }
+                        } catch (err) {
+                            console.error("Error fetching patient email for notification:", err);
+                        }
                     });
-                    if (!response.ok) {
-                        console.error("Calendar API Error");
-                    }
-                } catch (calendarError) {
-                    console.error("Erro ao criar evento no Google Calendar: ", calendarError);
                 }
             } else if (id && type === 'appointment') { // Update existing appointment
                 const eventRef = doc(db, 'appointments', id);

@@ -32,11 +32,10 @@ const HistoricoPage: React.FC = () => {
             try {
                 const now = new Date();
 
-                // Fetch Appointments
+                // Fetch Appointments (All times, so newly created ones show up)
                 const appQuery = query(
                     collection(db, "appointments"),
                     where("patientId", "==", user.uid),
-                    where("date", "<", Timestamp.fromDate(now)),
                     orderBy("date", "desc")
                 );
 

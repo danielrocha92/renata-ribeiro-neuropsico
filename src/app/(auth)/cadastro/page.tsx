@@ -72,13 +72,8 @@ const CadastroPage: React.FC = () => {
       return;
     }
     const provider = new GoogleAuthProvider();
-    provider.addScope('https://www.googleapis.com/auth/calendar.events');
     try {
       const result = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      if (credential?.accessToken) {
-        sessionStorage.setItem('googleOAuthToken', credential.accessToken);
-      }
       const user = result.user;
 
       const userDocRef = doc(db, "users", user.uid);

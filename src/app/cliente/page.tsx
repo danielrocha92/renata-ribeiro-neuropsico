@@ -16,14 +16,23 @@ import {
   CreditCard,
   MessageCircle,
   HelpCircle,
-  BookOpen
+  BookOpen,
+  Calendar
 } from 'lucide-react';
+import { useCalendarEvents } from '@/hooks/useCalendarEvents';
 
 const ClientePage: React.FC = () => {
   const { user } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { appointments: pendingAppointmentsCount, messages: unreadMessagesCount, documents: unreadDocumentsCount } = useDashboardNotifications(user?.uid, 'client');
+  const { events: calendarEvents } = useCalendarEvents({ userId: user?.uid, role: 'client' });
+
+  const nextAppointments = calendarEvents
+    .filter(e => e.type === 'appointment' && e.patientId === user?.uid && e.start > new Date())
+    .sort((a, b) => a.start.getTime() - b.start.getTime());
+
+  const upcomingAppointment = nextAppointments.length > 0 ? nextAppointments[0] : null;
 
 
   const dashboardItems: DashboardItem[] = [
@@ -82,6 +91,28 @@ const ClientePage: React.FC = () => {
           <p className={styles.loading}>Carregando sua área...</p>
         ) : (
           <>
+            {/* Upcoming Appointment Alert */}
+            {upcomingAppointment && (
+              <div
+                className={styles.nextAppointmentCard}
+                onClick={() => router.push('/cliente/historico')}
+                style={{ cursor: 'pointer' }}
+                role="button"
+                tabIndex={0}
+              >
+                <div className={styles.appointmentIcon}>
+                  <Calendar size={36} />
+                </div>
+                <div>
+                  <h3>Lembrete de Consulta</h3>
+                  <p>
+                    Você tem uma consulta agendada para: <strong>{upcomingAppointment.start.toLocaleString('pt-BR')}</strong>
+                  </p>
+                  {upcomingAppointment.status === 'pending' && <p className={styles.pendingText}>Aguardando confirmação.</p>}
+                </div>
+              </div>
+            )}
+
             {/* Quick Actions / Features Grid */}
             <DashboardGrid items={dashboardItems} />
 

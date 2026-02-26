@@ -10,12 +10,20 @@ import AdminCalendar from '@/components/AdminCalendar';
 import DashboardGrid, { DashboardItem } from '@/components/DashboardGrid';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDashboardNotifications } from '@/hooks/useDashboardNotifications';
+import { useCalendarEvents } from '@/hooks/useCalendarEvents';
 
 const AdminDashboardPage = () => {
   const router = useRouter();
   const { user } = useAuth(); // Need to ensure useAuth is imported or available (it wasn't imported in original file but usually needed)
   // Actually original file didn't import useAuth. Let's add it.
   const { appointments: pendingAppointmentsCount, messages: unreadMessagesCount } = useDashboardNotifications(user?.uid, 'admin');
+  const { events: calendarEvents } = useCalendarEvents({ userId: user?.uid, role: 'admin' });
+
+  const nextAppointments = calendarEvents
+    .filter(e => e.type === 'appointment' && e.start > new Date())
+    .sort((a, b) => a.start.getTime() - b.start.getTime());
+
+  const upcomingAppointment = nextAppointments.length > 0 ? nextAppointments[0] : null;
 
   const dashboardItems: DashboardItem[] = [
     {
@@ -72,6 +80,28 @@ const AdminDashboardPage = () => {
           <h1>Dashboard Administrativo</h1>
           <p>Gerencie sua clínica e atenda seus pacientes.</p>
         </header>
+
+        {/* Upcoming Appointment Alert */}
+        {upcomingAppointment && (
+          <div
+            className={`${styles.card} ${styles.highlightCard}`}
+            onClick={() => router.push('/admin/atendimentos')}
+            role="button"
+            tabIndex={0}
+            style={{ cursor: 'pointer', flexDirection: 'row', justifyContent: 'flex-start', textAlign: 'left', marginBottom: '2rem', backgroundColor: '#6A7EBD', color: 'white' }}
+          >
+            <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', padding: '1rem', borderRadius: '50%', marginRight: '1.5rem', display: 'flex' }}>
+              <CalendarCheck size={36} color="white" />
+            </div>
+            <div>
+              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.4rem' }}>Próxima Consulta Agendada</h3>
+              <p style={{ margin: 0, fontSize: '1.05rem' }}>
+                Você tem um agendamento com <strong>{upcomingAppointment.patientName || 'Paciente'}</strong> dia: <strong>{upcomingAppointment.start.toLocaleString('pt-BR')}</strong>
+              </p>
+              {upcomingAppointment.status === 'pending' && <span style={{ display: 'inline-block', backgroundColor: '#FBC02D', color: '#333', padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold', marginTop: '0.5rem' }}>Aguardando confirmação</span>}
+            </div>
+          </div>
+        )}
 
         <DashboardGrid items={dashboardItems} />
 

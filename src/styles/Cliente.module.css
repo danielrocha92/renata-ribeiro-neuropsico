@@ -121,6 +121,49 @@
   line-height: 1.5;
 }
 
+.nextAppointmentCard {
+  background-color: #6A7EBD;
+  color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(106, 126, 189, 0.4);
+}
+
+.nextAppointmentCard .appointmentIcon {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 1rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nextAppointmentCard h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.nextAppointmentCard p {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.pendingText {
+  display: inline-block;
+  background-color: #FBC02D;
+  color: #333;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-top: 0.5rem !important;
+}
+
 .sectionHeader {
   display: flex;
   justify-content: space-between;

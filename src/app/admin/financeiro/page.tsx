@@ -6,8 +6,9 @@ import utils from '@/styles/Utils.module.css';
 import AdminPrivateRoute from '@/components/AdminPrivateRoute';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, query, getDocs, where, Timestamp, orderBy, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import { Check, Clock, Plus, Trash2 } from 'lucide-react';
+import { Check, Clock, Plus, Trash2, Mail } from 'lucide-react';
 import SearchableUserSelect from '@/components/SearchableUserSelect';
+import { sendNotificationEmail } from '@/lib/notifications';
 
 interface Invoice {
     id: string;
@@ -22,15 +23,27 @@ interface Invoice {
 
 interface User {
     uid: string;
-    displayName: string;
+    displayName?: string;
+    name?: string;
     email: string;
     role?: string;
+}
+
+interface AppointmentLite {
+    id: string;
+    patientId: string;
+    patientName?: string;
+    title: string;
+    start: Timestamp | any;
+    status: string;
 }
 
 const AdminFinanceiroPage = () => {
     const [invoices, setInvoices] = useState<Invoice[]>([]);
     const [users, setUsers] = useState<User[]>([]);
+    const [appointments, setAppointments] = useState<AppointmentLite[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedAppointmentId, setSelectedAppointmentId] = useState('');
 
     const [formData, setFormData] = useState({
         patientId: '',
@@ -57,6 +70,11 @@ const AdminFinanceiroPage = () => {
             const invQuery = query(collection(db, 'invoices'), orderBy('dueDate', 'desc'));
             const invSnap = await getDocs(invQuery);
             setInvoices(invSnap.docs.map(d => ({ id: d.id, ...d.data() } as Invoice)));
+
+            // Fetch Appointments
+            const appQuery = query(collection(db, 'appointments'), orderBy('start', 'desc'));
+            const appSnap = await getDocs(appQuery);
+            setAppointments(appSnap.docs.map(d => ({ id: d.id, ...d.data() } as AppointmentLite)));
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
@@ -69,10 +87,17 @@ const AdminFinanceiroPage = () => {
         if (!formData.patientId) return alert('Selecione um paciente');
 
         try {
+            const parsedAmount = parseFloat(formData.amount.replace(/\./g, '').replace(',', '.'));
+            if (isNaN(parsedAmount)) {
+                alert('Preencha um valor válido.');
+                return;
+            }
+
             await addDoc(collection(db, 'invoices'), {
                 patientId: formData.patientId,
+                patientName: users.find(u => u.uid === formData.patientId)?.displayName || appointments.find(a => a.patientId === formData.patientId)?.patientName || 'Cliente Externo',
                 description: formData.description,
-                amount: parseFloat(formData.amount),
+                amount: parsedAmount,
                 status: formData.status,
                 dueDate: Timestamp.fromDate(new Date(formData.dueDate)),
                 paymentLink: formData.paymentLink, // Save link
@@ -80,6 +105,7 @@ const AdminFinanceiroPage = () => {
             });
             alert('Cobrança gerada com sucesso!');
             setFormData({ patientId: '', description: '', amount: '', status: 'pending', dueDate: '', paymentLink: '' });
+            setSelectedAppointmentId('');
             fetchData();
         } catch (error) {
             console.error("Error creating invoice:", error);
@@ -112,9 +138,69 @@ const AdminFinanceiroPage = () => {
         }
     };
 
-    const getPatientName = (uid: string) => {
-        const u = users.find(u => u.uid === uid);
-        return u ? (u.displayName || u.email) : uid;
+    const getPatientName = (uid: string, inv: Invoice) => {
+        const u = users.find(user => user.uid === uid);
+        return u ? (u.displayName || u.name || u.email) : (inv.patientName || 'Cliente Externo');
+    };
+
+    const handleGenerateReceipt = async (inv: Invoice) => {
+        const user = users.find(u => u.uid === inv.patientId);
+
+        // Send Email if there is an email
+        if (user && user.email) {
+            try {
+                await sendNotificationEmail(user.email, 'payment_receipt', `O recibo oficial da sua consulta (${inv.description}) será emitido através do sistema Receita Saúde.`);
+                alert("Confirmação com aviso do Receita Saúde enviada por email ao paciente com sucesso!");
+            } catch (err) {
+                console.error("Erro ao enviar email:", err);
+                alert("Houve um erro ao enviar o aviso para o paciente.");
+            }
+        } else {
+            alert("Não é possível enviar notificação! (Usuário não possui email cadastrado ou é externo)");
+        }
+    };
+
+    const handleAppointmentSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const apptId = e.target.value;
+        setSelectedAppointmentId(apptId);
+        if (!apptId) return;
+
+        const appt = appointments.find(a => a.id === apptId);
+        if (appt) {
+            let apptDate = '';
+            if (appt.start && typeof appt.start.toDate === 'function') {
+                apptDate = appt.start.toDate().toISOString().split('T')[0];
+            } else if (appt.start) {
+                apptDate = new Date(appt.start.seconds ? appt.start.seconds * 1000 : appt.start).toISOString().split('T')[0];
+            }
+
+            // Find matching user by name or ID if possible
+            let matchingUser = users.find(u => u.uid === appt.patientId);
+            let finalPatientId = appt.patientId || '';
+
+            // If patientId from appointment doesn't map to a real user uid in the dropdown,
+            // we will try to find a user by name as fallback, or just insert it as a string
+            // However SearchableUserSelect uses value matching `id`. If no ID matches, it returns placeholder.
+            // Let's ensure patientId is preserved so the select component finds the right user.
+
+            setFormData({
+                ...formData,
+                patientId: matchingUser ? matchingUser.uid : finalPatientId,
+                description: appt.title || 'Consulta'
+                // A data de vencimento não é preenchida automaticamente a pedido do usuário
+            });
+        }
+    };
+
+    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value.replace(/\D/g, ''); // Extract only digits
+        if (!value) {
+            setFormData({ ...formData, amount: '' });
+            return;
+        }
+        const numericValue = parseInt(value, 10) / 100;
+        const formattedValue = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(numericValue);
+        setFormData({ ...formData, amount: formattedValue });
     };
 
     return (
@@ -129,9 +215,46 @@ const AdminFinanceiroPage = () => {
                         <h2 className={styles.sectionTitle}>Nova Cobrança / Registro</h2>
                         <form onSubmit={handleSubmit}>
                             <div className={styles.formGroup}>
+                                <label className={styles.label}>Importar de Agendamento</label>
+                                <select
+                                    className={styles.select}
+                                    value={selectedAppointmentId}
+                                    onChange={handleAppointmentSelect}
+                                >
+                                    <option value="">-- Buscar nos agendamentos (Opcional) --</option>
+                                    {appointments.map(a => {
+                                        let dateStr = 'Data inválida';
+                                        if (a.start && typeof a.start.toDate === 'function') {
+                                            dateStr = a.start.toDate().toLocaleDateString('pt-BR');
+                                        } else if (a.start) {
+                                            dateStr = new Date(a.start.seconds ? a.start.seconds * 1000 : a.start).toLocaleDateString('pt-BR');
+                                        }
+                                        return (
+                                            <option key={a.id} value={a.id}>
+                                                {dateStr} - {a.patientName || 'Paciente'}
+                                            </option>
+                                        );
+                                    })}
+                                </select>
+                                <small className={`${utils.textMuted} ${utils.block} ${utils.mt05}`}>
+                                    Selecione um agendamento para preencher os dados automaticamente
+                                </small>
+                            </div>
+                            <hr style={{ margin: '1rem 0', borderColor: '#eee' }} />
+
+                            <div className={styles.formGroup}>
                                 <label className={styles.label}>Paciente</label>
                                 <SearchableUserSelect
-                                    users={users.map(u => ({ id: u.uid, displayName: u.displayName, email: u.email }))}
+                                    users={
+                                        // Merge actual users with the selected patientId if it's an external patient not in users list
+                                        [...users.map(u => ({ id: u.uid, displayName: u.displayName || u.name, email: u.email })),
+                                        ...(formData.patientId && !users.find(u => u.uid === formData.patientId)
+                                            ? [{
+                                                id: formData.patientId,
+                                                displayName: appointments.find(a => a.patientId === formData.patientId)?.patientName || 'Cliente Externo'
+                                            }]
+                                            : [])]
+                                    }
                                     value={formData.patientId}
                                     onChange={(value) => setFormData({ ...formData, patientId: value })}
                                     placeholder="Selecione o paciente..."
@@ -151,12 +274,13 @@ const AdminFinanceiroPage = () => {
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>Valor (R$)</label>
                                 <input
-                                    type="number"
-                                    step="0.01"
+                                    type="text"
+                                    inputMode="decimal"
                                     className={styles.input}
                                     required
+                                    placeholder="Ex: 150,00"
                                     value={formData.amount}
-                                    onChange={e => setFormData({ ...formData, amount: e.target.value })}
+                                    onChange={handleAmountChange}
                                 />
                             </div>
                             <div className={styles.formGroup}>
@@ -220,9 +344,9 @@ const AdminFinanceiroPage = () => {
                                     {invoices.map(inv => (
                                         <tr key={inv.id}>
                                             <td>{inv.dueDate ? new Date(inv.dueDate.seconds * 1000).toLocaleDateString() : '-'}</td>
-                                            <td>{getPatientName(inv.patientId)}</td>
+                                            <td>{getPatientName(inv.patientId, inv)}</td>
                                             <td>{inv.description}</td>
-                                            <td>R$ {inv.amount.toFixed(2)}</td>
+                                            <td>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(inv.amount)}</td>
                                             <td>
                                                 {inv.paymentLink ? (
                                                     <a href={inv.paymentLink} target="_blank" rel="noopener noreferrer" className={utils.textPrimary}>
@@ -241,10 +365,21 @@ const AdminFinanceiroPage = () => {
                                                     <option value="overdue">Atrasado</option>
                                                 </select>
                                             </td>
-                                            <td>
+                                            <td style={{ display: 'flex', gap: '8px' }}>
+                                                {inv.status === 'paid' && (
+                                                    <button
+                                                        onClick={() => handleGenerateReceipt(inv)}
+                                                        className={utils.btnOutlinePrimary}
+                                                        title="Enviar Aviso 'Receita Saúde'"
+                                                        style={{ padding: '0.4rem', border: 'none', backgroundColor: '#e3f2fd', color: '#1976d2' }}
+                                                    >
+                                                        <Mail size={18} />
+                                                    </button>
+                                                )}
                                                 <button
                                                     onClick={() => handleDelete(inv.id)}
                                                     className={utils.iconButtonDanger}
+                                                    title="Excluir"
                                                 >
                                                     <Trash2 size={18} />
                                                 </button>

@@ -1,12 +1,11 @@
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from './firebase';
+import emailjs from '@emailjs/browser';
 
 export const sendNotificationEmail = async (
     toEmail: string,
-    type: 'appointment_request' | 'appointment_confirmed' | 'new_message' | 'new_document',
+    type: 'appointment_request' | 'appointment_confirmed' | 'new_message' | 'new_document' | 'payment_receipt',
     previewText?: string
 ) => {
-    if (!toEmail || !db) return;
+    if (!toEmail) return;
 
     const siteUrl = typeof window !== 'undefined' ? window.location.origin : 'https://renata-ribeiro-neuropsico.web.app';
 
@@ -35,11 +34,18 @@ export const sendNotificationEmail = async (
             body = `Um novo documento foi adicionado ao seu prontuário.`;
             link = `${siteUrl}/cliente/historico`;
             break;
+        case 'payment_receipt':
+            subject = 'Confirmação de Pagamento - Renata Ribeiro';
+            body = `Recebemos o seu pagamento referente à consulta. Muito obrigada!<br/><br/>
+            <strong>Aviso Legal sobre Recibos de Consulta Psicológica (IRPF):</strong><br/>
+            Para fins de dedução no Imposto de Renda e em conformidade com as regras da Receita Federal obrigatórias a partir de 2025 para profissionais autônomos, o seu <strong>Recibo Oficial Eletrônico</strong> com validade fiscal será emitido exclusivamente através do sistema oficial <strong>Receita Saúde</strong>. Você o receberá em breve ou poderá consultá-lo diretamente nos canais da Receita Federal. Este e-mail serve apenas como confirmação interna de pagamento.`;
+            link = `${siteUrl}/cliente/financeiro`;
+            break;
     }
 
     const emailHtml = `
     <div style="font-family: Arial, sans-serif; padding: 20px;">
-      <h2>${subject}</h2>
+      <h2>[Renata Ribeiro] ${subject}</h2>
       <p>${body}</p>
       <a href="${link}" style="display: inline-block; padding: 10px 20px; background-color: #D95C41; color: white; text-decoration: none; border-radius: 5px; margin-top: 15px;">
         Acessar Plataforma
@@ -47,18 +53,29 @@ export const sendNotificationEmail = async (
     </div>
   `;
 
-    // Try to use Firebase Extension 'Trigger Email' if configured (collection 'mail')
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '';
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '';
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '';
+
+    if (!serviceId || !templateId || !publicKey) {
+        console.warn("[Email Notification] As credenciais do EmailJS não estão configuradas no .env.local.");
+        return;
+    }
+
     try {
-        await addDoc(collection(db, 'mail'), {
-            to: toEmail,
-            message: {
-                subject: `[Renata Ribeiro] ${subject}`,
-                html: emailHtml
-            }
-        });
-        console.log(`[Email Queued] To: ${toEmail}, Subject: ${subject}`);
+        await emailjs.send(
+            serviceId,
+            templateId,
+            {
+                to_email: toEmail,
+                subject: subject,
+                // Variável que armazena todo o HTML do e-mail perfeitamente construído para injetar no template deles.
+                message_html: emailHtml,
+            },
+            publicKey
+        );
+        console.log(`[Email Sent via EmailJS] To: ${toEmail}, Subject: ${subject}`);
     } catch (error) {
-        // If permission failed or collection doesn't exist, we just log it as the user might not have backend set up fully.
-        console.warn("[Email Notification] Failed to queue email (backend might need config):", error);
+        console.error("[Email Notification] Failed to send email via EmailJS:", error);
     }
 };
