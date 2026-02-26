@@ -95,6 +95,7 @@ const BookingCalendar = () => {
               start: event.start.toISOString(), // Assuming event.start is Date from hook
               end: event.end.toISOString(),
             },
+            googleAccessToken: sessionStorage.getItem('googleOAuthToken') || undefined,
           }),
         });
         if (!response.ok) {

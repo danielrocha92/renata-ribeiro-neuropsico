@@ -4,7 +4,7 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
 export async function POST(req: NextRequest) {
-  const { userId, appointment } = await req.json();
+  const { userId, appointment, googleAccessToken } = await req.json();
 
   if (!userId || !appointment) {
     return NextResponse.json({ error: 'Missing userId or appointment data' }, { status: 400 });
@@ -15,30 +15,32 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // 1. Get user's refresh token from Firestore
-    const userDocRef = doc(db, "users", userId);
-    const userDoc = await getDoc(userDocRef);
-
-    if (!userDoc.exists() || !userDoc.data().googleRefreshToken) {
-      return NextResponse.json({ error: 'User has not connected their Google Calendar' }, { status: 400 });
-    }
-    const refreshToken = userDoc.data().googleRefreshToken;
-
-    // 2. Create a new OAuth2 client and set the refresh token
     const oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
       process.env.GOOGLE_REDIRECT_URI
     );
-    oauth2Client.setCredentials({ refresh_token: refreshToken });
 
-    // 3. Get a new access token
-    const { token: accessToken } = await oauth2Client.getAccessToken();
-    if (!accessToken) {
-      throw new Error("Failed to retrieve access token");
+    if (googleAccessToken) {
+      oauth2Client.setCredentials({ access_token: googleAccessToken });
+    } else {
+      // 1. Get user's refresh token from Firestore as fallback
+      const userDocRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userDocRef);
+
+      if (!userDoc.exists() || !userDoc.data().googleRefreshToken) {
+        return NextResponse.json({ error: 'User has not connected their Google Calendar' }, { status: 400 });
+      }
+      const refreshToken = userDoc.data().googleRefreshToken;
+
+      oauth2Client.setCredentials({ refresh_token: refreshToken });
+
+      const { token: accessToken } = await oauth2Client.getAccessToken();
+      if (!accessToken) {
+        throw new Error("Failed to retrieve access token");
+      }
+      oauth2Client.setCredentials({ access_token: accessToken });
     }
-    oauth2Client.setCredentials({ access_token: accessToken });
-
 
     // 4. Create a new calendar event
     const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
