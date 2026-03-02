@@ -149,7 +149,11 @@ const AdminFinanceiroPage = () => {
         // Send Email if there is an email
         if (user && user.email) {
             try {
-                await sendNotificationEmail(user.email, 'payment_receipt', `O recibo oficial da sua consulta (${inv.description}) será emitido através do sistema Receita Saúde.`);
+                await sendNotificationEmail(user.email, 'payment_receipt', {
+                    patientName: user.displayName || user.name || 'Paciente',
+                    previewText: `O recibo oficial da sua consulta (${inv.description}) será emitido através do sistema Receita Saúde.`,
+                    title: `Receita Saúde: ${inv.description}`
+                });
                 alert("Confirmação com aviso do Receita Saúde enviada por email ao paciente com sucesso!");
             } catch (err) {
                 console.error("Erro ao enviar email:", err);
@@ -240,7 +244,7 @@ const AdminFinanceiroPage = () => {
                                     Selecione um agendamento para preencher os dados automaticamente
                                 </small>
                             </div>
-                            <hr style={{ margin: '1rem 0', borderColor: '#eee' }} />
+                            <hr className={styles.hrDivider} />
 
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>Paciente</label>
@@ -365,13 +369,12 @@ const AdminFinanceiroPage = () => {
                                                     <option value="overdue">Atrasado</option>
                                                 </select>
                                             </td>
-                                            <td style={{ display: 'flex', gap: '8px' }}>
+                                            <td className={styles.actionButtonsCell}>
                                                 {inv.status === 'paid' && (
                                                     <button
                                                         onClick={() => handleGenerateReceipt(inv)}
-                                                        className={utils.btnOutlinePrimary}
+                                                        className={styles.receiptButton}
                                                         title="Enviar Aviso 'Receita Saúde'"
-                                                        style={{ padding: '0.4rem', border: 'none', backgroundColor: '#e3f2fd', color: '#1976d2' }}
                                                     >
                                                         <Mail size={18} />
                                                     </button>

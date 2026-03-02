@@ -181,7 +181,7 @@ const ChatPage: React.FC = () => {
                                     type="file"
                                     ref={fileInputRef}
                                     onChange={handleFileSelect}
-                                    style={{ display: 'none' }}
+                                    className={utils.dNone}
                                 />
                             </label>
                              */}

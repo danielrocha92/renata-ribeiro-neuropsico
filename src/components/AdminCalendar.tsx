@@ -95,7 +95,13 @@ const AdminCalendar = () => {
                             if (patientDoc.exists()) {
                                 const patientEmail = patientDoc.data().email;
                                 if (patientEmail) {
-                                    sendNotificationEmail(patientEmail, 'appointment_confirmed', `Você tem um novo agendamento marcado para o dia ${start.toLocaleString('pt-BR')}. Acesse o painel para mais detalhes.`);
+                                    sendNotificationEmail(patientEmail, 'appointment_confirmed', {
+                                        patientName: patientDoc.data().displayName || patientDoc.data().name || 'Paciente',
+                                        date: start.toLocaleDateString('pt-BR'),
+                                        time: start.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+                                        title: 'Novo Agendamento Marcado',
+                                        previewText: `Você tem um novo agendamento marcado para o dia ${start.toLocaleString('pt-BR')}. Acesse o painel para mais detalhes.`
+                                    });
                                 }
                             }
                         } catch (err) {
@@ -139,7 +145,13 @@ const AdminCalendar = () => {
                     if (patientDoc.exists()) {
                         const patientEmail = patientDoc.data().email;
                         if (patientEmail) {
-                            sendNotificationEmail(patientEmail, 'appointment_confirmed', `Data: ${eventToConfirm.start.toLocaleString()}`);
+                            sendNotificationEmail(patientEmail, 'appointment_confirmed', {
+                                patientName: patientDoc.data().displayName || patientDoc.data().name || 'Paciente',
+                                date: eventToConfirm.start.toLocaleDateString('pt-BR'),
+                                time: eventToConfirm.start.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+                                title: 'Consulta Confirmada',
+                                previewText: `Sua consulta para o dia ${eventToConfirm.start.toLocaleString('pt-BR')} foi confirmada.`
+                            });
                         }
                     }
                 } catch (err) {

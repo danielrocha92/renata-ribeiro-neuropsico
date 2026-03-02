@@ -84,21 +84,20 @@ const AdminDashboardPage = () => {
         {/* Upcoming Appointment Alert */}
         {upcomingAppointment && (
           <div
-            className={`${styles.card} ${styles.highlightCard}`}
+            className={`${styles.card} ${styles.upcomingAppointmentCard}`}
             onClick={() => router.push('/admin/atendimentos')}
             role="button"
             tabIndex={0}
-            style={{ cursor: 'pointer', flexDirection: 'row', justifyContent: 'flex-start', textAlign: 'left', marginBottom: '2rem', backgroundColor: '#6A7EBD', color: 'white' }}
           >
-            <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', padding: '1rem', borderRadius: '50%', marginRight: '1.5rem', display: 'flex' }}>
+            <div className={styles.upcomingAppointmentIcon}>
               <CalendarCheck size={36} color="white" />
             </div>
             <div>
-              <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.4rem' }}>Próxima Consulta Agendada</h3>
-              <p style={{ margin: 0, fontSize: '1.05rem' }}>
+              <h3 className={styles.upcomingAppointmentTitle}>Próxima Consulta Agendada</h3>
+              <p className={styles.upcomingAppointmentText}>
                 Você tem um agendamento com <strong>{upcomingAppointment.patientName || 'Paciente'}</strong> dia: <strong>{upcomingAppointment.start.toLocaleString('pt-BR')}</strong>
               </p>
-              {upcomingAppointment.status === 'pending' && <span style={{ display: 'inline-block', backgroundColor: '#FBC02D', color: '#333', padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold', marginTop: '0.5rem' }}>Aguardando confirmação</span>}
+              {upcomingAppointment.status === 'pending' && <span className={styles.upcomingAppointmentBadge}>Aguardando confirmação</span>}
             </div>
           </div>
         )}

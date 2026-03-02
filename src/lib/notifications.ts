@@ -3,7 +3,13 @@ import emailjs from '@emailjs/browser';
 export const sendNotificationEmail = async (
     toEmail: string,
     type: 'appointment_request' | 'appointment_confirmed' | 'new_message' | 'new_document' | 'payment_receipt',
-    previewText?: string
+    extraData?: {
+        patientName?: string,
+        date?: string,
+        time?: string,
+        title?: string,
+        previewText?: string
+    }
 ) => {
     if (!toEmail) return;
 
@@ -13,15 +19,17 @@ export const sendNotificationEmail = async (
     let body = '';
     let link = siteUrl;
 
+    const previewText = extraData?.previewText || '';
+
     switch (type) {
         case 'appointment_request':
             subject = 'Nova Solicitação de Consulta';
-            body = `Você recebeu uma nova solicitação de consulta. Acesse o painel para responder.<br/><br/>${previewText || ''}`;
+            body = `Você recebeu uma nova solicitação de consulta. Acesse o painel para responder.<br/><br/>${previewText}`;
             link = `${siteUrl}/admin/disponibilidade`;
             break;
         case 'appointment_confirmed':
             subject = 'Sua Consulta foi Confirmada!';
-            body = `Sua consulta foi confirmada. Acesse o site para ver os detalhes.<br/><br/>${previewText || ''}`;
+            body = `Sua consulta foi confirmada. Acesse o site para ver os detalhes.<br/><br/>${previewText}`;
             link = `${siteUrl}/cliente`; // Or specific route
             break;
         case 'new_message':
@@ -54,8 +62,15 @@ export const sendNotificationEmail = async (
   `;
 
     const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '';
-    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '';
     const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '';
+
+    // Choose template based on notification type
+    let templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '';
+    if (type === 'payment_receipt') {
+        templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_RECIBO || templateId;
+    } else if (type === 'appointment_confirmed' || type === 'appointment_request') {
+        templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_CONFIRMACAO || templateId;
+    }
 
     if (!serviceId || !templateId || !publicKey) {
         console.warn("[Email Notification] As credenciais do EmailJS não estão configuradas no .env.local.");
@@ -69,7 +84,12 @@ export const sendNotificationEmail = async (
             {
                 to_email: toEmail,
                 subject: subject,
-                // Variável que armazena todo o HTML do e-mail perfeitamente construído para injetar no template deles.
+                // Variáveis específicas para o layout do Daniel (conforme prints)
+                paciente_nome: extraData?.patientName || 'Paciente',
+                data_consulta: extraData?.date || '',
+                horario_consulta: extraData?.time || '',
+                title: extraData?.title || subject,
+                // Mantemos o HTML caso o Daniel prefira usar {{{message_html}}} no futuro
                 message_html: emailHtml,
             },
             publicKey

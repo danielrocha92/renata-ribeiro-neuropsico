@@ -94,9 +94,8 @@ const ClientePage: React.FC = () => {
             {/* Upcoming Appointment Alert */}
             {upcomingAppointment && (
               <div
-                className={styles.nextAppointmentCard}
+                className={`${styles.nextAppointmentCard} ${utils.cursorPointer}`}
                 onClick={() => router.push('/cliente/historico')}
-                style={{ cursor: 'pointer' }}
                 role="button"
                 tabIndex={0}
               >
