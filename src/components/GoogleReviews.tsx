@@ -1,100 +1,245 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import styles from '@/styles/GoogleReviews.module.css';
-import { Star } from 'lucide-react';
+import { Star, ExternalLink } from 'lucide-react';
+import { getRelativeTime } from '@/lib/getRelativeTime';
 
-const GoogleLogo = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px">
-        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
-        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
-        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
-        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
-        <path fill="none" d="M0 0h48v48H0z" />
-    </svg>
-);
+// ─── Tipos ────────────────────────────────────────────────────────────────────
+interface Review {
+  author_name: string;
+  rating: number;
+  /** Unix timestamp em segundos — getRelativeTime() calcula o "há X meses/anos" automaticamente */
+  time: number;
+  text: string;
+}
 
-const reviews = [
-    {
-        id: 1,
-        name: "Maria Silva",
-        initial: "M",
-        colorClass: "avatarPurple",
-        time: "há 2 meses",
-        rating: 5,
-        text: "Profissional excelente! A avaliação neuropsicológica foi fundamental para o diagnóstico do meu filho. Agradeço muito pela atenção e cuidado.",
-    },
-    {
-        id: 2,
-        name: "João Pedro Santos",
-        initial: "J",
-        colorClass: "avatarBlue",
-        time: "há 1 mês",
-        rating: 5,
-        text: "Atendimento online de muita qualidade. Me senti acolhido desde a primeira sessão. Recomendo fortemente a Dra. Renata.",
-    },
-    {
-        id: 3,
-        name: "Ana Clara",
-        initial: "A",
-        colorClass: "avatarOrange",
-        time: "há 3 meses",
-        rating: 5,
-        text: "A Dra. Renata é muito atenciosa e competente. O processo de psicoterapia tem me ajudado demais no meu autoconhecimento.",
-    }
+// ─── Helper para converter data para unix timestamp (segundos) ────────────────
+function ts(dateStr: string): number {
+  return Math.floor(new Date(dateStr).getTime() / 1000);
+}
+
+// ─── Avaliações reais do Google Maps (coletadas em abril/2026) ────────────────
+// Datas estimadas com base no texto exibido pelo Google ("há X meses/anos").
+// O getRelativeTime() recalcula automaticamente a partir de agora — nunca fica desatualizado.
+const REVIEWS: Review[] = [
+  {
+    author_name: 'Lorena Queiroz',
+    rating: 5,
+    time: ts('2025-09-20'), // "há 7 meses" a partir de abr/2026
+    text: 'Excelente profissional. Sempre muito cuidadosa e responsável com seus casos e estudos. Super recomendo!',
+  },
+  {
+    author_name: 'Elvira Melo',
+    rating: 5,
+    time: ts('2025-09-22'),
+    text: 'Excelente profissional! Sempre dedicada com seus casos de avaliação Neuropsicológica de adultos! Recomendo.',
+  },
+  {
+    author_name: 'Jéssica Santos',
+    rating: 5,
+    time: ts('2025-09-25'),
+    text: 'Profissional excelente. Além de ser super acolhedora e atenciosa, é extremamente ética, competente e comprometida.',
+  },
+  {
+    author_name: 'Fabiana Saraiva',
+    rating: 5,
+    time: ts('2025-09-27'),
+    text: 'Conheço a Renata há muitos anos, profissional excelente, responsável e dedicada.',
+  },
+  {
+    author_name: 'Carlos Araujo',
+    rating: 5,
+    time: ts('2024-04-15'), // "há 2 anos" a partir de abr/2026
+    text: 'Profissional extremamente competente e atenciosa. Recomendo muito!',
+  },
+  {
+    author_name: 'Lorena Antunes',
+    rating: 5,
+    time: ts('2024-04-10'),
+    text: 'Excelente profissional.',
+  },
+  {
+    author_name: 'Marcos Henrique',
+    rating: 5,
+    time: ts('2024-03-20'),
+    text: 'Excelente profissional, atenciosa e muito competente no que faz.',
+  },
+  {
+    author_name: 'Camila Tullio',
+    rating: 5,
+    time: ts('2024-03-10'),
+    text: 'Renata é excelente, comprometida e tem me ajudado muito.',
+  },
+  {
+    author_name: 'Débora Matos',
+    rating: 5,
+    time: ts('2024-02-28'),
+    text: 'Profissional excelente! Super indico.',
+  },
+  {
+    author_name: 'Beatriz Belarmino',
+    rating: 5,
+    time: ts('2024-02-15'),
+    text: 'A melhor psicóloga que existe!',
+  },
 ];
 
+// ─── Google Logo ──────────────────────────────────────────────────────────────
+const GoogleLogo = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20px" height="20px" aria-hidden="true">
+    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+    <path fill="none" d="M0 0h48v48H0z" />
+  </svg>
+);
+
+// ─── Paleta de cores para avatares ────────────────────────────────────────────
+const AVATAR_COLORS = [
+  '#8e24aa', '#1565c0', '#ef6c00', '#00897b',
+  '#c62828', '#283593', '#558b2f', '#4e342e',
+];
+
+function getAvatarColor(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+}
+
+// ─── Card de avaliação ────────────────────────────────────────────────────────
+function ReviewCard({ review }: { review: Review }) {
+  const [expanded, setExpanded] = useState(false);
+  const initial = review.author_name.charAt(0).toUpperCase();
+  const avatarColor = getAvatarColor(review.author_name);
+
+  // Calculado apenas no cliente para evitar hydration mismatch:
+  // o servidor renderiza string vazia; após montar, o cliente atualiza com o valor real.
+  const [relativeTime, setRelativeTime] = useState('');
+  useEffect(() => {
+    setRelativeTime(getRelativeTime(review.time));
+  }, [review.time]);
+
+  const MAX_CHARS = 150;
+  const isLong = review.text.length > MAX_CHARS;
+
+  return (
+    <div className={styles.card}>
+      {/* Cabeçalho do usuário */}
+      <div className={styles.userInfo}>
+        <div
+          className={styles.avatar}
+          style={{ backgroundColor: avatarColor }}
+          aria-hidden="true"
+        >
+          {initial}
+        </div>
+        <div className={styles.meta}>
+          <span className={styles.userName}>{review.author_name}</span>
+          {/* O atributo dateTime usa o ISO real; o texto visível é calculado dinamicamente */}
+          <time
+            className={styles.timeAgo}
+            dateTime={new Date(review.time * 1000).toISOString()}
+            title={new Date(review.time * 1000).toLocaleDateString('pt-BR', {
+              day: '2-digit',
+              month: 'long',
+              year: 'numeric',
+            })}
+          >
+            {relativeTime}
+          </time>
+        </div>
+      </div>
+
+      {/* Estrelas */}
+      <div className={styles.stars} aria-label={`${review.rating} de 5 estrelas`}>
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            size={14}
+            fill={i < review.rating ? '#fbbc04' : 'none'}
+            color={i < review.rating ? '#fbbc04' : '#dadce0'}
+            strokeWidth={1.5}
+          />
+        ))}
+      </div>
+
+      {/* Texto */}
+      {review.text && (
+        <p className={styles.reviewText}>
+          {isLong && !expanded
+            ? `${review.text.slice(0, MAX_CHARS)}…`
+            : review.text}
+          {isLong && (
+            <button
+              className={styles.expandBtn}
+              onClick={() => setExpanded((v) => !v)}
+              aria-expanded={expanded}
+            >
+              {expanded ? ' menos' : ' mais'}
+            </button>
+          )}
+        </p>
+      )}
+
+      {/* Rodapé Google */}
+      <div className={styles.reviewFooter}>
+        <GoogleLogo />
+        <span className={styles.footerLabel}>Google</span>
+      </div>
+    </div>
+  );
+}
+
+// ─── Componente principal ─────────────────────────────────────────────────────
 const GoogleReviews: React.FC = () => {
-    return (
-        <section className={styles.container}>
-            <div className={styles.header}>
-                <h2 className={styles.title}>O que dizem nossos pacientes</h2>
-                <div className={styles.ratingHeader}>
-                    <span>5.0</span>
-                    <div className={styles.stars}>
-                        {[...Array(5)].map((_, i) => (
-                            <Star key={i} size={20} fill="#fbbc04" color="#fbbc04" />
-                        ))}
-                    </div>
-                    <span>no</span>
-                    <GoogleLogo />
-                    <span>Google</span>
-                </div>
-            </div>
+  return (
+    <section className={styles.container} aria-label="Avaliações no Google">
+      {/* Header */}
+      <div className={styles.header}>
+        <h2 className={styles.title}>O que dizem nossos pacientes</h2>
 
-            <div className={styles.grid}>
-                {reviews.map((review) => (
-                    <div key={review.id} className={styles.card}>
-                        <div className={styles.userInfo}>
-                            <div className={`${styles.avatar} ${styles[review.colorClass]}`}>
-                                {review.initial}
-                            </div>
-                            <div className={styles.meta}>
-                                <span className={styles.userName}>{review.name}</span>
-                                <span className={styles.timeAgo}>{review.time}</span>
-                            </div>
-                        </div>
-
-                        <div className={styles.stars}>
-                            {[...Array(review.rating)].map((_, i) => (
-                                <Star key={i} size={16} fill="#fbbc04" color="#fbbc04" />
-                            ))}
-                        </div>
-
-                        <p className={styles.reviewText}>{review.text}</p>
-                    </div>
-                ))}
+        <div className={styles.ratingBadge}>
+          <div className={styles.ratingScore}>5,0</div>
+          <div className={styles.ratingInfo}>
+            <div className={styles.stars} aria-label="5 de 5 estrelas">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} size={17} fill="#fbbc04" color="#fbbc04" strokeWidth={1.5} />
+              ))}
             </div>
-            <div className={styles.linkContainer}>
-                <a
-                    href="https://www.google.com/maps/place/Renata+C+Ribeiro+%E2%80%93+Psic%C3%B3loga+%26+Neuropsic%C3%B3loga/@-23.5308753,-46.6614918,17z/data=!4m8!3m7!1s0x94cef93c48e13f65:0x463f20561ff49c33!8m2!3d-23.5308753!4d-46.6589169!9m1!1b1!16s%2Fg%2F11svtkz889?hl=pt&entry=ttu"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.link}
-                >
-                    Ver todas as avaliações no Google Maps →
-                </a>
+            <div className={styles.ratingMeta}>
+              <span>15 avaliações</span>
+              <span className={styles.separator}>·</span>
+              <GoogleLogo />
+              <span>Google</span>
             </div>
-        </section>
-    );
+          </div>
+        </div>
+      </div>
+
+      {/* Grid de cards */}
+      <div className={styles.grid}>
+        {REVIEWS.map((review, i) => (
+          <ReviewCard key={i} review={review} />
+        ))}
+      </div>
+
+      {/* Link externo */}
+      <div className={styles.linkContainer}>
+        <a
+          href="https://www.google.com/maps/place/Renata+C+Ribeiro+%E2%80%93+Psic%C3%B3loga+%26+Neuropsic%C3%B3loga/@-23.5308753,-46.6589169,17z"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.link}
+          aria-label="Ver todas as avaliações no Google Maps"
+        >
+          Ver todas as avaliações no Google
+          <ExternalLink size={13} className={styles.linkIcon} />
+        </a>
+      </div>
+    </section>
+  );
 };
 
 export default GoogleReviews;

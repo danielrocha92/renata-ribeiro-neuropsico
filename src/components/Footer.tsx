@@ -50,6 +50,21 @@ const Footer: React.FC = () => {
         </div>
 
         <div className={styles.footerSection}>
+          <h4>Links Úteis</h4>
+          <ul>
+            <li>
+              <Link href="/politica-de-privacidade">Política de Privacidade</Link>
+            </li>
+            <li>
+              <Link href="/termos-e-condicoes">Termos e Condições</Link>
+            </li>
+            <li>
+              <Link href="/lgpd">LGPD</Link>
+            </li>
+          </ul>
+        </div>
+
+        <div className={styles.footerSection}>
           <h4>Contato e Redes Sociais</h4>
           <p className={styles.addressContainer}>
             <FiMapPin size={32} />

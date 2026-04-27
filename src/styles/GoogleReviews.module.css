@@ -1,153 +1,280 @@
+/* ─── Container ─────────────────────────────────────────────────────────────── */
 .container {
-    padding: 4rem 2rem;
-    background-color: #f8f9fa;
-    /* Light gray background common in Google sections */
-    text-align: center;
+  padding: 5rem 2rem;
+  background: linear-gradient(160deg, #f8f5ff 0%, #f0f4ff 50%, #f8f9fa 100%);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
+.container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 20% 20%, rgba(142, 36, 170, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(66, 133, 244, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────────── */
 .header {
-    margin-bottom: 3rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+  margin-bottom: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
 }
 
 .title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #202124;
-    margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+  letter-spacing: -0.5px;
 }
 
-.ratingHeader {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1.2rem;
-    color: #5f6368;
+/* ─── Rating Badge ───────────────────────────────────────────────────────────── */
+.ratingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  background: #ffffff;
+  border-radius: 50px;
+  padding: 0.6rem 1.4rem 0.6rem 0.8rem;
+  box-shadow: 0 2px 12px rgba(60, 64, 67, 0.12), 0 0 0 1px rgba(60, 64, 67, 0.06);
 }
 
-.googleLogo {
-    height: 24px;
-    width: auto;
+.ratingScore {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  line-height: 1;
+  letter-spacing: -1px;
 }
 
+.ratingInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.ratingMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: #5f6368;
+  font-weight: 500;
+}
+
+.separator {
+  color: #dadce0;
+}
+
+/* ─── Grid de Cards ──────────────────────────────────────────────────────────── */
 .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    max-width: 1200px;
-    margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
+/* ─── Card ───────────────────────────────────────────────────────────────────── */
 .card {
-    background: #ffffff;
-    border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    transition: transform 0.2s ease;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.08), 0 4px 16px rgba(60, 64, 67, 0.08);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  border: 1px solid rgba(60, 64, 67, 0.06);
+  position: relative;
 }
 
 .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(60, 64, 67, 0.3), 0 4px 12px 4px rgba(60, 64, 67, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(60, 64, 67, 0.14), 0 2px 8px rgba(60, 64, 67, 0.08);
 }
 
+/* ─── User Info ──────────────────────────────────────────────────────────────── */
 .userInfo {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
 }
 
+/* Avatar com foto */
+.avatarImg {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid rgba(142, 36, 170, 0.12);
+}
+
+/* Avatar com inicial (fallback) */
 .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: #7b1fa2;
-    /* Random accent color if no image */
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-.avatarPurple {
-    background-color: #8e24aa;
-}
-
-.avatarBlue {
-    background-color: #039be5;
-}
-
-.avatarOrange {
-    background-color: #ef6c00;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .meta {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
 }
 
 .userName {
-    font-weight: 600;
-    color: #202124;
-    font-size: 0.95rem;
+  font-weight: 600;
+  color: #202124;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .timeAgo {
-    font-size: 0.8rem;
-    color: #70757a;
+  font-size: 0.77rem;
+  color: #70757a;
+  cursor: help;
 }
 
+/* ─── Estrelas ───────────────────────────────────────────────────────────────── */
 .stars {
-    display: flex;
-    color: #fbbc04;
-    /* Google Star Color */
-    gap: 2px;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  flex-shrink: 0;
 }
 
+/* ─── Texto da avaliação ─────────────────────────────────────────────────────── */
 .reviewText {
-    color: #3c4043;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  color: #3c4043;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
 }
 
+.expandBtn {
+  background: none;
+  border: none;
+  color: #8e24aa;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 2px;
+  transition: opacity 0.15s;
+}
+
+.expandBtn:hover {
+  opacity: 0.75;
+}
+
+/* ─── Footer do card ─────────────────────────────────────────────────────────── */
 .reviewFooter {
-    margin-top: auto;
-    padding-top: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f1f3f4;
 }
 
-.googleIconSmall {
-    width: 18px;
-    height: 18px;
+.footerLabel {
+  font-size: 0.78rem;
+  color: #5f6368;
+  font-weight: 500;
 }
 
+/* ─── Link externo ───────────────────────────────────────────────────────────── */
 .linkContainer {
-    margin-top: 2rem;
+  margin-top: 2.5rem;
 }
 
 .link {
-    color: #1a73e8;
-    text-decoration: none;
-    font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 50px;
+  border: 1.5px solid #1a73e8;
+  transition: background 0.2s, color 0.2s;
 }
 
 .link:hover {
-    text-decoration: underline;
+  background: #1a73e8;
+  color: #ffffff;
+}
+
+.linkIcon {
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.link:hover .linkIcon {
+  transform: translate(2px, -2px);
+}
+
+/* ─── Skeleton Loading ───────────────────────────────────────────────────────── */
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.skeleton {
+  height: 200px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─── Responsivo ─────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .container {
+    padding: 3rem 1rem;
+  }
+
+  .ratingBadge {
+    gap: 0.75rem;
+    padding: 0.5rem 1rem 0.5rem 0.6rem;
+  }
+
+  .ratingScore {
+    font-size: 1.8rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
