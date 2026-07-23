@@ -7,8 +7,8 @@ import styles from '@/styles/InstagramEmbed.module.css';
 const InstagramEmbed = () => {
     useEffect(() => {
         // Força o re-processamento do embed do Instagram caso o script já tenha carregado
-        if (window.instgrm) {
-            window.instgrm.Embeds.process();
+        if (typeof window !== 'undefined' && (window as any).instgrm) {
+            (window as any).instgrm.Embeds.process();
         }
     }, []);
 
