@@ -194,6 +194,11 @@ function ReviewCard({ review }: { review: Review }) {
 
 // ─── Componente principal ─────────────────────────────────────────────────────
 const GoogleReviews: React.FC = () => {
+  const [showAll, setShowAll] = useState(false);
+
+  // Show only 4 reviews by default
+  const displayedReviews = showAll ? REVIEWS : REVIEWS.slice(0, 4);
+
   return (
     <section className={styles.container} aria-label="Avaliações no Google">
       {/* Header */}
@@ -220,13 +225,22 @@ const GoogleReviews: React.FC = () => {
 
       {/* Grid de cards */}
       <div className={styles.grid}>
-        {REVIEWS.map((review, i) => (
+        {displayedReviews.map((review, i) => (
           <ReviewCard key={i} review={review} />
         ))}
       </div>
 
-      {/* Link externo */}
+      {/* Botão Ver Mais e Link externo */}
       <div className={styles.linkContainer}>
+        {!showAll && REVIEWS.length > 4 && (
+          <button
+            onClick={() => setShowAll(true)}
+            className={styles.viewMoreBtn}
+          >
+            Ver mais avaliações
+          </button>
+        )}
+
         <a
           href="https://www.google.com/maps/place/Renata+C+Ribeiro+%E2%80%93+Psic%C3%B3loga+%26+Neuropsic%C3%B3loga/@-23.5308753,-46.6589169,17z"
           target="_blank"

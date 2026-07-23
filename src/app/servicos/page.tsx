@@ -1,5 +1,6 @@
 // src/app/servicos/page.tsx
 import styles from '@/styles/Servicos.module.css';
+import { BrainCircuit, ClipboardList, UserCheck, GraduationCap } from 'lucide-react';
 
 export const metadata = {
   title: 'Serviços de Neuropsicologia e Psicoterapia',
@@ -12,50 +13,61 @@ export const metadata = {
 export default function ServicosPage() {
   return (
     <main className={styles.main}>
-      <h1 className={styles.heading}>Nossos Serviços Especializados</h1>
-      <p className={styles.subHeading}>
-        Com uma abordagem baseada na Neuropsicologia e na Terapia Cognitivo Comportamental (TCC), ofereço um acompanhamento completo para o seu desenvolvimento cognitivo e emocional.
-      </p>
+      <div className={styles.headerSection}>
+        <h1 className={styles.heading}>Serviços Especializados</h1>
+        <p className={styles.subHeading}>
+          Abordagem baseada na Neuropsicologia e na Terapia Cognitivo-Comportamental (TCC), oferecendo um acompanhamento completo para o seu desenvolvimento cognitivo e emocional.
+        </p>
+      </div>
 
       <section className={styles.cardsContainer}>
-        <div className={styles.serviceBlock}>
+        <div className={styles.serviceCard}>
+          <div className={styles.iconWrapper}>
+            <BrainCircuit size={32} />
+          </div>
           <h2>Psicoterapia Online</h2>
-          <p>Os atendimentos são realizados através do Google Meet, em ambiente confidencial e seguro.</p>
-          <div className={styles.expandableContent}>
-            <p>A psicoterapia online é um espaço de acolhimento e autoconhecimento, que tem como objetivo promover saúde mental, equilíbrio emocional e desenvolvimento pessoal.</p>
-            <p>O trabalho é baseado nas Psicoterapias Cognitivo-Comportamentais de 3ª Geração, que integram técnicas de mindfulness, aceitação e regulação emocional, proporcionando resultados efetivos e adaptados à realidade de cada pessoa.</p>
-            <p>Através do acompanhamento psicológico, é possível lidar melhor com <strong>ansiedade, depressão, stress, pânico, baixa autoestima, dificuldades nos relacionamentos</strong>, entre outras demandas emocionais do dia a dia.</p>
-          </div>
+          <p>
+            Acompanhamento psicológico baseado na TCC. Um espaço seguro e acolhedor para lidar com ansiedade, depressão, estresse e promover o autoconhecimento e a regulação emocional.
+          </p>
         </div>
 
-        <div className={styles.serviceBlock}>
-          <h2>Avaliação Neuropsicológica <em>(Presencial)</em></h2>
-          <p>A avaliação neuropsicológica é um processo clínico-científico que tem como objetivo compreender o funcionamento cognitivo, emocional e comportamental de uma pessoa.</p>
-          <div className={styles.expandableContent}>
-            <p>Realizada presencialmente, envolve entrevistas, aplicação de testes padronizados e análise integrada dos resultados, permitindo identificar padrões de funcionamento cerebral e possíveis alterações cognitivas.</p>
-            <p>Este serviço é indicado para a investigação de neuro divergências, como TDAH, TEA, dislexia, dificuldades de aprendizagem, sequelas neurológicas e outras condições que afetam atenção, memória, linguagem, planejamento e comportamento.</p>
-            <p>A devolutiva é feita em linguagem acessível, com orientações práticas e encaminhamentos adequados.</p>
+        <div className={styles.serviceCard}>
+          <div className={styles.iconWrapper}>
+            <ClipboardList size={32} />
           </div>
+          <h2>Avaliação Neuropsicológica</h2>
+          <span className={styles.badge}>Presencial</span>
+          <p>
+            Investigação clínica aprofundada do funcionamento cognitivo e comportamental. Indicada para diagnóstico e compreensão de TDAH, TEA, dislexia e outras neurodivergências.
+          </p>
         </div>
 
-        <div className={styles.serviceBlock}>
+        <div className={styles.serviceCard}>
+          <div className={styles.iconWrapper}>
+            <UserCheck size={32} />
+          </div>
           <h2>Avaliação Psicológica</h2>
-          <p>A avaliação psicológica busca compreender aspectos emocionais, comportamentais e de personalidade, auxiliando no autoconhecimento e na tomada de decisões em diferentes contextos.</p>
-          <div className={styles.expandableContent}>
-            <p>É indicada em situações como processos terapêuticos, orientações vocacionais, acompanhamento clínico, contextos jurídicos, ou demandas específicas que envolvem aspectos emocionais e de comportamento.</p>
-            <p>O processo inclui entrevista inicial, aplicação de instrumentos psicológicos reconhecidos pelo Conselho Federal de Psicologia (CFP), e uma devolutiva clara, ética e fundamentada.</p>
-          </div>
+          <p>
+            Compreensão de aspectos emocionais e de personalidade através de instrumentos reconhecidos. Auxilia em processos terapêuticos, orientação vocacional e contextos específicos.
+          </p>
         </div>
 
-        <div className={styles.serviceBlock}>
-          <h2>Colaboração, Consultoria & Supervisão</h2>
-          <p>Ofereço consultoria e supervisão clínica para psicólogos e profissionais em formação que desejam aprimorar o raciocínio clínico, o uso de instrumentos psicológicos e a condução de casos.</p>
-          <div className={styles.expandableContent}>
-            <p>A supervisão é conduzida em um espaço ético e colaborativo, voltado ao desenvolvimento técnico e pessoal do profissional, com foco em <strong>Psicologia Clínica, Avaliação Psicológica e Neuropsicológica</strong>.</p>
-            <p>Também realizo colaborações interdisciplinares com médicos, educadores e outros profissionais da saúde, favorecendo uma atuação integrada e centrada no paciente.</p>
+        <div className={styles.serviceCard}>
+          <div className={styles.iconWrapper}>
+            <GraduationCap size={32} />
           </div>
+          <h2>Consultoria & Supervisão</h2>
+          <p>
+            Apoio técnico e desenvolvimento clínico para psicólogos e profissionais da saúde. Foco no aprimoramento do raciocínio clínico e colaboração interdisciplinar.
+          </p>
         </div>
       </section>
+
+      <div className={styles.ctaSection}>
+        <a href="/contato" className={styles.ctaButton}>
+          Agendar uma Consulta
+        </a>
+      </div>
     </main>
   );
 }

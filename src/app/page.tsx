@@ -6,8 +6,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/Home.module.css';
 import utils from '@/styles/Utils.module.css';
-import VideoModal from '@/components/VideoModal';
+import InstagramEmbed from '@/components/InstagramEmbed';
 import GoogleReviews from '@/components/GoogleReviews';
+import FAQ from '@/components/FAQ';
 
 import { Video, Brain, ClipboardList, Users } from 'lucide-react';
 
@@ -113,11 +114,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- Video Modal Section --- */}
-      <VideoModal videoUrl="https://www.linkedin.com/embed/feed/update/urn:li:activity:7029232180379693056?autoplay=1" />
+      {/* --- Conteúdo e Vídeos Section --- */}
+      <InstagramEmbed />
 
       {/* --- Google Reviews Section --- */}
       <GoogleReviews />
+
+      {/* --- FAQ Section --- */}
+      <FAQ />
 
       {/* --- Location Section --- */}
       <section id="localizacao" className={`${styles.locationSection} ${styles.fadeIn}`}>
@@ -135,7 +139,6 @@ export default function Home() {
           ></iframe>
         </div>
       </section>
-
 
     </main>
   );

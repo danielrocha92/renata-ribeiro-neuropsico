@@ -1,0 +1,117 @@
+.faqSection {
+    padding: 80px 20px;
+    background-color: #ffffff;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.title {
+    font-size: 2.2rem;
+    color: var(--color-secondary);
+    margin-bottom: 15px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: var(--color-text-dark);
+    opacity: 0.85;
+    line-height: 1.6;
+}
+
+.faqList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.faqItem {
+    background-color: var(--color-background);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+}
+
+.faqItem:hover {
+    border-color: rgba(114, 111, 178, 0.3);
+    /* Secondary color with opacity */
+}
+
+.faqItem.open {
+    background-color: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border-color: rgba(114, 111, 178, 0.2);
+}
+
+.questionBtn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: var(--color-text-dark);
+    font-family: inherit;
+}
+
+.questionText {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding-right: 20px;
+    transition: color 0.3s ease;
+}
+
+.faqItem.open .questionText {
+    color: var(--color-secondary);
+}
+
+.icon {
+    color: var(--color-secondary);
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.answerContainer {
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.answerText {
+    padding: 0 25px 25px 25px;
+    color: var(--color-text-dark);
+    opacity: 0.85;
+    line-height: 1.6;
+    font-size: 1rem;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .faqSection {
+        padding: 60px 15px;
+    }
+
+    .title {
+        font-size: 1.8rem;
+    }
+
+    .questionBtn {
+        padding: 15px 20px;
+    }
+
+    .answerText {
+        padding: 0 20px 20px 20px;
+    }
+}

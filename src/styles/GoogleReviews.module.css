@@ -204,9 +204,30 @@
   font-weight: 500;
 }
 
-/* ─── Link externo ───────────────────────────────────────────────────────────── */
+/* ─── Link externo e Botão Ver Mais ────────────────────────────────────────────── */
 .linkContainer {
   margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.viewMoreBtn {
+  background: none;
+  border: 1.5px solid var(--color-secondary);
+  color: var(--color-secondary);
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.viewMoreBtn:hover {
+  background: var(--color-secondary);
+  color: #ffffff;
 }
 
 .link {
@@ -255,8 +276,13 @@
 }
 
 @keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* ─── Responsivo ─────────────────────────────────────────────────────────────── */
