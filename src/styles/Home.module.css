@@ -111,6 +111,7 @@
 .profilePic {
   border-radius: 50%;
   object-fit: cover;
+  object-position: center 20%;
   border: 5px solid #e8eaf6;
   /* Borda suave */
 }

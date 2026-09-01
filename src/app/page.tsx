@@ -80,7 +80,7 @@ export default function Home() {
         <div className={styles.aboutContainer}>
           <div className={styles.aboutImage}>
             <Image
-              src="/Profile.jpeg"
+              src="/galeria/DSC06220.jpeg"
               alt="Renata Ribeiro, Neuropsicóloga"
               width={300}
               height={300}
