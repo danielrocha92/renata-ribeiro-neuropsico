@@ -69,7 +69,7 @@ export default function SobrePage() {
       <section className={styles.profileSection}>
         <div className={styles.photoPlaceholder}>
           <Image
-            src="/Profile.jpeg"
+            src="/galeria/DSC06220.jpeg"
             alt="Renata Claudino Ribeiro"
             width={200}
             height={200}

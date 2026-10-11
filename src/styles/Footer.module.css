@@ -60,6 +60,7 @@
   /* Reduced font size for content */
 }
 
+
 .footerSection a:hover {
   color: var(--color-accent);
 }
@@ -88,24 +89,57 @@
   transform: scale(1.1);
 }
 
-.copyright,
-.madeBy {
+.footerBottom {
+  margin: 2rem auto 0 auto;
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.copyright {
+  font-size: 0.875rem;
+  color: var(--color-text-light);
   text-align: center;
-  margin-top: 2rem;
+}
+
+.madeBy {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   font-size: 0.875rem;
   color: var(--color-text-light);
 }
 
-.madeBy a {
-  color: var(--color-primary);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s ease;
+.rochaTechLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0b1120;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 6px 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s ease;
+  text-decoration: none !important;
 }
 
-.madeBy a:hover {
-  color: var(--color-accent);
-  text-decoration: underline;
+.rochaTechLink:hover {
+  transform: translateY(-2px);
+  background-color: #111827;
+  border-color: rgba(0, 210, 255, 0.45);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), 0 0 12px rgba(0, 210, 255, 0.25);
+}
+
+.rochaTechLogo {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 5px rgba(0, 210, 255, 0.3));
 }
 
 /* --- Tablet & Desktop Styles --- */
@@ -134,6 +168,15 @@
 
   .socialIcons {
     justify-content: flex-start;
+  }
+
+  .footerBottom {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .copyright {
+    text-align: left;
   }
 }
 

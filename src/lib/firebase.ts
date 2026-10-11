@@ -19,7 +19,7 @@ let auth;
 let db;
 let storage;
 
-if (typeof window !== 'undefined' || process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
   try {
     app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
     auth = getAuth(app);

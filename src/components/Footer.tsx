@@ -104,19 +104,28 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className={styles.copyright}>
-        &copy; {currentYear} Renata Ribeiro Neuropsicologia. Todos os
-        direitos reservados.
-      </div>
-      <div className={styles.madeBy}>
-        Feito por:{' '}
-        <a
-          href="https://rocha-tech-solutions.vercel.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Rocha Tech Solutions
-        </a>
+      <div className={styles.footerBottom}>
+        <div className={styles.copyright}>
+          &copy; {currentYear} Renata Ribeiro Neuropsicologia. Todos os
+          direitos reservados.
+        </div>
+        <div className={styles.madeBy}>
+          <span>Feito por:</span>
+          <a
+            href="https://rocha-tech-solutions.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.rochaTechLink}
+            title="Desenvolvido por Rocha Tech Solutions"
+            aria-label="Rocha Tech Solutions"
+          >
+            <img
+              src="/rocha-tech-logo.png"
+              alt="Rocha Tech Solutions"
+              className={styles.rochaTechLogo}
+            />
+          </a>
+        </div>
       </div>
     </footer>
   );
