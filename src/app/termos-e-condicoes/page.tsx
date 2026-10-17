@@ -3,7 +3,7 @@ import styles from '@/styles/LegalPage.module.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Termos e Condições | Renata Ribeiro Neuropsicologia',
+  title: 'Termos e Condições | Renata Ribeiro | Psicologia e Neuropsicologialogia',
   description:
     'Leia os Termos e Condições de uso dos serviços oferecidos por Renata C. Ribeiro – Psicóloga & Neuropsicóloga.',
 };

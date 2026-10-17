@@ -27,7 +27,7 @@ export default function ServicosPage() {
           </div>
           <h2>Psicoterapia Online</h2>
           <p>
-            Acompanhamento psicológico baseado na TCC. Um espaço seguro e acolhedor para lidar com ansiedade, depressão, estresse e promover o autoconhecimento e a regulação emocional.
+            Atendimento psicológico individual fundamentado na Terapia Cognitivo-Comportamental (TCC), voltado à compreensão de padrões de pensamento, emoções e comportamentos, ao desenvolvimento de estratégias de enfrentamento e ao acompanhamento de dificuldades emocionais e comportamentais.
           </p>
         </div>
 
@@ -38,7 +38,11 @@ export default function ServicosPage() {
           <h2>Avaliação Neuropsicológica</h2>
           <span className={styles.badge}>Presencial</span>
           <p>
-            Investigação clínica aprofundada do funcionamento cognitivo e comportamental. Indicada para diagnóstico e compreensão de TDAH, TEA, dislexia e outras neurodivergências.
+            Processo de investigação clínica que busca compreender o funcionamento cognitivo, emocional e comportamental por meio de entrevistas, instrumentos psicológicos e neuropsicológicos, observação clínica e integração de diferentes fontes de informação.
+          </p>
+          <br />
+          <p>
+            Pode contribuir para a investigação de dificuldades relacionadas à atenção, memória, funções executivas e outras habilidades cognitivas, além de subsidiar hipóteses diagnósticas e recomendações individualizadas.
           </p>
         </div>
 
@@ -48,7 +52,7 @@ export default function ServicosPage() {
           </div>
           <h2>Avaliação Psicológica</h2>
           <p>
-            Compreensão de aspectos emocionais e de personalidade através de instrumentos reconhecidos. Auxilia em processos terapêuticos, orientação vocacional e contextos específicos.
+            Processo técnico-científico que utiliza métodos e instrumentos psicológicos adequados à demanda para investigar características psicológicas e responder a questões específicas de avaliação, respeitando as diretrizes éticas e técnicas da profissão.
           </p>
         </div>
 
@@ -58,7 +62,7 @@ export default function ServicosPage() {
           </div>
           <h2>Consultoria & Supervisão</h2>
           <p>
-            Apoio técnico e desenvolvimento clínico para psicólogos e profissionais da saúde. Foco no aprimoramento do raciocínio clínico e colaboração interdisciplinar.
+            Espaço de discussão técnico-científica para profissionais da Psicologia, com foco no aprimoramento do raciocínio clínico, na análise de casos, na avaliação psicológica e neuropsicológica e na fundamentação das decisões profissionais.
           </p>
         </div>
       </section>

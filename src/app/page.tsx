@@ -62,10 +62,10 @@ export default function Home() {
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <h1 className={`${styles.title} ${styles.fadeIn}`}>
-            Cuidar da mente é o primeiro passo para uma vida plena.
+            Psicologia e Neuropsicologia: compreensão científica e cuidado individualizado
           </h1>
           <p className={`${styles.subtitle} ${styles.fadeIn}`}>
-            Ofereço um atendimento psicológico e neuropsicológico ético e personalizado, focado em suas necessidades e bem-estar.
+            Atendimento psicológico fundamentado na Terapia Cognitivo-Comportamental (TCC) e avaliação neuropsicológica voltada à compreensão do funcionamento cognitivo, emocional e comportamental.
           </p>
           <Link href="/contato" passHref>
             <button className={`${styles.ctaButton} ${styles.fadeIn}`}>
@@ -90,12 +90,15 @@ export default function Home() {
           <div className={styles.aboutText}>
             <h2>Sobre Mim</h2>
             <p>
-              Olá, sou Renata Ribeiro, psicóloga e neuropsicóloga. Ofereço um atendimento integrativo e humanizado, combinando psicoterapia e avaliação neuropsicológica para promover o autoconhecimento e o bem-estar.
+              Olá, sou Renata Claudino Ribeiro, psicóloga e neuropsicóloga, com atuação clínica fundamentada na Terapia Cognitivo-Comportamental (TCC).
             </p>
             <p>
-              Meu objetivo é criar um ambiente seguro e acolhedor, onde você possa explorar suas emoções e conquistar uma vida mais equilibrada e feliz.
+              Meu trabalho envolve psicoterapia e avaliação neuropsicológica, considerando as particularidades de cada pessoa e a integração entre aspectos cognitivos, emocionais e comportamentais.
             </p>
-            <span>Renata C. Ribeiro - Psicóloga e Neuropsicóloga | CRP 06/195299</span>
+            <p>
+              Busco oferecer um espaço de escuta qualificada, investigação clínica e intervenções fundamentadas em conhecimentos científicos, respeitando a singularidade de cada processo.
+            </p>
+            <span>Renata C. Ribeiro - Psicóloga e Neuropsicóloga | CRP 06/165147</span>
           </div>
         </div>
       </section>

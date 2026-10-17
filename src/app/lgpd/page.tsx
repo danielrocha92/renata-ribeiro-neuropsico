@@ -3,7 +3,7 @@ import styles from '@/styles/LegalPage.module.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'LGPD | Renata Ribeiro Neuropsicologia',
+  title: 'LGPD | Renata Ribeiro | Psicologia e Neuropsicologialogia',
   description:
     'Informações sobre a conformidade com a Lei Geral de Proteção de Dados (LGPD – Lei n.º 13.709/2018).',
 };

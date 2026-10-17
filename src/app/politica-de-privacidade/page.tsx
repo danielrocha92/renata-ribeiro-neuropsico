@@ -3,7 +3,7 @@ import styles from '@/styles/LegalPage.module.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Política de Privacidade | Renata Ribeiro Neuropsicologia',
+  title: 'Política de Privacidade | Renata Ribeiro | Psicologia e Neuropsicologialogia',
   description:
     'Saiba como coletamos, usamos e protegemos seus dados pessoais em conformidade com a LGPD.',
 };

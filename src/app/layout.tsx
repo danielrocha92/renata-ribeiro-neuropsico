@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://renataribeiropsico.com.br'),
   title: {
     default: "Renata Ribeiro | Neuropsicóloga e Psicóloga em São Paulo",
-    template: "%s | Renata Ribeiro Neuropsicologia"
+    template: "%s | Renata Ribeiro | Psicologia e Neuropsicologialogia"
   },
   description: "Especialista em Neuropsicologia, Reabilitação Cognitiva e Terapia Cognitivo-Comportamental (TCC). Atendimento presencial na Barra Funda (SP) e Online.",
   keywords: ["neuropsicóloga", "psicóloga", "TCC", "avaliação neuropsicológica", "reabilitação cognitiva", "barra funda", "são paulo", "terapia online", "tea", "tdah"],
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     url: 'https://renataribeiropsico.com.br',
     title: 'Renata Ribeiro | Neuropsicóloga e Psicóloga',
     description: 'Atendimento clínico especializado em Neuropsicologia e TCC. Agende sua consulta.',
-    siteName: 'Renata Ribeiro Neuropsicologia',
+    siteName: 'Renata Ribeiro | Psicologia e Neuropsicologialogia',
     images: [
       {
         url: '/Profile.jpeg', // Assuming profile image works as OG image for now, ideally 1200x630

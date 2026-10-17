@@ -53,7 +53,7 @@ const Header: React.FC = () => {
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
       <div className={styles.navContainer}>
         <Link href="/" className={styles.logo}>
-          Renata Ribeiro <span>Neuropsico</span>
+          Renata Ribeiro <span>| Psicologia e Neuropsicologia</span>
         </Link>
 
         <button

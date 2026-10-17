@@ -23,8 +23,8 @@ const Footer: React.FC = () => {
     <footer className={styles.footer}>
       <div className={styles.footerContent}>
         <div className={styles.footerSection}>
-          <h4>Renata Ribeiro | Neuropsicologia</h4>
-          <p>CRP SP 06/53721-8</p>
+          <h4>Renata Claudino Ribeiro | Psicóloga e Neuropsicóloga</h4>
+          <p>CRP 06/165147</p>
           <p>
             Especialista com foco em neuropsicologia, TCC e Reabilitação Cognitiva
             (HC-FMUSP).
@@ -106,7 +106,7 @@ const Footer: React.FC = () => {
       </div>
       <div className={styles.footerBottom}>
         <div className={styles.copyright}>
-          &copy; {currentYear} Renata Ribeiro Neuropsicologia. Todos os
+          &copy; {currentYear} Renata Ribeiro | Psicologia e Neuropsicologialogia. Todos os
           direitos reservados.
         </div>
         <div className={styles.madeBy}>
