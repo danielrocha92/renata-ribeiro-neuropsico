@@ -20,61 +20,45 @@ export default function PoliticaDePrivacidadePage() {
         <section className={styles.section}>
           <h2>1. Quem somos</h2>
           <p>
-            Este site é mantido por <strong>Renata C. Ribeiro</strong>, psicóloga e neuropsicóloga
-            inscrita no CRP SP 06/195299, com atuação em psicoterapia online e avaliação
-            neuropsicológica presencial em São Paulo – SP.
+            Este site institucional é mantido por <strong>Renata Claudino Ribeiro</strong>, psicóloga e neuropsicóloga inscrita no CRP SP 06/165147, com atuação em psicoterapia online e avaliação neuropsicológica presencial em São Paulo – SP.
           </p>
         </section>
 
         <section className={styles.section}>
-          <h2>2. Quais dados coletamos</h2>
-          <p>Podemos coletar as seguintes categorias de dados pessoais:</p>
+          <h2>2. Quais dados o site coleta</h2>
+          <p>Para garantir a segurança e o limite de atuação da plataforma, separamos a coleta de dados da seguinte forma:</p>
           <ul>
             <li>
-              <strong>Dados de identificação:</strong> nome completo, e-mail e telefone, fornecidos
-              voluntariamente pelo formulário de contato ou agendamento.
+              <strong>Dados captados pelo site:</strong> Apenas informações de contato fornecidas voluntariamente no formulário (nome, e-mail e telefone/WhatsApp) e dados básicos de navegação (endereço IP, dispositivo e páginas acessadas).
             </li>
             <li>
-              <strong>Dados de navegação:</strong> endereço IP, tipo de dispositivo, páginas
-              visitadas e tempo de permanência, coletados automaticamente por ferramentas de análise
-              (ex.: Google Analytics).
-            </li>
-            <li>
-              <strong>Dados clínicos:</strong> informações de saúde compartilhadas durante o
-              atendimento, tratadas com sigilo e guardiadas conforme o Código de Ética do CFP.
+              <strong>Dados clínicos (Sensíveis):</strong> Nenhuma informação de saúde, prontuário ou histórico clínico transita ou é armazenada na infraestrutura deste site. Esses dados são tratados exclusivamente pela profissional durante as sessões e guardados em sistema de gestão clínica apartado e seguro.
             </li>
           </ul>
         </section>
 
         <section className={styles.section}>
-          <h2>3. Como usamos seus dados</h2>
+          <h2>3. Como usamos os dados do site</h2>
           <ul>
-            <li>Responder solicitações de contato e agendamento de consultas.</li>
-            <li>Enviar confirmações, lembretes e comunicações relacionadas ao atendimento.</li>
-            <li>Melhorar a experiência de navegação no site.</li>
-            <li>Cumprir obrigações legais e regulatórias.</li>
+            <li>Responder solicitações de contato e realizar o agendamento prévio das consultas.</li>
+            <li>Garantir a segurança da infraestrutura do site e melhorar a experiência de navegação.</li>
           </ul>
         </section>
 
         <section className={styles.section}>
           <h2>4. Base legal para o tratamento</h2>
           <p>
-            O tratamento dos seus dados é realizado com base nas seguintes hipóteses previstas na
-            Lei Geral de Proteção de Dados (Lei n.º 13.709/2018):
+            O tratamento dos dados segue a Lei Geral de Proteção de Dados (Lei n.º 13.709/2018):
           </p>
           <ul>
             <li>
-              <strong>Consentimento</strong> — para envio de comunicações e análise de navegação.
+              <strong>Consentimento</strong> — Para análise de navegação (cookies) e envio de comunicações.
             </li>
             <li>
-              <strong>Execução de contrato</strong> — para prestação dos serviços psicológicos.
+              <strong>Diligências pré-contratuais e Contrato:</strong> — Para viabilizar o agendamento e a prestação dos serviços psicológicos.
             </li>
             <li>
-              <strong>Cumprimento de obrigação legal</strong> — para atender determinações do CFP e
-              legislação aplicável.
-            </li>
-            <li>
-              <strong>Legítimo interesse</strong> — para segurança e melhoria do site.
+              <strong>Legítimo interesse:</strong> — Para a segurança da aplicação.
             </li>
           </ul>
         </section>
@@ -82,49 +66,29 @@ export default function PoliticaDePrivacidadePage() {
         <section className={styles.section}>
           <h2>5. Compartilhamento de dados</h2>
           <p>
-            Seus dados <strong>não são vendidos</strong> a terceiros. Podemos compartilhá-los
-            apenas com:
+            Seus dados <strong>não são vendidos</strong> a terceiros. O compartilhamento ocorre apenas com prestadores de infraestrutura tecnológica estritamente necessários para o funcionamento do site (como serviços de hospedagem e banco de dados em nuvem, que operam sob protocolos de segurança criptografados) e plataformas de comunicação (como WhatsApp, Google Meet ou Zoom) utilizadas diretamente pela profissional para viabilizar os atendimentos.
           </p>
-          <ul>
-            <li>Prestadores de serviço tecnológico (hospedagem, e-mail, videoconferência) sob
-              obrigação de confidencialidade.</li>
-            <li>Autoridades públicas, quando exigido por lei ou ordem judicial.</li>
-          </ul>
         </section>
 
         <section className={styles.section}>
           <h2>6. Armazenamento e segurança</h2>
           <p>
-            Os dados são armazenados em servidores seguros com criptografia. Dados clínicos são
-            mantidos pelo período mínimo exigido pelo CFP (20 anos a partir do encerramento do
-            atendimento ou, para crianças, até 10 anos após a maioridade).
+            Os dados de contato do site são mantidos em servidores com criptografia padrão da indústria. Já os dados clínicos e registros documentais (gerados após o início do atendimento e armazenados fora deste site) são retidos pela profissional pelo prazo mínimo de 5 (cinco) anos, em estrito cumprimento ao Art. 18 da Resolução CFP n.º 01/2009.
           </p>
         </section>
 
         <section className={styles.section}>
           <h2>7. Seus direitos</h2>
-          <p>Nos termos da LGPD, você tem direito a:</p>
-          <ul>
-            <li>Confirmar a existência de tratamento dos seus dados.</li>
-            <li>Acessar os dados que possuímos sobre você.</li>
-            <li>Corrigir dados incompletos, inexatos ou desatualizados.</li>
-            <li>Solicitar anonimização, bloqueio ou eliminação de dados desnecessários.</li>
-            <li>Revogar o consentimento a qualquer momento.</li>
-          </ul>
-          <p>
-            Para exercer seus direitos, entre em contato pelo e-mail:{' '}
-            <a href="mailto:contato@renataribeiropsico.com.br">
-              contato@renataribeiropsico.com.br
-            </a>
-          </p>
+          <p>Conforme a LGPD, você pode solicitar a qualquer momento: confirmação, acesso, correção, anonimização, bloqueio ou eliminação dos seus dados, bem como a revogação do consentimento. Entre em contato pelo e-mail:{' '}
+            <a href="mailto:neuropsirenataribeiro@gmail.com">
+              neuropsirenataribeiro@gmail.com
+            </a>.</p>
         </section>
 
         <section className={styles.section}>
           <h2>8. Cookies</h2>
           <p>
-            Utilizamos cookies para melhorar a experiência de navegação e analisar o tráfego do
-            site. Você pode configurar seu navegador para recusar cookies, mas isso pode afetar
-            algumas funcionalidades.
+            Utilizamos cookies essenciais para o funcionamento do site e cookies analíticos para entender o tráfego. Você pode gerenciá-los ou bloqueá-los nas configurações do seu navegador.
           </p>
         </section>
 
@@ -140,8 +104,8 @@ export default function PoliticaDePrivacidadePage() {
           <h2>10. Contato</h2>
           <p>
             Dúvidas ou solicitações relacionadas a esta política podem ser enviadas para:{' '}
-            <a href="mailto:contato@renataribeiropsico.com.br">
-              contato@renataribeiropsico.com.br
+            <a href="mailto:neuropsirenataribeiro@gmail.com">
+              neuropsirenataribeiro@gmail.com
             </a>
           </p>
         </section>

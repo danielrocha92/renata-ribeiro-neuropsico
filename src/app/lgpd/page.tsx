@@ -19,29 +19,20 @@ export default function LgpdPage() {
         </header>
 
         <section className={styles.section}>
-          <h2>O que é a LGPD?</h2>
+          <h2>LGPD — Aviso de Privacidade Simplificado</h2>
           <p>
-            A <strong>Lei Geral de Proteção de Dados Pessoais (LGPD)</strong>, Lei Federal n.º
-            13.709 de 14 de agosto de 2018, estabelece regras sobre coleta, armazenamento,
-            tratamento e compartilhamento de dados pessoais no Brasil, com o objetivo de proteger
-            os direitos fundamentais de liberdade e de privacidade.
+            Nosso compromisso com a privacidade
+          </p>
+          <p>
+            Este consultório leva a sério a proteção dos seus dados. Nossa arquitetura digital foi desenhada para que este site funcione apenas como ponte de contato, isolando completamente seus dados sensíveis.
           </p>
         </section>
 
         <section className={styles.section}>
-          <h2>Nosso compromisso</h2>
-          <p>
-            <strong>Renata C. Ribeiro</strong> (CRP SP 06/195299) está comprometida com a
-            conformidade à LGPD em todas as etapas de coleta e tratamento de dados pessoais,
-            respeitando os princípios de:
-          </p>
+          <h2>Separação de Dados</h2>
           <ul>
-            <li><strong>Finalidade</strong> — dados coletados para propósitos específicos e legítimos.</li>
-            <li><strong>Adequação</strong> — uso compatível com as finalidades informadas.</li>
-            <li><strong>Necessidade</strong> — coleta limitada ao mínimo necessário.</li>
-            <li><strong>Transparência</strong> — informações claras sobre o tratamento.</li>
-            <li><strong>Segurança</strong> — medidas técnicas para proteção dos dados.</li>
-            <li><strong>Não discriminação</strong> — proibição de tratamento para fins ilícitos.</li>
+            <li><strong>Dados de Contato (Processados por este site):</strong> — Nome, E-mail e WhatsApp. Usados para retornar seu contato.</li>
+            <li><strong>Dados Sensíveis (NÃO processados por este site):</strong> — Informações de saúde, histórico clínico e registros de sessões. Estes dados ficam sob guarda exclusiva da psicóloga em prontuário próprio, arquivado de forma segura e offline ou em software médico homologado.</li>
           </ul>
         </section>
 
@@ -98,46 +89,40 @@ export default function LgpdPage() {
         </section>
 
         <section className={styles.section}>
-          <h2>Seus direitos como titular</h2>
+          <h2>Prazos de Retenção</h2>
           <p>
-            De acordo com o Art. 18 da LGPD, você possui os seguintes direitos em relação aos seus
-            dados pessoais:
+            Os registros documentais de saúde (prontuários) são mantidos por no mínimo 5 anos, conforme exigência do Conselho Federal de Psicologia (Resolução CFP n.º 01/2009).
           </p>
-          <ul>
-            <li>Confirmação da existência de tratamento.</li>
-            <li>Acesso aos dados.</li>
-            <li>Correção de dados incompletos, inexatos ou desatualizados.</li>
-            <li>Anonimização, bloqueio ou eliminação de dados desnecessários ou excessivos.</li>
-            <li>Portabilidade dos dados a outro fornecedor de serviço.</li>
-            <li>Eliminação dos dados tratados com consentimento.</li>
-            <li>Informação sobre o compartilhamento com terceiros.</li>
-            <li>Revogação do consentimento a qualquer momento.</li>
-            <li>Oposição a tratamento realizado em descumprimento da LGPD.</li>
-          </ul>
         </section>
 
         <section className={styles.section}>
           <h2>Como exercer seus direitos</h2>
           <p>
-            Para exercer qualquer direito previsto na LGPD, entre em contato pelo canal abaixo.
-            Respondemos em até <strong>15 dias úteis</strong>:
+            Você é o dono dos seus dados. Para solicitar acesso, correção ou exclusão das suas informações de contato da nossa base:
           </p>
           <div className={styles.contactBlock}>
             <p>
-              📧{' '}
-              <a href="mailto:contato@renataribeiropsico.com.br">
-                contato@renataribeiropsico.com.br
+              E-mail:{' '}
+              <a href="mailto:neuropsirenataribeiro@gmail.com">
+                neuropsirenataribeiro@gmail.com
               </a>
             </p>
             <p>Informe no assunto: <em>&quot;Solicitação LGPD – [seu direito]&quot;</em></p>
           </div>
         </section>
 
+         <section className={styles.section}>
+          <h2>Prazos de Resposta:</h2>
+          <ul>
+            <li><strong>Solicitações simples (como confirmar se temos seus dados):</strong> — Retorno imediato (ou no menor tempo operacional possível).</li>
+            <li><strong>Solicitações complexas (como relatórios completos de tratamento de dados):</strong> — Até 15 dias úteis, conforme determina a lei.</li>
+          </ul>
+        </section>
+
         <section className={styles.section}>
-          <h2>Encarregado de dados (DPO)</h2>
+          <h2>Encarregada de dados (DPO)</h2>
           <p>
-            O encarregado pelo tratamento de dados pessoais é a própria titular do consultório:{' '}
-            <strong>Renata C. Ribeiro</strong>, que pode ser contactada pelo e-mail acima.
+            A responsável pelo tratamento de dados é a própria titular, <strong>Renata C. Ribeiro</strong>, disponível através do canal de contato oficial acima.
           </p>
         </section>
 

@@ -20,93 +20,59 @@ export default function TermosECondicoesPage() {
         <section className={styles.section}>
           <h2>1. Aceitação dos termos</h2>
           <p>
-            Ao acessar e utilizar este site ou contratar os serviços de <strong>Renata C.
-            Ribeiro</strong> (CRP SP 06/195299), você declara ter lido, compreendido e concordado
-            com os presentes Termos e Condições. Caso não concorde, pedimos que não utilize os
-            serviços.
+            Ao utilizar este site para solicitar contato ou agendamento com <strong>Renata Claudino Ribeiro</strong> (CRP SP 06/165147), você concorda com estes Termos.
           </p>
         </section>
 
         <section className={styles.section}>
-          <h2>2. Serviços oferecidos</h2>
-          <p>Os serviços disponibilizados incluem:</p>
-          <ul>
-            <li>Psicoterapia online (via plataforma de videoconferência segura).</li>
-            <li>Avaliação neuropsicológica presencial em São Paulo – SP.</li>
-            <li>Avaliação psicológica.</li>
-            <li>Consultoria, colaboração e supervisão clínica para profissionais.</li>
-          </ul>
+          <h2>2. O papel deste site</h2>
+          <p>Este site atua exclusivamente como um portal institucional e canal de agendamento prévio. Ele não é uma plataforma de telemedicina e não substitui os canais oficiais de sessão (plataformas de videoconferência).</p>
         </section>
 
         <section className={styles.section}>
-          <h2>3. Agendamento e cancelamento</h2>
+          <h2>3. Serviços oferecidos</h2>
           <ul>
             <li>
-              O agendamento de sessões é realizado mediante contato prévio e confirmação formal.
+              Psicoterapia online (realizada via plataforma de videoconferência segura externa ao site).
             </li>
             <li>
-              Cancelamentos devem ser realizados com antecedência mínima de <strong>24 horas</strong>.
-              Cancelamentos tardios ou ausências sem aviso prévio poderão ser cobrados integralmente.
+              Avaliação neuropsicológica presencial em São Paulo – SP.
             </li>
             <li>
-              Em casos de emergência devidamente justificada, a profissional analisará a situação
-              individualmente.
+              Consultoria e supervisão clínica.
             </li>
           </ul>
         </section>
 
         <section className={styles.section}>
-          <h2>4. Pagamento</h2>
+          <h2>4. Agendamento, Cancelamentos e No-Show</h2>
           <ul>
-            <li>Os honorários são informados no momento do agendamento.</li>
-            <li>O pagamento deve ser efetuado conforme combinado previamente.</li>
-            <li>
-              Não é emitido reembolso por sessões realizadas, salvo acordo específico entre as
-              partes.
-            </li>
+            <li>O preenchimento do formulário no site é uma solicitação de contato, não garantindo a reserva imediata do horário. A confirmação ocorre mediante retorno direto da profissional.</li>
+            <li>Cancelamentos ou reagendamentos devem ser informados com antecedência mínima de 24 horas. Sessões canceladas fora deste prazo ou ausências sem aviso prévio (no-show) são passíveis de cobrança integral, conforme contrato terapêutico estabelecido no início do acompanhamento.</li>
           </ul>
         </section>
 
         <section className={styles.section}>
-          <h2>5. Sigilo profissional</h2>
+          <h2>5. Sigilo e Ética</h2>
           <p>
-            Todas as informações compartilhadas durante os atendimentos são protegidas pelo sigilo
-            profissional, conforme o Código de Ética Profissional do Psicólogo (Resolução CFP n.º
-            10/2005) e a legislação vigente. O sigilo poderá ser quebrado somente nas hipóteses
-            legalmente previstas.
+            Todo o processo terapêutico é protegido por rigoroso sigilo, conforme o Código de Ética Profissional do Psicólogo. Nenhuma informação conversada em sessão é registrada na base de dados deste site.
           </p>
         </section>
 
         <section className={styles.section}>
-          <h2>6. Uso do site</h2>
-          <p>É vedado ao usuário:</p>
-          <ul>
-            <li>Utilizar o site para fins ilícitos ou contrários a estes Termos.</li>
-            <li>Reproduzir, distribuir ou modificar conteúdos sem autorização expressa.</li>
-            <li>Tentar acessar áreas restritas sem credenciais autorizadas.</li>
-          </ul>
+          <h2>6. Propriedade Intelectual</h2>
+          <p>Textos, identidade visual e materiais deste site pertencem a Renata C. Ribeiro e estão protegidos por direitos autorais.</p>
         </section>
 
         <section className={styles.section}>
-          <h2>7. Propriedade intelectual</h2>
+          <h2>7. Foro</h2>
           <p>
-            Todo o conteúdo deste site — textos, imagens, logotipos e materiais educativos — é de
-            propriedade de Renata C. Ribeiro ou de seus licenciadores, protegido pela legislação de
-            direitos autorais. A reprodução sem autorização é proibida.
+            Elege-se o foro da Comarca de São Paulo – SP para eventuais questões jurídicas relacionadas ao uso deste portal institucional.
           </p>
         </section>
 
         <section className={styles.section}>
-          <h2>8. Limitação de responsabilidade</h2>
-          <p>
-            O conteúdo informativo deste site tem caráter educacional e não substitui consulta
-            psicológica ou neuropsicológica individual. A profissional não se responsabiliza pelo
-            uso indevido das informações disponibilizadas.
-          </p>
-        </section>
-
-        <section className={styles.section}>
-          <h2>9. Alterações nos termos</h2>
+          <h2>8. Alterações nos termos</h2>
           <p>
             Estes Termos podem ser atualizados a qualquer momento. O uso continuado do site após
             eventuais alterações implica a aceitação das novas condições.
@@ -114,20 +80,11 @@ export default function TermosECondicoesPage() {
         </section>
 
         <section className={styles.section}>
-          <h2>10. Foro</h2>
-          <p>
-            Fica eleito o foro da Comarca de São Paulo – SP para dirimir quaisquer conflitos
-            decorrentes destes Termos, com renúncia a qualquer outro, por mais privilegiado que
-            seja.
-          </p>
-        </section>
-
-        <section className={styles.section}>
-          <h2>11. Contato</h2>
+          <h2>9. Contato</h2>
           <p>
             Dúvidas sobre estes Termos:{' '}
-            <a href="mailto:contato@renataribeiropsico.com.br">
-              contato@renataribeiropsico.com.br
+            <a href="mailto:neuropsirenataribeiro@gmail.com">
+              neuropsirenataribeiro@gmail.com
             </a>
           </p>
         </section>

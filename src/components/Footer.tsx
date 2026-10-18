@@ -74,13 +74,13 @@ const Footer: React.FC = () => {
           </p>
           <p>
             <FiMail size={32} />
-            <a href="mailto:contato@renataribeiropsico.com.br">
-              contato@renataribeiropsico.com.br
+            <a href="mailto:neuropsirenataribeiro@gmail.com">
+              neuropsirenataribeiro@gmail.com
             </a>
           </p>
           <p>
             <FiPhone size={32} />
-            <a href="https://wa.me/5511998765432">(11) 99876-5432</a>
+            <a href="https://wa.me/5511930176966">(11) 93017-6966</a>
           </p>
           <div className={styles.socialIcons}>
             <a

@@ -6,7 +6,7 @@ import styles from '@/styles/WhatsAppButton.module.css';
 
 const WhatsAppButton: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
-  const phoneNumber = '5511998765432'; // Replace with your WhatsApp number
+  const phoneNumber = '5511930176966'; // Replace with your WhatsApp number
   const message = 'Olá! Gostaria de agendar uma consulta.'; // Pre-filled message
 
   const handleClick = () => {
